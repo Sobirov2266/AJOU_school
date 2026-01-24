@@ -1,0 +1,176 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* BODY */
+body {
+    min-height: 100vh;
+    position: relative;
+    background: #f4f6f8;
+}
+
+/* BACKGROUND IMAGE + OVERLAY */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(0, 60, 120, 0.45),
+            rgba(0, 60, 120, 0.45)
+        ),
+        url("../images/student_fon.png");
+
+    background-size: cover;
+
+    background-repeat: no-repeat;
+
+    z-index: -1;
+}
+
+/* ================= TOPBAR ================= */
+.topbar {
+    height: 60px;
+    background: rgba(0, 89, 179, 0.95);
+    color: white;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 25px;
+}
+
+.topbar .logo {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.topbar a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+/* ================= LAYOUT ================= */
+.container {
+    display: flex;
+    min-height: calc(100vh - 60px);
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+    width: 240px;
+    background: rgba(31, 45, 61, 0.95);
+    padding-top: 15px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+
+.sidebar li {
+    padding: 14px 22px;
+    color: #cfd8dc;
+    cursor: pointer;
+    transition: 0.25s;
+    font-size: 18px;
+}
+
+.sidebar li:hover,
+.sidebar .active {
+    background: rgba(0, 89, 179, 0.9);
+    color: #fff;
+}
+
+/* ================= CONTENT ================= */
+.content {
+    flex: 1;
+    padding: 35px;
+}
+
+/* PAGE TITLE */
+.content h1 {
+    font-size: 22px;
+    color: #1f2d3d;
+}
+
+.subtitle {
+    margin-top: 6px;
+    color: #555;
+    font-size: 14px;
+}
+
+/* ================= CARD ================= */
+.card {
+    margin-top: 30px;
+    max-width: 460px;
+
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(6px);
+
+    padding: 32px;
+    border-radius: 12px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+/* ================= FORM ================= */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+
+    border-radius: 8px;
+    border: 1px solid #ccd3da;
+
+    transition: 0.25s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #0059b3;
+    box-shadow: 0 0 0 3px rgba(0,89,179,0.15);
+}
+
+/* ================= BUTTON ================= */
+button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 13px;
+
+    background: #0059b3;
+    color: white;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+button:hover {
+    background: #004494;
+}

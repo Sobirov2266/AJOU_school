@@ -1,0 +1,63 @@
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1 class="school-name">AJOU <span>school</span></h1>
+            </div>
+
+            <nav class="nav-menu">
+                <ul>
+                    <li>
+                        <a href="{% url 'teacher_dashboard' %}">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'my_classes' %}">
+                            <i class="fas fa-users"></i>
+                            <span>Mening sinflarim</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="time-table.html">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Dars jadval</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="assignments.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>Topshiriqlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tests.html">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Testlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="attendance.html">
+                            <i class="fas fa-clipboard-check"></i>
+                            <span>Davomat</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="profile.html">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Profilim</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="setting.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Sozlamalar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+    <div class="sidebar-user">
+        {{ request.user.username }} · O‘qituvchi
+    </div>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJOU School - Topshiriqlar</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../static/assignments.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+
+        <!-- Sidebar Chap navigatsiya paneli -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1 class="school-name">AJOU <span>school</span></h1>
+            </div>
+
+            <nav class="nav-menu">
+                <ul>
+                    <li>
+                        <a href="../dashboard/teacher_dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="my-classes.html">
+                            <i class="fas fa-users"></i>
+                            <span>Mening sinflarim</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="time-table.html">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Dars jadval</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="assignments.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>Topshiriqlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Testlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="attendance.html">
+                            <i class="fas fa-clipboard-check"></i>
+                            <span>Davomat</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Profilim</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-cog"></i>
+                            <span>Sozlamalar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="user-profile">
+                <div class="user-info">
+                    <p class="user-name">Aliyev Sanjar</p>
+                    <p class="user-role">Matematika o'qituvchisi</p>
+                </div>
+            </div>
+        </aside>
+        <!-- Asosiy kontent -->
+        <main class="main-content">
+            <header class="page-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-tasks"></i> Topshiriqlar</h1>
+                    <p class="subtitle">Sinflaringizga topshiriqlar yuklang va baholang</p>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-primary" id="newAssignmentBtn">
+                        <i class="fas fa-plus"></i> Yangi topshiriq
+                    </button>
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">2</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <!-- Filtrlash va qidiruv -->
+                <div class="filter-section">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchAssignments" placeholder="Topshiriq nomi bo'yicha qidirish...">
+                    </div>
+
+                    <div class="filter-controls">
+                        <select id="filterClass">
+                            <option value="">Barcha sinflar</option>
+                            <option value="9A">9-A sinf</option>
+                            <option value="10B">10-B sinf</option>
+                            <option value="11A">11-A sinf</option>
+                        </select>
+
+                        <select id="filterStatus">
+                            <option value="">Barcha holatlar</option>
+                            <option value="active">Faol topshiriqlar</option>
+                            <option value="graded">Baholangan</option>
+                            <option value="pending">Kutilayotgan</option>
+                            <option value="expired">Muddati o'tgan</option>
+                        </select>
+
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-filter"></i> Filtrlash
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Topshiriqlar jadvali -->
+                <div class="assignments-table-container">
+                    <div class="table-header">
+                        <h2>Barcha topshiriqlar</h2>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="assignments-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="selectAll">
+                                    </th>
+                                    <th>Topshiriq nomi</th>
+                                    <th>Sinf</th>
+                                    <th>Fan</th>
+                                    <th>Muddati</th>
+                                    <th>Yuklanganlar</th>
+                                    <th>Holati</th>
+                                    <th>Harakatlar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>
+                                        <div class="assignment-info">
+                                            <div class="assignment-title">Matematika 1-mavzu vazifasi</div>
+                                            <div class="assignment-desc">Algebraik ifodalarni soddalashtirish</div>
+                                        </div>
+                                    </td>
+                                    <td>9-A sinf</td>
+                                    <td>Matematika</td>
+                                    <td>
+                                        <div class="due-date">
+                                            <i class="far fa-calendar-alt"></i>
+                                            <span>15.10.2025</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="submission-count">
+                                            <span class="count">24/30</span>
+                                            <div class="progress-bar">
+                                                <div class="progress" style="width: 80%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge status-active">Faol</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-icon btn-view" title="Ko'rish">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-icon btn-edit" title="Tahrirlash">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn-icon btn-grade" title="Baholash">
+                                                <i class="fas fa-check-circle"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>
+                                        <div class="assignment-info">
+                                            <div class="assignment-title">Fizika laboratoriya hisoboti</div>
+                                            <div class="assignment-desc">Nyuton qonunlari bo'yicha tajriba</div>
+                                        </div>
+                                    </td>
+                                    <td>10-B sinf</td>
+                                    <td>Fizika</td>
+                                    <td>
+                                        <div class="due-date expired">
+                                            <i class="far fa-calendar-alt"></i>
+                                            <span>05.10.2025</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="submission-count">
+                                            <span class="count">28/32</span>
+                                            <div class="progress-bar">
+                                                <div class="progress" style="width: 87%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge status-graded">Baholangan</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-icon btn-view" title="Ko'rish">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-icon btn-results" title="Natijalar">
+                                                <i class="fas fa-chart-bar"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>
+                                        <div class="assignment-info">
+                                            <div class="assignment-title">Tarix insho topshirig'i</div>
+                                            <div class="assignment-desc">Jadidchilik harakati haqida insho</div>
+                                        </div>
+                                    </td>
+                                    <td>11-A sinf</td>
+                                    <td>Tarix</td>
+                                    <td>
+                                        <div class="due-date">
+                                            <i class="far fa-calendar-alt"></i>
+                                            <span>20.10.2025</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="submission-count">
+                                            <span class="count">15/30</span>
+                                            <div class="progress-bar">
+                                                <div class="progress" style="width: 50%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge status-pending">Kutilmoqda</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-icon btn-view" title="Ko'rish">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-icon btn-remind" title="Eslatma yuborish">
+                                                <i class="fas fa-bell"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>
+                                        <div class="assignment-info">
+                                            <div class="assignment-title">Biologiya loyihasi</div>
+                                            <div class="assignment-desc">O'simliklar fotosintezi</div>
+                                        </div>
+                                    </td>
+                                    <td>9-A sinf</td>
+                                    <td>Biologiya</td>
+                                    <td>
+                                        <div class="due-date">
+                                            <i class="far fa-calendar-alt"></i>
+                                            <span>25.10.2023</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="submission-count">
+                                            <span class="count">0/30</span>
+                                            <div class="progress-bar">
+                                                <div class="progress" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge status-active">Faol</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-icon btn-view" title="Ko'rish">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-icon btn-edit" title="Tahrirlash">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-footer">
+                        <div class="footer-info">
+                            <span>Jami: 4 ta topshiriq</span>
+                            <span>Tanlangan: 0</span>
+                        </div>
+                        <div class="pagination">
+                            <button class="pagination-btn disabled">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span class="page-number active">1</span>
+                            <button class="pagination-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistikalar -->
+                <div class="stats-section">
+                    <h2>Topshiriqlar statistikasi</h2>
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background-color: #e3f2fd;">
+                                <i class="fas fa-tasks" style="color: #2196f3;"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>12</h3>
+                                <p>Faol topshiriqlar</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background-color: #f3e5f5;">
+                                <i class="fas fa-clock" style="color: #9c27b0;"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>8</h3>
+                                <p>Kutilayotgan baholar</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background-color: #e8f5e9;">
+                                <i class="fas fa-check-circle" style="color: #4caf50;"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>24</h3>
+                                <p>Baholangan topshiriqlar</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background-color: #fff3e0;">
+                                <i class="fas fa-calendar-times" style="color: #ff9800;"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>3</h3>
+                                <p>Muddati o'tgan</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Yangi topshiriq -->
+    <div class="modal" id="newAssignmentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus"></i> Yangi topshiriq yaratish</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="assignmentForm">
+                    <div class="form-group">
+                        <label for="assignmentTitle">Topshiriq nomi *</label>
+                        <input type="text" id="assignmentTitle" placeholder="Masalan: Algebra 2-mavzu vazifasi" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="assignmentClass">Sinf *</label>
+                            <select id="assignmentClass" required>
+                                <option value="">Sinfni tanlang</option>
+                                <option value="9A">9-A sinf</option>
+                                <option value="9B">9-B sinf</option>
+                                <option value="10A">10-A sinf</option>
+                                <option value="10B">10-B sinf</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="assignmentSubject">Fan *</label>
+                            <select id="assignmentSubject" required>
+                                <option value="">Fanni tanlang</option>
+                                <option value="mathematics">Matematika</option>
+                                <option value="physics">Fizika</option>
+                                <option value="history">Tarix</option>
+                                <option value="biology">Biologiya</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="assignmentDueDate">Topshirish muddati *</label>
+                            <input type="date" id="assignmentDueDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="assignmentPoints">Maksimal ball</label>
+                            <input type="number" id="assignmentPoints" min="0" max="100" placeholder="100">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="assignmentDescription">Tavsif</label>
+                        <textarea id="assignmentDescription" rows="4" placeholder="Topshiriq haqida batafsil ma'lumot..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fayl yuklash (ixtiyoriy)</label>
+                        <div class="file-upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Faylni shu yerga torting yoki <span class="browse-link">tanlang</span></p>
+                            <input type="file" id="assignmentFile" hidden>
+                            <p class="file-hint">PDF, DOC, DOCX, JPEG, PNG (maks. 10MB)</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Bekor qilish</button>
+                <button class="btn btn-primary" id="saveAssignmentBtn">Saqlash va e'lon qilish</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assignments.js"></script>
+</body>
+</html>

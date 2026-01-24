@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talabalar Ro'yxati</title>
+    <link rel="stylesheet" href="../../static/students.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-users"></i> Talabalar Ro'yxati</h1>
+            <a href="add-student.html" class="add-btn">
+                <i class="fas fa-user-plus"></i> Yangi Talaba Qo'shish
+            </a>
+
+            <a href="../dashboard/teacher_dashboard.html" class="add-btn">
+                <i class="fas fa-home"></i> Bosh oynaga qaytish
+            </a>
+        </header>
+
+        <div class="content">
+
+
+
+            <!-- Filter va qidiruv bo'limi -->
+            <div class="filter-section">
+                <h2><i class="fas fa-filter"></i> Qidiruv va Filtrlash</h2>
+                <div class="filter-grid">
+
+                    <div class="filter-group">
+                        <label for="filterLastName"><i class="fas fa-users"></i>ID, Ism, Familiya bo'yicha</label>
+                        <input type="text" id="filterLastName" placeholder="Ali, Rahmatov...">
+                    </div>
+
+                    <div class="filter-faculty">
+                        <label for="filterFaculty"><i class="fas fa-graduation-cap"></i> Fakultet bo'yicha</label>
+                        <input type="text" id="filterFaculty" placeholder="Arxitektura, IT biznes...">
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filterGroup"><i class="fas fa-layer-group"></i> Guruh bo'yicha</label>
+                        <input type="text" id="filterGroup" placeholder="DIF-101, DIF-102...">
+                    </div>
+
+                    <div class="filter-passport">
+                        <label for="filterPassport"><i class="fas fa-passport"></i> Pasport bo'yicha</label>
+                        <input type="text" id="filterPassport" placeholder="AB1234567...">
+                    </div>
+
+                    <div class="filter-status">
+                        <label for="filterstatus"><i class="fas fa-user-tag"></i> Status bo'yicha</label>
+                        <input type="text" id="filterstatus" placeholder="O'qimoqa, Bitirgan...">
+                    </div>
+                    </div>
+
+                <div class="filter-actions">
+                    <button class="filter-btn clear-btn" onclick="clearFilters()">
+                        <i class="fas fa-broom"></i> Tozalash
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="students-info">
+                <div class="total-students">
+                    <i class="fas fa-user-graduate"></i>
+                    Jami talabalar: <span id="totalCount">15</span>
+                </div>
+            </div>
+
+            <div class="students-table-container">
+                <table class="students-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ism</th>
+                            <th>Familiya</th>
+                            <th>Fakultet</th>
+                            <th>Guruh</th>
+                            <th>Pasport ID</th>
+                            <th>Yaratilgan sana</th>
+                            <th>Status</th>
+                            <th>Harakatlar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <!-- Talabalar ro'yxati -->
+
+                        <tr data-student-id="1">
+                            <td data-field="id">001</td>
+                            <td data-field="name">Ali</td>
+                            <td data-field="lastname">Valiyev</td>
+                            <td data-field="faculty">Arxitektura</td>
+                            <td data-field="group">DIF-101</td>
+                            <td data-field="passport">AB1234567</td>
+                            <td>2024-01-15</td>
+                            <td data-field="status">O'qimoqda</td>
+
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(1)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+
+                        </tr>
+
+                            <tr data-student-id="2">
+                            <td data-field="id">002</td>
+                            <td data-field="name">Hasan</td>
+                            <td data-field="lastname">Rahmatov</td>
+                            <td data-field="faculty">IT-biznes</td>
+                            <td data-field="group">DIF-102</td>
+                            <td data-field="passport">AB2345678</td>
+                            <td>2024-01-16</td>
+                            <td data-field="status">Bitirgan</td>
+                            <td>
+
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(2)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr data-student-id="3">
+                            <td data-field="id">003</td>
+                            <td data-field="name">Malika</td>
+                            <td data-field="lastname">Qodirova</td>
+                            <td data-field="faculty">Qurilish</td>
+                            <td data-field="group">DIF-101</td>
+                            <td data-field="passport">AB3456789</td>
+                            <td>2024-01-17</td>
+                            <td data-field="status">Akademik ta'tilda</td>
+
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(3)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-student-id="4">
+                            <td data-field="id">004</td>
+                            <td data-field="name">Jasur</td>
+                            <td data-field="lastname">Karimov</td>
+                            <td data-field="faculty">Daturiy ta'minot</td>
+                            <td data-field="group">DIF-103</td>
+                            <td data-field="passport">AB4567890</td>
+                            <td>2024-01-18</td>
+                            <td data-field="status">O'qimoqda</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(4)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-student-id="5">
+                            <td data-field="id">ST005</td>
+                            <td data-field="name">Shahzoda</td>
+                            <td data-field="lastname">Toshmatova</td>
+                            <td data-field="faculty">Arxitektura</td>
+                            <td data-field="group">DIF-102</td>
+                            <td data-field="passport">AB5678901</td>
+                            <td>2024-01-19</td>
+                            <td data-field="status">O'qimoqda</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(5)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-student-id="6">
+                            <td data-field="id">ST006</td>
+                            <td data-field="name">Farhod</td>
+                            <td data-field="lastname">Nosirov</td>
+                            <td data-field="faculty">Arxitektura</td>
+                            <td data-field="group">DIF-104</td>
+                            <td data-field="passport">AB6789012</td>
+                            <td>2024-01-20</td>
+                            <td data-field="status">O'qimoqda</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(6)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-student-id="7">
+                            <td data-field="id">ST007</td>
+                            <td data-field="name">Madina</td>
+                            <td data-field="lastname">G'ofurova</td>
+                            <td data-field="faculty">Arxitektura</td>
+                            <td data-field="group">DIF-101</td>
+                            <td data-field="passport">AB7890123</td>
+                            <td>2024-01-21</td>
+                            <td data-field="status">O'qimoqda</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(7)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-student-id="8">
+                            <td data-field="id">ST008</td>
+                            <td data-field="name">Shavkat</td>
+                            <td data-field="lastname">Mirziyoyev</td>
+                            <td data-field="faculty">IT biznes</td>
+                            <td data-field="group">DIF-105</td>
+                            <td data-field="passport">AB8901234</td>
+                            <td>2024-01-22</td>
+                            <td data-field="status">Akademik ta'tilda</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(8)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-student-id="9">
+                            <td data-field="id">ST009</td>
+                            <td data-field="name">Nigora</td>
+                            <td data-field="lastname">Yusupova</td>
+                            <td data-field="faculty">IT biznes</td>
+                            <td data-field="group">DIF-103</td>
+                            <td data-field="passport">AB9012345</td>
+                            <td>2024-01-23</td>
+                            <td data-field="status">O'qimoqda</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(9)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-student-id="10">
+                            <td data-field="id">ST010</td>
+                            <td data-field="name">Bobur</td>
+                            <td data-field="lastname">Nazarov</td>
+                            <td data-field="faculty">IT biznes</td>
+                            <td data-field="group">DIF-102</td>
+                            <td data-field="passport">AB0123456</td>
+                            <td>2024-01-24</td>
+                            <td data-field="status">O'qimoqda</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(10)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-student-id="1">
+                            <td data-field="id">001</td>
+                            <td data-field="name">Ali</td>
+                            <td data-field="lastname">Valiyev</td>
+                            <td data-field="faculty">Arxitektura</td>
+                            <td data-field="group">DIF-101</td>
+                            <td data-field="passport">AB1234567</td>
+                            <td>2024-01-15</td>
+                            <td data-field="status">O'qimoqda</td>
+
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(1)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+
+                        </tr>
+
+                            <tr data-student-id="2">
+                            <td data-field="id">002</td>
+                            <td data-field="name">Hasan</td>
+                            <td data-field="lastname">Rahmatov</td>
+                            <td data-field="faculty">IT-biznes</td>
+                            <td data-field="group">DIF-102</td>
+                            <td data-field="passport">AB2345678</td>
+                            <td>2024-01-16</td>
+                            <td data-field="status">Bitirgan</td>
+                            <td>
+
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(2)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr data-student-id="3">
+                            <td data-field="id">003</td>
+                            <td data-field="name">Malika</td>
+                            <td data-field="lastname">Qodirova</td>
+                            <td data-field="faculty">Qurilish</td>
+                            <td data-field="group">DIF-101</td>
+                            <td data-field="passport">AB3456789</td>
+                            <td>2024-01-17</td>
+                            <td data-field="status">Akademik ta'tilda</td>
+
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(3)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-student-id="4">
+                            <td data-field="id">004</td>
+                            <td data-field="name">Jasur</td>
+                            <td data-field="lastname">Karimov</td>
+                            <td data-field="faculty">Daturiy ta'minot</td>
+                            <td data-field="group">DIF-103</td>
+                            <td data-field="passport">AB4567890</td>
+                            <td>2024-01-18</td>
+                            <td data-field="status">O'qimoqda</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(4)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-student-id="5">
+                            <td data-field="id">ST005</td>
+                            <td data-field="name">Shahzoda</td>
+                            <td data-field="lastname">Toshmatova</td>
+                            <td data-field="faculty">Arxitektura</td>
+                            <td data-field="group">DIF-102</td>
+                            <td data-field="passport">AB5678901</td>
+                            <td>2024-01-19</td>
+                            <td data-field="status">O'qimoqda</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewStudentDetails(5)">
+                                    <i class="fas fa-eye"></i> Tahrirlash
+                                </button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+                <!-- PAGINATION -->
+    <div class="pagination">
+        <a href="#" class="prev">Prev</a>
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#" class="next">Next</a>
+    </div>
+
+        </div>
+
+        <!-- Talaba tafsilotlari modali -->
+        <div id="studentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-user-graduate"></i> Talaba Ma'lumotlari</h2>
+                    <button class="close-btn" onclick="closeModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="student-details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Talaba ID:</span>
+                            <span class="detail-value" id="detail-student-id">ST001</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Ism:</span>
+                            <span class="detail-value" id="detail-username">Ali</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Familiya:</span>
+                            <span class="detail-value" id="detail-lastname">Valiyev</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Pasport ID:</span>
+                            <span class="detail-value" id="detail-passport">AB1234567</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Guruh:</span>
+                            <span class="detail-value" id="detail-group">DIF-101</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Login:</span>
+                            <span class="detail-value" id="detail-login">ali.valiyev</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Parol:</span>
+                            <span class="detail-value" id="detail-password">••••••••</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Yaratilgan sana:</span>
+                            <span class="detail-value" id="detail-created">2024-01-15 10:30:00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn edit-btn" onclick="editStudent()">
+                        <i class="fas fa-edit"></i> Tahrirlash
+                    </button>
+                    <button class="modal-btn delete-btn" onclick="deleteStudent()">
+                        <i class="fas fa-trash"></i> O'chirish
+                    </button>
+                    <button class="modal-btn close-modal-btn" onclick="closeModal()">
+                        Yopish
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript fayliga havola -->
+    <script src="/static/students.js"></script>
+</body>
+</html>

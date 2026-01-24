@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilim - AJOU O'qituvchi Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../static/profile.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <!-- Chap navigatsiya paneli -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1 class="school-name">AJOU <span>school</span></h1>
+            </div>
+
+            <nav class="nav-menu">
+                <ul>
+                    <li>
+                        <a href="../dashboard/teacher_dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="my-classes.html">
+                            <i class="fas fa-users"></i>
+                            <span>Mening sinflarim</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="time-table.html">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Dars jadval</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="assignments.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>Topshiriqlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tests.html">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Testlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="attendance.html">
+                            <i class="fas fa-clipboard-check"></i>
+                            <span>Davomat</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="profile.html">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Profilim</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="setting.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Sozlamalar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="user-profile">
+
+                <div class="user-info">
+                    <p class="user-name">Sobirov Abdufattoh</p>
+                    <p class="user-role">Matematika o'qituvchisi</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1 class="page-title">Profilim</h1>
+                <div class="user-info">
+                    <span>Sobirov Abdufattoh</span>
+                    <img src="../../static/images/sobirov.jpg" alt="User Avatar">
+                </div>
+            </div>
+
+            <div class="profile-container">
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <div class="profile-img-container">
+                        <img src="../../static/images/sobirov.jpg" alt="Profil rasmi" class="profile-img">
+                        <div class="change-photo" id="changePhotoBtn">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <h2 class="profile-name">Sobirov Abdufattoh</h2>
+                    <p class="profile-title">Matematika o'qituvchisi</p>
+                    <p>AJOU School • 8 yillik tajriba</p>
+
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Sinflar</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">142</div>
+                            <div class="stat-label">O'quvchilar</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4.9</div>
+                            <div class="stat-label">Reyting</div>
+                        </div>
+                    </div>
+
+                    <button class="edit-profile-btn" id="editProfileBtn">
+                        <i class="fas fa-edit"></i> Profilni tahrirlash
+                    </button>
+                </div>
+
+                <!-- Profile Details -->
+                <div class="profile-details">
+                    <h3 class="section-title">Shaxsiy ma'lumotlar</h3>
+
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">To'liq ismi</span>
+                            <div class="detail-value">Sobirov Abdufattoh Adhamjon o'g'li</div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Tug'ilgan sana</span>
+                            <div class="detail-value">6-okt, 202</div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Telefon raqami</span>
+                            <div class="detail-value">+998 99 940 22 66</div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Elektron pochta</span>
+                            <div class="detail-value">asobirov@ajou.uz</div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Manzil</span>
+                            <div class="detail-value">Toshkent sh., Yashnabod tumani</div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Ishga qabul qilingan sana</span>
+                            <div class="detail-value">1-avgust, 2024</div>
+                        </div>
+                    </div>
+
+                    <h3 class="section-title">Kasbiy ma'lumotlar</h3>
+
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Mutaxassislik</span>
+                            <div class="detail-value">Matematika o'qituvchisi</div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Daraja</span>
+                            <div class="detail-value">Yuqori toifali o'qituvchi</div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Ish tajribasi</span>
+                            <div class="detail-value">1 yil 7 oy</div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">O'qigan oliy o'quv yurti</span>
+                            <div class="detail-value">Toshkent Axborot texnologiyalari Universiteti</div>
+                        </div>
+                    </div>
+
+                    <div class="skills-section">
+                        <h3 class="section-title">Qobiliyatlar</h3>
+                        <div class="skills-container">
+                            <div class="skill-tag">
+                                <i class="fas fa-calculator"></i>
+                                <span>Matematika</span>
+                            </div>
+                            <div class="skill-tag">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Algebra</span>
+                            </div>
+                            <div class="skill-tag">
+                                <i class="fas fa-shapes"></i>
+                                <span>Geometriya</span>
+                            </div>
+                            <div class="skill-tag">
+                                <i class="fas fa-laptop-code"></i>
+                                <span>Dasturlash asoslari</span>
+                            </div>
+                            <div class="skill-tag">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Statistika</span>
+                            </div>
+                            <div class="skill-tag">
+                                <i class="fas fa-brain"></i>
+                                <span>Mantiqiy fikrlash</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Profil ma'lumotlarini tahrirlash</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
+            </div>
+
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="fullName" class="form-label">To'liq ismi</label>
+                    <input type="text" id="fullName" class="form-input" value="Azizova Malika Qodirovna">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Elektron pochta</label>
+                    <input type="email" id="email" class="form-input" value="malika.azizova@ajou.edu.uz">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" class="form-label">Telefon raqami</label>
+                    <input type="text" id="phone" class="form-input" value="+998 90 123 45 67">
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="form-label">Manzil</label>
+                    <input type="text" id="address" class="form-input" value="Toshkent sh., Yunusobod tumani">
+                </div>
+
+                <div class="form-group">
+                    <label for="specialization" class="form-label">Mutaxassislik</label>
+                    <input type="text" id="specialization" class="form-input" value="Matematika o'qituvchisi">
+                </div>
+
+                <div class="form-group">
+                    <label for="education" class="form-label">O'qigan oliy o'quv yurti</label>
+                    <input type="text" id="education" class="form-input" value="Toshkent Axborot texnologiyalari Universiteti">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelEditBtn">Bekor qilish</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        Profil ma'lumotlari muvaffaqiyatli yangilandi!
+    </div>
+
+    <script src="../../static/profile.js"></script>
+</body>
+</html>

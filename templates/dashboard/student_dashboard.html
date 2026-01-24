@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Men Ajou School</title>
+    <link rel="stylesheet" href="../../static/css/student_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <!-- Chap navigatsiya paneli -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1 class="school-name">AJOU <span>school</span></h1>
+            </div>
+
+            <nav class="nav-menu">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../html_code/my-classes.html">
+                            <i class="fas fa-users"></i>
+                            <span>Mening sinflarim</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="../html_code/time-table.html">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Dars jadval</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-tasks"></i>
+                            <span>Topshiriqlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Testlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-clipboard-check"></i>
+                            <span>Davomat</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Profilim</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-cog"></i>
+                            <span>Sozlamalar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img src="https://ui-avatars.com/api/?name=O'qituvchi&background=4A6FA5&color=fff" alt="O'qituvchi">
+                </div>
+                <div class="user-info">
+                    <p class="user-name">Aliyev Sanjar</p>
+                    <p class="user-role">Matematika o'qituvchisi</p>
+                </div>
+            </div>
+        </aside>
+        <!-- Asosiy kontent -->
+        <main class="main-content">
+            <!-- Sarlavha qismi -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1>Student Dashboard</h1>
+                    <p>Xush kelibsiz, <span class="student-name">Abdulloh</span>!</p>
+                </div>
+                <div class="header-right">
+                    <div class="date-display">
+                        <i class="fas fa-calendar-day"></i>
+                        <span id="current-date"></span>
+                    </div>
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">3</span>
+                    </div>
+                    <div class="user-avatar">
+                        <img src="https://i.pravatar.cc/150?img=8" alt="Student Avatar">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Statistikalar -->
+            <section class="stats-section">
+                <h2 class="section-title">Umumiy statistikalar</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Fanlar soni</h3>
+                            <p class="stat-number">6</p>
+                            <p class="stat-change">+1 yangi fan</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Topshiriqlar</h3>
+                            <p class="stat-number">12</p>
+                            <p class="stat-change">3 ta muddati yaqinlashgan</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>O'rtacha baho</h3>
+                            <p class="stat-number">4.8</p>
+                            <p class="stat-change">O'tgan haftagag qaraganda +0.2</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Bugungi darslar</h3>
+                            <p class="stat-number">4</p>
+                            <p class="stat-change">2 tasi online</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Asosiy kontent va sidebar -->
+            <div class="content-wrapper">
+                <!-- Chap qism - Yakunlash muddati yaqinlashgan topshiriqlar -->
+                <section class="tasks-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Yaqinlashgan topshiriqlar</h2>
+                        <a href="#" class="view-all">Barchasini ko'rish <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="tasks-list">
+                        <div class="task-item priority-high">
+                            <div class="task-status"></div>
+                            <div class="task-info">
+                                <h4>Matematika topshirig'i</h4>
+                        <p class="task-course">Matematika asoslari</p>
+                                <p class="task-deadline"><i class="far fa-clock"></i> Muddat: 2 kun qoldi</p>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn btn-outline">Batafsil</button>
+                            </div>
+                        </div>
+
+                        <div class="task-item priority-medium">
+                            <div class="task-status"></div>
+                            <div class="task-info">
+                                <h4>Dasturlash loyihasi</h4>
+                        <p class="task-course">Python dasturlash</p>
+                                <p class="task-deadline"><i class="far fa-clock"></i> Muddat: 5 kun qoldi</p>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn btn-outline">Batafsil</button>
+                            </div>
+                        </div>
+
+                        <div class="task-item priority-low">
+                            <div class="task-status"></div>
+                            <div class="task-info">
+                                <h4>Ingliz tili presentatsiyasi</h4>
+                        <p class="task-course">Ingliz tili</p>
+                                <p class="task-deadline"><i class="far fa-clock"></i> Muddat: 1 hafta qoldi</p>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn btn-outline">Batafsil</button>
+                            </div>
+                        </div>
+
+                        <div class="task-item">
+                            <div class="task-status"></div>
+                            <div class="task-info">
+                                <h4>Tarix esa qog'ozi</h4>
+                        <p class="task-course">Jahon tarixi</p>
+                                <p class="task-deadline"><i class="far fa-clock"></i> Muddat: 10 kun qoldi</p>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn btn-outline">Batafsil</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- O'ng qism - Dars jadvali va tezkor havolalar -->
+                <aside class="right-sidebar">
+                    <!-- Bugungi dars jadvali -->
+                    <div class="schedule-widget">
+                        <h3 class="widget-title">Bugungi darslar</h3>
+                        <div class="schedule-list">
+                            <div class="schedule-item">
+                                <div class="schedule-time">09:00 - 10:30</div>
+                                <div class="schedule-info">
+                                    <h4>Matematika</h4>
+                                    <p>Prof. Ahmadov</p>
+                                    <span class="schedule-type online">Online</span>
+                                </div>
+                            </div>
+
+                            <div class="schedule-item">
+                                <div class="schedule-time">11:00 - 12:30</div>
+                                <div class="schedule-info">
+                                    <h4>Fizika</h4>
+                                    <p>Prof. Karimov</p>
+                                    <span class="schedule-type offline">Offline</span>
+                                </div>
+                            </div>
+
+                            <div class="schedule-item">
+                                <div class="schedule-time">14:00 - 15:30</div>
+                                <div class="schedule-info">
+                                    <h4>Dasturlash</h4>
+                                    <p>Prof. Ismoilova</p>
+                                    <span class="schedule-type online">Online</span>
+                                </div>
+                            </div>
+
+                            <div class="schedule-item">
+                                <div class="schedule-time">16:00 - 17:30</div>
+                                <div class="schedule-info">
+                                    <h4>Ingliz tili</h4>
+                                    <p>Prof. Nazarova</p>
+                                    <span class="schedule-type offline">Offline</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tezkor havolalar -->
+                    <div class="quick-links">
+                        <h3 class="widget-title">Tezkor havolalar</h3>
+                        <div class="links-grid">
+                            <a href="#" class="link-item">
+                                <div class="link-icon">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <span>Video darslar</span>
+                            </a>
+
+                            <a href="#" class="link-item">
+                                <div class="link-icon">
+                                    <i class="fas fa-file-download"></i>
+                                </div>
+                                <span>Materiallar</span>
+                            </a>
+
+                            <a href="#" class="link-item">
+                                <div class="link-icon">
+                                    <i class="fas fa-chart-bar"></i>
+                                </div>
+                                <span>Natijalar</span>
+                            </a>
+
+                            <a href="#" class="link-item">
+                                <div class="link-icon">
+                                    <i class="fas fa-question-circle"></i>
+                                </div>
+                                <span>Yordam</span>
+                            </a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Oxirgi yangiliklar -->
+            <section class="news-section">
+                <h2 class="section-title">Oxirgi yangiliklar</h2>
+                <div class="news-grid">
+                    <div class="news-card">
+                        <div class="news-date">
+                            <span class="day">15</span>
+                            <span class="month">May</span>
+                        </div>
+                        <div class="news-content">
+                            <h3>Yangi kutubxona tizimi ishga tushdi</h3>
+                            <p>Maktabning yangi raqamli kutubxona tizimi endi barcha talabalar uchun ochiq. Elektron kitoblar va ilmiy maqolalardan foydalaning.</p>
+                            <a href="#" class="read-more">Batafsil o'qish <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="news-card">
+                        <div class="news-date">
+                            <span class="day">10</span>
+                            <span class="month">May</span>
+                        </div>
+                        <div class="news-content">
+                            <h3>Bahorga bag'ishlangan tanlov e'lon qilindi</h3>
+                            <p>Rasm va she'rlar tanlovi barcha talabalar uchun. Eng yaxshi ishlar sovrinlar bilan taqdirlanadi.</p>
+                            <a href="#" class="read-more">Batafsil o'qish <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="news-card">
+                        <div class="news-date">
+                            <span class="day">05</span>
+                            <span class="month">May</span>
+                        </div>
+                        <div class="news-content">
+                            <h3>Yozgi semestr uchun ro'yxatdan o'tish boshlandi</h3>
+                            <p>Yozgi semestr kurslari uchun ro'yxatdan o'tish jarayoni boshlandi. O'zingizga kerakli kurslarni tanlang.</p>
+                            <a href="#" class="read-more">Batafsil o'qish <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- JavaScript kodi (faqat oddiy funktsiyalar uchun) -->
+    <script>
+        // Joriy sanani ko'rsatish
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString('uz-UZ', options);
+            document.getElementById('current-date').textContent = dateString;
+        }
+
+        // Sana yangilanishi
+        document.addEventListener('DOMContentLoaded', updateCurrentDate);
+
+        // Notification bell uchun interaktivlik
+        document.querySelector('.notification-bell').addEventListener('click', function() {
+            alert('Sizda 3 ta yangi xabar bor!');
+        });
+    </script>
+</body>
+</html>

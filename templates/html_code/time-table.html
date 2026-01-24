@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJOU School - Dars Jadvali</title>
+    <link rel="stylesheet" href="../../static/time-table.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Chap navigatsiya paneli -->
+        <!-- Sidebar -->
+        <!-- Chap navigatsiya paneli -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1 class="school-name">AJOU <span>school</span></h1>
+            </div>
+
+            <nav class="nav-menu">
+                <ul>
+                    <li>
+                        <a href="../dashboard/teacher_dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="my-classes.html">
+                            <i class="fas fa-users"></i>
+                            <span>Mening sinflarim</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="time-table.html">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Dars jadval</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="assignments.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>Topshiriqlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Testlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="attendance.html">
+                            <i class="fas fa-clipboard-check"></i>
+                            <span>Davomat</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Profilim</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-cog"></i>
+                            <span>Sozlamalar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img src="https://ui-avatars.com/api/?name=O'qituvchi&background=4A6FA5&color=fff" alt="O'qituvchi">
+                </div>
+                <div class="user-info">
+                    <p class="user-name">Aliyev Sanjar</p>
+                    <p class="user-role">Matematika o'qituvchisi</p>
+                </div>
+            </div>
+        </aside>
+        <!-- Asosiy kontent (Dars jadvali) -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <h2 class="page-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        Dars Jadvali
+                    </h2>
+                    <p class="page-subtitle">1-haftalik dars jadvalingiz</p>
+                </div>
+
+                <div class="header-right">
+                    <div class="date-selector">
+                        <button class="btn-date-nav">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="current-week">
+                            <span class="week-range">12-18 Sentyabr</span>
+                            <span class="week-year">2023</span>
+                        </div>
+                        <button class="btn-date-nav">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="header-actions">
+                        <button class="btn btn-print">
+                            <i class="fas fa-print"></i>
+                            Chop etish
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-download"></i>
+                            Yuklab olish
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dars jadvali -->
+            <div class="time-table-container">
+                <div class="time-table-header">
+                    <div class="time-slot-header">Vaqt</div>
+                    <div class="day-header">
+                        <span>Dushanba</span>
+                        <span class="date">12.09</span>
+                    </div>
+                    <div class="day-header">
+                        <span>Seshanba</span>
+                        <span class="date">13.09</span>
+                    </div>
+                    <div class="day-header">
+                        <span>Chorshanba</span>
+                        <span class="date">14.09</span>
+                    </div>
+                    <div class="day-header">
+                        <span>Payshanba</span>
+                        <span class="date">15.09</span>
+                    </div>
+                    <div class="day-header">
+                        <span>Juma</span>
+                        <span class="date">16.09</span>
+                    </div>
+                    <div class="day-header weekend">
+                        <span>Shanba</span>
+                        <span class="date">17.09</span>
+                    </div>
+                </div>
+
+                <div class="time-table-body">
+                    <!-- 1-dars -->
+                    <div class="time-row">
+                        <div class="time-slot">
+                            <span class="time">08:00 - 08:45</span>
+                            <span class="period">1-dars</span>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card math">
+                                <div class="lesson-subject">Matematika</div>
+                                <div class="lesson-class">9-A sinf</div>
+                                <div class="lesson-room">Xona: 302</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card physics">
+                                <div class="lesson-subject">Fizika</div>
+                                <div class="lesson-class">10-B sinf</div>
+                                <div class="lesson-room">Xona: 215</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card math">
+                                <div class="lesson-subject">Matematika</div>
+                                <div class="lesson-class">8-V sinf</div>
+                                <div class="lesson-room">Xona: 104</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card empty">
+                                <div class="empty-lesson">Dars yo'q</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card algebra">
+                                <div class="lesson-subject">Algebra</div>
+                                <div class="lesson-class">11-A sinf</div>
+                                <div class="lesson-room">Xona: 305</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell weekend">
+                            <div class="lesson-card empty">
+                                <div class="empty-lesson">Dam olish kuni</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2-dars -->
+                    <div class="time-row">
+                        <div class="time-slot">
+                            <span class="time">09:00 - 09:45</span>
+                            <span class="period">2-dars</span>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card geometry">
+                                <div class="lesson-subject">Geometriya</div>
+                                <div class="lesson-class">10-A sinf</div>
+                                <div class="lesson-room">Xona: 204</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card math">
+                                <div class="lesson-subject">Matematika</div>
+                                <div class="lesson-class">9-B sinf</div>
+                                <div class="lesson-room">Xona: 108</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card empty">
+                                <div class="empty-lesson">Dars yo'q</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card math">
+                                <div class="lesson-subject">Matematika</div>
+                                <div class="lesson-class">8-A sinf</div>
+                                <div class="lesson-room">Xona: 112</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card informatics">
+                                <div class="lesson-subject">Informatika</div>
+                                <div class="lesson-class">9-V sinf</div>
+                                <div class="lesson-room">Xona: 401</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell weekend">
+                            <div class="lesson-card empty">
+                                <div class="empty-lesson">Dam olish kuni</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3-dars -->
+                    <div class="time-row">
+                        <div class="time-slot">
+                            <span class="time">10:00 - 10:45</span>
+                            <span class="period">3-dars</span>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card empty">
+                                <div class="empty-lesson">Dars yo'q</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card algebra">
+                                <div class="lesson-subject">Algebra</div>
+                                <div class="lesson-class">11-B sinf</div>
+                                <div class="lesson-room">Xona: 305</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card geometry">
+                                <div class="lesson-subject">Geometriya</div>
+                                <div class="lesson-class">10-V sinf</div>
+                                <div class="lesson-room">Xona: 208</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card math">
+                                <div class="lesson-subject">Matematika</div>
+                                <div class="lesson-class">9-A sinf</div>
+                                <div class="lesson-room">Xona: 302</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card empty">
+                                <div class="empty-lesson">Dars yo'q</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell weekend">
+                            <div class="lesson-card empty">
+                                <div class="empty-lesson">Dam olish kuni</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4-dars -->
+                    <div class="time-row">
+                        <div class="time-slot">
+                            <span class="time">11:00 - 11:45</span>
+                            <span class="period">4-dars</span>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card informatics">
+                                <div class="lesson-subject">Informatika</div>
+                                <div class="lesson-class">10-A sinf</div>
+                                <div class="lesson-room">Xona: 401</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card geometry">
+                                <div class="lesson-subject">Geometriya</div>
+                                <div class="lesson-class">11-A sinf</div>
+                                <div class="lesson-room">Xona: 204</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card math">
+                                <div class="lesson-subject">Matematika</div>
+                                <div class="lesson-class">8-B sinf</div>
+                                <div class="lesson-room">Xona: 104</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card physics">
+                                <div class="lesson-subject">Fizika</div>
+                                <div class="lesson-class">9-V sinf</div>
+                                <div class="lesson-room">Xona: 215</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card algebra">
+                                <div class="lesson-subject">Algebra</div>
+                                <div class="lesson-class">10-B sinf</div>
+                                <div class="lesson-room">Xona: 305</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell weekend">
+                            <div class="lesson-card empty">
+                                <div class="empty-lesson">Dam olish kuni</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5-dars -->
+                    <div class="time-row">
+                        <div class="time-slot">
+                            <span class="time">12:00 - 12:45</span>
+                            <span class="period">5-dars</span>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card math">
+                                <div class="lesson-subject">Matematika</div>
+                                <div class="lesson-class">9-V sinf</div>
+                                <div class="lesson-room">Xona: 108</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card empty">
+                                <div class="empty-lesson">Dars yo'q</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card algebra">
+                                <div class="lesson-subject">Algebra</div>
+                                <div class="lesson-class">10-A sinf</div>
+                                <div class="lesson-room">Xona: 305</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card geometry">
+                                <div class="lesson-subject">Geometriya</div>
+                                <div class="lesson-class">9-B sinf</div>
+                                <div class="lesson-room">Xona: 204</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell">
+                            <div class="lesson-card math">
+                                <div class="lesson-subject">Matematika</div>
+                                <div class="lesson-class">8-A sinf</div>
+                                <div class="lesson-room">Xona: 112</div>
+                            </div>
+                        </div>
+                        <div class="lesson-cell weekend">
+                            <div class="lesson-card empty">
+                                <div class="empty-lesson">Dam olish kuni</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jadval tushuntirishlari -->
+            <div class="legend-section">
+                <h3 class="legend-title">Fanlar ranglari:</h3>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-color math"></div>
+                        <span>Matematika</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color algebra"></div>
+                        <span>Algebra</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color geometry"></div>
+                        <span>Geometriya</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color physics"></div>
+                        <span>Fizika</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color informatics"></div>
+                        <span>Informatika</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Kichik interaktivlik
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dars kartalari uchun hover effekt
+            const lessonCards = document.querySelectorAll('.lesson-card:not(.empty)');
+            lessonCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Chop etish tugmasi
+            const printBtn = document.querySelector('.btn-print');
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+
+            // Hafta navigatsiyasi
+            const prevWeekBtn = document.querySelectorAll('.btn-date-nav')[0];
+            const nextWeekBtn = document.querySelectorAll('.btn-date-nav')[1];
+            const weekRange = document.querySelector('.week-range');
+
+            let currentWeek = 1;
+
+            prevWeekBtn.addEventListener('click', function() {
+                if (currentWeek > 1) {
+                    currentWeek--;
+                    updateWeekDisplay();
+                }
+            });
+
+            nextWeekBtn.addEventListener('click', function() {
+                if (currentWeek < 4) {
+                    currentWeek++;
+                    updateWeekDisplay();
+                }
+            });
+
+            function updateWeekDisplay() {
+                const weekRanges = [
+                    "12-18 Sentyabr",
+                    "19-25 Sentyabr",
+                    "26 Sentyabr - 2 Oktyabr",
+                    "3-9 Oktyabr"
+                ];
+
+                weekRange.textContent = weekRanges[currentWeek - 1];
+            }
+        });
+    </script>
+</body>
+</html>

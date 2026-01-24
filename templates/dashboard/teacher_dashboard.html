@@ -1,0 +1,185 @@
+{% extends "base/dashboard_base.html" %}
+
+{% block title %}
+O‘qituvchi Dashboard
+{% endblock %}
+
+{% block content %}
+
+<header class="header">
+    <h2>O‘qituvchi Dashboardi</h2>
+
+    <div class="header-actions">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Qidirish...">
+        </div>
+
+        <button class="notification-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge"></span>
+        </button>
+    </div>
+</header>
+
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon blue">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-info">
+            <h3>142</h3>
+            <p>Jami O'quvchilar</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon green">
+            <i class="fas fa-book"></i>
+        </div>
+        <div class="stat-info">
+            <h3>8</h3>
+            <p>Faol Kurslar</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon purple">
+            <i class="fas fa-tasks"></i>
+        </div>
+        <div class="stat-info">
+            <h3>24</h3>
+            <p>Topshiriqlar</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon orange">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-info">
+            <h3>94%</h3>
+            <p>O'rtacha Baho</p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="content-grid">
+    <div class="left-column">
+        <!-- Profile Card -->
+        <div class="card">
+            <div class="profile-header">
+                <div class="profile-avatar">AA</div>
+                <div class="profile-info">
+                    <h3>Ali Aliyev</h3>
+                    <p>Dasturlash fanidan o'qituvchi</p>
+                    <div class="rating">
+                        ⭐⭐⭐⭐☆ <span>4.7 (128 baho)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span>Kurslarni tugatish darajasi</span>
+                    <span>78%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 78%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-column">
+        <div class="card">
+                        <div class="card-header">
+                            <h3>Yaqin Keladigan Faoliyatlar</h3>
+                            <a href="#">Barchasi <i class="fas fa-arrow-right"></i></a>
+                        </div>
+            <ul class="activity-list">
+                            <li class="activity-item">
+                                <div class="activity-icon lecture">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <h4>Python - Funksiyalar</h4>
+                                    <p>Dars 8: Funksiyalar va ularning qo'llanilishi</p>
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> Ertaga, 10:00
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon assignment">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <h4>Topshiriqni tekshirish</h4>
+                                    <p>Veb-dasturlash kursi 3-topshiriq</p>
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> 2 kun, 15:00
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon exam">
+                                    <i class="fas fa-clipboard-check"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <h4>Oraliq nazorat</h4>
+                                    <p>Ma'lumotlar tuzilmasi kursi</p>
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> 5 kun, 9:00
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon lecture">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <h4>Django - Model va Admin</h4>
+                                    <p>Dars 5: Django model va admin panel</p>
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> 1 hafta, 11:00
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Tezkor Amallar</h3>
+                        </div>
+
+                        <div class="quick-actions-grid">
+                            <button class="quick-action-btn" data-action="new-lesson">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Yangi dars</span>
+                            </button>
+
+                            <button class="quick-action-btn" data-action="upload-material">
+                                <i class="fas fa-upload"></i>
+                                <span>Material yuklash</span>
+                            </button>
+
+                            <button class="quick-action-btn" data-action="grading">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span>Baholash</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="messages">
+                                <i class="fas fa-comments"></i>
+                                <span>Xabarlar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+{% endblock %}

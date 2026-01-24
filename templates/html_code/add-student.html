@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Talaba qo‘shish | AJOU LMS</title>
+    <link rel="stylesheet" href="../../static/add-student.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="logo">AJOU UNIVERSITY LMS</div>
+    <div class="user">
+        Talaba: <strong>Sobirov A.</strong>
+        <a href="login.html">Chiqish</a>
+    </div>
+</header>
+
+<div class="container">
+
+    <aside class="sidebar">
+        <ul>
+            <a href="../dashboard/teacher_dashboard.html"><li>Dashboard</li></a>
+            <a href="students.html"> <li>Talabalar ro‘yxati</li></a>
+            <a href="../dashboard/teacher_dashboard.html"><li>Mening fanlarim</li></a>
+            <a href="../dashboard/teacher_dashboard.html"><li>Dars jadvali</li></a>
+            <a href="students.html"> <li>Testlar</li></a>
+            <a href="../dashboard/teacher_dashboard.html"><li>Mening ma'lumotlarim</li></a>
+            <a href="../dashboard/teacher_dashboard.html"><li>Profil sozlamalari</li></a>
+        </ul>
+    </aside>
+
+    <main class="content">
+
+        <h1>O‘quvchi qo‘shish</h1>
+        <p class="subtitle">Yangi o‘quvchini tizimga ro‘yxatdan o‘tkazing</p>
+
+        <div class="card">
+            <form action="students.html" method="POST">
+
+                <div class="form-group">
+                    <label>Ism</label>
+                    <input type="text" placeholder="O‘quvchi ismi" maxlength="15" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Familiya</label>
+                    <input type="text" placeholder="O‘quvchi familiyasi" maxlength="15" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Qaysi guruhda o'qiyotganligi</label>
+                    <input type="text" placeholder="Masalan:15A" maxlength="3" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Pasport ID</label>
+                    <input type="text" placeholder="AA123456" maxlength="9" minlength="9" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Login 6 ta belgidan kam bo'lmasin</label>
+                    <input type="text" placeholder="Login yarating" minlength="6" maxlength="15" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Parol 6 ta belgidan kam bo'lmasin</label>
+                    <input type="password" placeholder="Parol yarating" minlength="6" maxlength="8" required>
+                </div>
+
+
+                <button type="submit" class="add-btn">Saqlash</button>
+
+
+            </form>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>

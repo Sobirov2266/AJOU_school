@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Davomat - AJOU O'qituvchi Dashboard</title>
+    <link rel="stylesheet" href="../../static/attendance.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <!-- Chap navigatsiya paneli -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1 class="school-name">AJOU <span>school</span></h1>
+            </div>
+
+            <nav class="nav-menu">
+                <ul>
+                    <li>
+                        <a href="../dashboard/teacher_dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="my-classes.html">
+                            <i class="fas fa-users"></i>
+                            <span>Mening sinflarim</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="time-table.html">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Dars jadval</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="assignments.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>Topshiriqlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Testlar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-clipboard-check"></i>
+                            <span>Davomat</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Profilim</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-cog"></i>
+                            <span>Sozlamalar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img src="https://ui-avatars.com/api/?name=O'qituvchi&background=4A6FA5&color=fff" alt="O'qituvchi">
+                </div>
+                <div class="user-info">
+                    <p class="user-name">Aliyev Sanjar</p>
+                    <p class="user-role">Matematika o'qituvchisi</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-clipboard-check"></i> Davomat</h1>
+                    <p>O'quvchilarning darsga qatnashishini belgilash</p>
+                </div>
+                <div class="header-right">
+                    <div class="date-display">
+                        <i class="fas fa-calendar-day"></i>
+                        <span id="current-date"></span>
+                    </div>
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Sinf tanlash bo'limi -->
+            <section class="class-selection">
+                <h2><i class="fas fa-list"></i> Sinfni tanlang</h2>
+                <div class="class-cards" id="class-cards">
+                    <!-- Sinf kartalari JavaScript orqali yuklanadi -->
+                </div>
+            </section>
+
+            <!-- Davomat jadvali bo'limi (dastlab yashirin) -->
+            <section class="attendance-section hidden" id="attendance-section">
+                <div class="attendance-header">
+                    <h2 id="selected-class-title">9-A sinfi uchun davomat</h2>
+                    <div class="attendance-actions">
+                        <div class="date-picker">
+                            <label for="attendance-date"><i class="fas fa-calendar-alt"></i> Sana:</label>
+                            <input type="date" id="attendance-date" value="">
+                        </div>
+                        <button class="btn btn-secondary" id="back-to-classes">
+                            <i class="fas fa-arrow-left"></i> Sinflarga qaytish
+                        </button>
+                        <button class="btn btn-primary" id="save-attendance">
+                            <i class="fas fa-save"></i> Saqlash
+                        </button>
+                    </div>
+                </div>
+
+                <div class="attendance-table-container">
+                    <div class="table-actions">
+                        <div class="bulk-actions">
+                            <button class="btn btn-success btn-small" id="mark-all-present">
+                                <i class="fas fa-check-circle"></i> Barchasi keldi
+                            </button>
+                            <button class="btn btn-danger btn-small" id="mark-all-absent">
+                                <i class="fas fa-times-circle"></i> Barchasi kelmadi
+                            </button>
+                        </div>
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="student-search" placeholder="O'quvchini qidirish...">
+                        </div>
+                    </div>
+
+                    <div class="attendance-table-wrapper">
+                        <table class="attendance-table">
+                            <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>O'quvchi ismi</th>
+                                    <th>Telefon raqami</th>
+                                    <th>Holati</th>
+                                    <th>Sababi (agar kelmagan bo'lsa)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-table-body">
+                                <!-- O'quvchilar ro'yxati JavaScript orqali yuklanadi -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="summary">
+                        <div class="summary-item present">
+                            <i class="fas fa-user-check"></i>
+                            <span>Keldi: <strong id="present-count">0</strong></span>
+                        </div>
+                        <div class="summary-item absent">
+                            <i class="fas fa-user-times"></i>
+                            <span>Kelmadi: <strong id="absent-count">0</strong></span>
+                        </div>
+                        <div class="summary-item total">
+                            <i class="fas fa-users"></i>
+                            <span>Jami: <strong id="total-count">0</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modal oynasi (kelmaganlik sababini kiritish uchun) -->
+            <div class="modal hidden" id="reason-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Kelmaganlik sababini kiriting</h3>
+                        <button class="close-modal" id="close-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong id="student-name-modal"></strong> uchun kelmaganlik sababini tanlang yoki kiriting:</p>
+                        <div class="reason-options">
+                            <button class="reason-option" data-reason="Kasallik">Kasallik</button>
+                            <button class="reason-option" data-reason="Oilaviy sabab">Oilaviy sabab</button>
+                            <button class="reason-option" data-reason="Transport muammosi">Transport muammosi</button>
+                            <button class="reason-option" data-reason="Boshqa sabab">Boshqa sabab</button>
+                        </div>
+                        <div class="custom-reason">
+                            <label for="custom-reason">Yoki o'zingiz kiriting:</label>
+                            <textarea id="custom-reason" placeholder="Sababni batafsil yozing..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" id="cancel-reason">Bekor qilish</button>
+                        <button class="btn btn-primary" id="save-reason">Saqlash</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../static/attendance.js"></script>
+</body>
+</html>
