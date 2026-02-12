@@ -38,7 +38,7 @@ body {
     min-height: 100vh;
 }
 
-/* Chap navigatsiya paneli */
+/* Chap navigatsiya paneli
 .sidebar {
     width: 260px;
     background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
@@ -159,7 +159,7 @@ body {
 .user-role {
     font-size: 13px;
     opacity: 0.8;
-}
+} */
 
 
 /* Asosiy kontent */

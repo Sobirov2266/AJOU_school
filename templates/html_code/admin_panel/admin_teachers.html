@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJOU Admin - O'qituvchilar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> AJOU Admin</h1>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="index.html" class="menu-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="teachers.html" class="menu-item active">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>O'qituvchilar</span>
+                </a>
+                <a href="students.html" class="menu-item">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>O'quvchilar</span>
+                </a>
+                <a href="classes.html" class="menu-item">
+                    <i class="fas fa-school"></i>
+                    <span>Sinflar</span>
+                </a>
+                <a href="settings.html" class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Sozlamalar</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Asosiy Kontent -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h2>O'qituvchilar</h2>
+                    <p>Barcha o'qituvchilar ro'yxati</p>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" alt="Admin">
+                        <span>Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Action Bar -->
+            <div class="action-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-teacher" placeholder="O'qituvchi qidirish...">
+                </div>
+                <button class="btn btn-primary" id="add-teacher-btn">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Yangi o'qituvchi</span>
+                </button>
+            </div>
+
+            <!-- O'qituvchilar Jadvali -->
+            <div class="card table-container">
+                <div class="card-header">
+                    <h3>O'qituvchilar ro'yxati</h3>
+                    <div class="table-info">
+                        <span id="teacher-count">8 ta o'qituvchi</span>
+                        <div class="filter-dropdown">
+                            <select id="filter-subject">
+                                <option value="all">Barcha fanlar</option>
+                                <option value="mathematics">Matematika</option>
+                                <option value="physics">Fizika</option>
+                                <option value="chemistry">Kimyo</option>
+                                <option value="biology">Biologiya</option>
+                                <option value="english">Ingliz tili</option>
+                                <option value="uzbek">O'zbek tili</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="teachers-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Ism</th>
+                                    <th>Familiya</th>
+                                    <th>Telefon</th>
+                                    <th>Email</th>
+                                    <th>Fan</th>
+                                    <th>Holati</th>
+                                    <th>Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teachers-table-body">
+                                <!-- O'qituvchilar dinamik ravishda yuklanadi -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="pagination">
+                        <button class="pagination-btn" id="prev-page">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span class="page-numbers">
+                            <span class="page-active">1</span>
+                            <span>2</span>
+                            <span>3</span>
+                        </span>
+                        <button class="pagination-btn" id="next-page">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>© 2023 AJOU School Admin Panel. Barcha huquqlar himoyalangan.</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Modal: Yangi O'qituvchi Qo'shish -->
+    <div class="modal" id="add-teacher-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Yangi o'qituvchi qo'shish</h3>
+                <button class="modal-close" id="close-add-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-teacher-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">Ism *</label>
+                            <input type="text" id="first-name" name="first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Familiya *</label>
+                            <input type="text" id="last-name" name="last-name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Telefon raqam</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+998 XX XXX XX XX">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">O'qitadigan fan *</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Fan tanlang</option>
+                            <option value="mathematics">Matematika</option>
+                            <option value="physics">Fizika</option>
+                            <option value="chemistry">Kimyo</option>
+                            <option value="biology">Biologiya</option>
+                            <option value="english">Ingliz tili</option>
+                            <option value="uzbek">O'zbek tili</option>
+                            <option value="history">Tarix</option>
+                            <option value="geography">Geografiya</option>
+                            <option value="informatics">Informatika</option>
+                            <option value="other">Boshqa</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Holati</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="status" value="active" checked>
+                                <span class="radio-custom"></span>
+                                <span>Faol</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="status" value="inactive">
+                                <span class="radio-custom"></span>
+                                <span>Faol emas</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Qo'shimcha ma'lumot</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Qo'shimcha ma'lumotlar..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-add">Bekor qilish</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Saqlash
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: O'qituvchini Tahrirlash -->
+    <div class="modal" id="edit-teacher-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>O'qituvchi ma'lumotlarini tahrirlash</h3>
+                <button class="modal-close" id="close-edit-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-teacher-form">
+                    <input type="hidden" id="edit-id" name="id">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-first-name">Ism *</label>
+                            <input type="text" id="edit-first-name" name="first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-last-name">Familiya *</label>
+                            <input type="text" id="edit-last-name" name="last-name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-phone">Telefon raqam</label>
+                            <input type="tel" id="edit-phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-email">Email *</label>
+                            <input type="email" id="edit-email" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-subject">O'qitadigan fan *</label>
+                        <select id="edit-subject" name="subject" required>
+                            <option value="">Fan tanlang</option>
+                            <option value="mathematics">Matematika</option>
+                            <option value="physics">Fizika</option>
+                            <option value="chemistry">Kimyo</option>
+                            <option value="biology">Biologiya</option>
+                            <option value="english">Ingliz tili</option>
+                            <option value="uzbek">O'zbek tili</option>
+                            <option value="history">Tarix</option>
+                            <option value="geography">Geografiya</option>
+                            <option value="informatics">Informatika</option>
+                            <option value="other">Boshqa</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-status">Holati</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="edit-status" value="active" id="edit-status-active">
+                                <span class="radio-custom"></span>
+                                <span>Faol</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="edit-status" value="inactive" id="edit-status-inactive">
+                                <span class="radio-custom"></span>
+                                <span>Faol emas</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-notes">Qo'shimcha ma'lumot</label>
+                        <textarea id="edit-notes" name="notes" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-danger" id="delete-teacher-btn">
+                            <i class="fas fa-trash"></i>
+                            O'chirish
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="cancel-edit">Bekor qilish</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Yangilash
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin_teachers.js"></script>
+</body>
+</html>

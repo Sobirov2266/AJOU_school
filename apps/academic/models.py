@@ -1,67 +1,129 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-from apps.accounts.models import TeacherProfile
+from django.utils import timezone
+from apps.accounts.models import TeacherProfile, StudentProfile
 
 
 
-User = get_user_model()
-
-
+# =========================
+# SINFLAR
+# =========================
 class SchoolClass(models.Model):
-    name = models.CharField(max_length=50)  # masalan: 9-A, 10-B
-    teacher = models.ForeignKey(
-        TeacherProfile,
-        on_delete=models.CASCADE,
-        related_name="classes"
+    name = models.CharField(
+        max_length=20,
+        unique=True,
+        verbose_name="Sinf nomi"
     )
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         verbose_name = "Sinf"
         verbose_name_plural = "Sinflar"
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
 
 
 
-# Talaba modeli
-class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=150)
-
-    class Meta:
-        verbose_name = "Talaba"
-        verbose_name_plural = "Talabalar"
-
-    def __str__(self):
-        return self.full_name
 
 
-#  Sinfga yozilish modeli (Student ↔ Class)
-class Enrollment(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="enrollments")
-    school_class = models.ForeignKey(SchoolClass, on_delete=models.CASCADE, related_name="enrollments")
-    joined_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ("student", "school_class")
-        verbose_name = "Sinfga yozilish"
-        verbose_name_plural = "Sinfga yozilishlar"
-
-    def __str__(self):
-        return f"{self.student} -> {self.school_class}"
-
-
-# Fan modeli
+# =========================
+# FANLAR
+# =========================
 class Subject(models.Model):
-    name = models.CharField(max_length=100)
-    school_class = models.ForeignKey(SchoolClass, on_delete=models.CASCADE, related_name="subjects")
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Fan nomi"
+    )
+    code = models.CharField(
+        max_length=30,
+        unique=True,
+        verbose_name="Fan kodi"
+    )
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         verbose_name = "Fan"
         verbose_name_plural = "Fanlar"
+        ordering = ["name"]
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.code})"
+
+
+
+
+
+# =========================
+# SINF ↔ FAN ↔ O‘QITUVCHI
+# =========================
+class ClassSubject(models.Model):
+    school_class = models.ForeignKey(
+        SchoolClass,
+        on_delete=models.CASCADE,
+        related_name="class_subjects",
+        verbose_name="Sinf"
+    )
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        related_name="class_subjects",
+        verbose_name="Fan"
+    )
+    teacher = models.ForeignKey(
+        TeacherProfile,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="class_subjects",
+        verbose_name="O‘qituvchi"
+    )
+    weekly_hours = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Haftalik soat"
+    )
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "Sinf fani"
+        verbose_name_plural = "Sinf fanlari"
+        unique_together = ("school_class", "subject")
+        ordering = ["school_class", "subject"]
+
+    def __str__(self):
+        return f"{self.school_class} → {self.subject} ({self.teacher})"
+
+
+
+
+
+
+# =========================
+# O‘QUVCHI ↔ SINF
+# =========================
+class Enrollment(models.Model):
+    student = models.OneToOneField(
+        StudentProfile,
+        on_delete=models.CASCADE,
+        related_name="enrollment"
+    )
+    school_class = models.ForeignKey(
+        SchoolClass,
+        on_delete=models.CASCADE,
+        related_name="enrollments"
+    )
+
+    enrolled_at = models.DateField(default=timezone.now)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "O‘quvchini sinfga biriktirish"
+        verbose_name_plural = "O‘quvchilar sinflari"
+
+    def __str__(self):
+        return f"{self.student} → {self.school_class}"
+
+

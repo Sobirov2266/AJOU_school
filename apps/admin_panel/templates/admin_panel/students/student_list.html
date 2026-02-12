@@ -1,0 +1,177 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="students-page">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <div>
+            <h1>O‘quvchilar</h1>
+            <p>Barcha o‘quvchilar ro‘yxati</p>
+        </div>
+
+        <div class="page-actions">
+            <input type="text" class="search-input" placeholder="Qidirish...">
+            <a href="{% url 'admin_panel:student_create' %}" class="btn btn-primary">+ Yangi o‘quvchi</a>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span>{{ total_students }}</span>
+            <p>Jami</p>
+        </div>
+        <div class="stat-card green">
+            <span>{{ active_students }}</span>
+            <p>Faol</p>
+        </div>
+        <div class="stat-card red">
+            <span>{{ inactive_students }}</span>
+            <p>Faol emas</p>
+        </div>
+        <div class="stat-card blue">
+            <span>{{ today_students }}</span>
+            <p>Bugun</p>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+        <div class="table-header">
+            <h3>O‘quvchilar ro‘yxati</h3>
+            <div class="table-actions">
+                <button class="btn btn-outline">Filtr</button>
+                <button class="btn btn-outline">Yuklab olish</button>
+            </div>
+        </div>
+
+        <table class="students-table">
+            <thead>
+                <tr>
+                    <th class="col-id">#</th>
+                    <th>F.I.Sh</th>
+                    <th>Passport / ID</th>
+                    <th>Tug‘ilgan sana</th>
+                    <th>Sinf</th>
+                    <th>Status</th>
+                    <th class="col-actions">Amallar</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td class="col-id">{{ forloop.counter }}</td>
+
+                    <td>
+                        <div class="user-cell">
+                            <div class="avatar">
+                                {{ student.first_name|first }}{{ student.last_name|first }}
+                            </div>
+                            <div>
+                                <strong>{{ student.first_name }} {{ student.last_name }}</strong>
+                                <small>{{ student.user.email }}</small>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>{{ student.passport_id }}</td>
+                    <td>{{ student.birth_date|date:"d M, Y" }}</td>
+
+                    <td>
+                        {% if student.enrollment %}
+                            <span class="badge class">
+                                {{ student.enrollment.school_class.name }}
+                            </span>
+                        {% else %}—{% endif %}
+                    </td>
+
+                    <td>
+                        {% if student.enrollment %}
+                            <span class="badge status {% if student.enrollment.is_active %}active{% else %}inactive{% endif %}"
+                                  onclick="toggleStatus(this)"
+                                  data-enrollment-id="{{ student.enrollment.id }}">
+                                {% if student.enrollment.is_active %}Active{% else %}Inactive{% endif %}
+                            </span>
+                        {% else %}—{% endif %}
+                    </td>
+
+                    <td class="col-actions">
+                        <a href="{% url 'admin_panel:student_edit' student.id %}" class="icon-btn edit">✏️</a>
+                        <button class="icon-btn delete"
+                                onclick="deleteStudent({{ student.id }})"
+                                title="O‘chirish">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="table-footer">
+            {{ students|length }} ta o‘quvchi ko‘rsatilmoqda
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+function deleteStudent(studentId) {
+    if (!confirm("Rostdan o‘chirmoqchimisiz?")) return;
+
+    fetch(`/admin-panel/students/delete/${studentId}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert("O‘chirishda xatolik yuz berdi");
+        }
+    });
+}
+</script>
+
+
+<script>
+function toggleStatus(el) {
+    const enrollmentId = el.dataset.enrollmentId;
+
+    fetch(`/admin-panel/students/toggle-status/${enrollmentId}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.is_active) {
+            el.classList.remove("inactive");
+            el.classList.add("active");
+            el.textContent = "Active";
+        } else {
+            el.classList.remove("active");
+            el.classList.add("inactive");
+            el.textContent = "Inactive";
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Statusni o‘zgartirishda xatolik");
+    });
+}
+</script>
+
+
+
+{% endblock %}

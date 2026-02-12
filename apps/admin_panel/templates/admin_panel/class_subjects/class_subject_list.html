@@ -1,0 +1,356 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Class Subjects{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_class_subjects.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="cs-page">
+
+  <div class="cs-header">
+    <div>
+      <h1>Sinf fanlari</h1>
+      <p>Sinf ↔ Fan ↔ O‘qituvchi biriktirish</p>
+    </div>
+
+    <button class="btn primary" id="openCreateModal">
+      <i class="fa-solid fa-plus"></i> Yangi biriktirish
+    </button>
+  </div>
+
+  {% if messages %}
+    <div class="cs-messages">
+      {% for message in messages %}
+        <div class="cs-alert {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="cs-toolbar">
+    <form method="get" class="cs-filters">
+      <div class="cs-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" name="q" value="{{ q }}" placeholder="Sinf, fan, kod, o‘qituvchi..." />
+      </div>
+
+      <select name="class_id">
+        <option value="">Barcha sinflar</option>
+        {% for c in classes %}
+          <option value="{{ c.id }}" {% if class_id == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="subject_id">
+        <option value="">Barcha fanlar</option>
+        {% for s in subjects %}
+          <option value="{{ s.id }}" {% if subject_id == s.id|stringformat:"s" %}selected{% endif %}>{{ s.name }} ({{ s.code }})</option>
+        {% endfor %}
+      </select>
+
+      <select name="teacher_id">
+        <option value="">Barcha o‘qituvchilar</option>
+        {% for t in teachers %}
+          <option value="{{ t.id }}" {% if teacher_id == t.id|stringformat:"s" %}selected{% endif %}>
+            {{ t.last_name }} {{ t.first_name }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <select name="status">
+        <option value="">Status: Barchasi</option>
+        <option value="active" {% if status == "active" %}selected{% endif %}>Active</option>
+        <option value="inactive" {% if status == "inactive" %}selected{% endif %}>Inactive</option>
+      </select>
+
+      <button class="btn outline" type="submit">Filtrlash</button>
+      <a class="btn ghost" href="{% url 'admin_panel:class_subject_list' %}">Tozalash</a>
+    </form>
+
+    <div class="cs-count">
+      <span>{{ count }} ta</span>
+    </div>
+  </div>
+
+  <div class="cs-card">
+    <div class="cs-card-head">
+      <h3>Ro‘yxat</h3>
+    </div>
+
+    <div class="cs-table-wrap">
+      <table class="cs-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Sinf</th>
+            <th>Fan</th>
+            <th>O‘qituvchi</th>
+            <th>Haftalik soat</th>
+            <th>Status</th>
+            <th class="right">Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for x in items %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+
+            <td>
+              <span class="badge class">{{ x.school_class.name }}</span>
+               <small>{{ x.student_count }} ta o‘quvchi</small>
+            </td>
+
+            <td>
+              <div class="subject-cell">
+                <strong>{{ x.subject.name }}</strong>
+                <small>{{ x.subject.code }}</small>
+              </div>
+            </td>
+
+            <td>
+              {% if x.teacher %}
+                {{ x.teacher.last_name }} {{ x.teacher.first_name }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+
+            <td>{{ x.weekly_hours }}</td>
+
+            <td>
+              <span
+                class="badge status {% if x.is_active %}active{% else %}inactive{% endif %}"
+                data-id="{{ x.id }}"
+                onclick="toggleCSStatus(this)"
+                title="Bosib statusni o‘zgartiring"
+              >
+                {% if x.is_active %}Active{% else %}Inactive{% endif %}
+              </span>
+            </td>
+
+            <td class="right">
+              <button
+                class="icon-btn edit"
+                onclick="openEditModal(this)"
+                data-id="{{ x.id }}"
+                data-school-class="{{ x.school_class.id }}"
+                data-subject="{{ x.subject.id }}"
+                data-teacher="{% if x.teacher %}{{ x.teacher.id }}{% endif %}"
+                data-weekly-hours="{{ x.weekly_hours }}"
+                data-active="{{ x.is_active }}"
+                title="Tahrirlash"
+              >
+                <i class="fa-solid fa-pen"></i>
+              </button>
+
+              <a class="icon-btn delete" href="{% url 'admin_panel:class_subject_delete' x.id %}"
+                 onclick="return confirm('O‘chirishni tasdiqlaysizmi?')"
+                 title="O‘chirish"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="empty">Hozircha ma’lumot yo‘q</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- CREATE MODAL -->
+<div class="modal" id="createModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="mh-left">
+        <div class="mh-icon"><i class="fa-solid fa-link"></i></div>
+        <div>
+          <h2>Yangi biriktirish</h2>
+          <p>Sinf ↔ Fan ↔ O‘qituvchi</p>
+        </div>
+      </div>
+      <button class="mh-close" onclick="closeModal('createModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <form method="post" action="{% url 'admin_panel:class_subject_create' %}" class="modal-body">
+      {% csrf_token %}
+
+      <div class="grid">
+        <div class="field">
+          <label>Sinf</label>
+          <select name="school_class" required>
+            <option value="">— tanlang —</option>
+            {% for c in classes %}
+              <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Fan</label>
+          <select name="subject" required>
+            <option value="">— tanlang —</option>
+            {% for s in subjects %}
+              <option value="{{ s.id }}">{{ s.name }} ({{ s.code }})</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field">
+          <label>O‘qituvchi (ixtiyoriy)</label>
+          <select name="teacher">
+            <option value="">— tanlanmagan —</option>
+            {% for t in teachers %}
+              <option value="{{ t.id }}">{{ t.last_name }} {{ t.first_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Haftalik soat</label>
+          <input type="number" name="weekly_hours" min="0" value="0" />
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select name="is_active">
+            <option value="1" selected>Active</option>
+            <option value="0">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">Saqlash</button>
+        <button type="button" class="btn secondary" onclick="closeModal('createModal')">Bekor qilish</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal" id="editModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="mh-left">
+        <div class="mh-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+        <div>
+          <h2>Biriktirishni tahrirlash</h2>
+          <p>Ma’lumotlarni yangilang</p>
+        </div>
+      </div>
+      <button class="mh-close" onclick="closeModal('editModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <form method="post" action="{% url 'admin_panel:class_subject_update' %}" class="modal-body">
+      {% csrf_token %}
+      <input type="hidden" name="id" id="edit_id">
+
+      <div class="grid">
+        <div class="field">
+          <label>Sinf</label>
+          <select name="school_class" id="edit_school_class" required>
+            <option value="">— tanlang —</option>
+            {% for c in classes %}
+              <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Fan</label>
+          <select name="subject" id="edit_subject" required>
+            <option value="">— tanlang —</option>
+            {% for s in subjects %}
+              <option value="{{ s.id }}">{{ s.name }} ({{ s.code }})</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field">
+          <label>O‘qituvchi (ixtiyoriy)</label>
+          <select name="teacher" id="edit_teacher">
+            <option value="">— tanlanmagan —</option>
+            {% for t in teachers %}
+              <option value="{{ t.id }}">{{ t.last_name }} {{ t.first_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Haftalik soat</label>
+          <input type="number" name="weekly_hours" id="edit_weekly_hours" min="0" value="0" />
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select name="is_active" id="edit_is_active">
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">Saqlash</button>
+        <button type="button" class="btn secondary" onclick="closeModal('editModal')">Bekor qilish</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // modal open/close
+  const openCreateBtn = document.getElementById("openCreateModal");
+  openCreateBtn?.addEventListener("click", () => openModal("createModal"));
+
+  function openModal(id){ document.getElementById(id).classList.add("active"); }
+  function closeModal(id){ document.getElementById(id).classList.remove("active"); }
+
+  // click outside close
+  document.querySelectorAll(".modal").forEach(m => {
+    m.addEventListener("click", (e) => { if(e.target === m) m.classList.remove("active"); });
+  });
+
+  function openEditModal(btn){
+    openModal("editModal");
+    document.getElementById("edit_id").value = btn.dataset.id;
+    document.getElementById("edit_school_class").value = btn.dataset.schoolClass || "";
+    document.getElementById("edit_subject").value = btn.dataset.subject || "";
+    document.getElementById("edit_teacher").value = btn.dataset.teacher || "";
+    document.getElementById("edit_weekly_hours").value = btn.dataset.weeklyHours || "0";
+    document.getElementById("edit_is_active").value = (btn.dataset.active === "True" || btn.dataset.active === "true") ? "1" : "0";
+  }
+
+  // status toggle (ajax)
+  function toggleCSStatus(el){
+    const id = el.dataset.id;
+    fetch(`/admin-panel/class-subjects/toggle-status/${id}/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    })
+    .then(r => r.json())
+    .then(data => {
+      if(data.is_active){
+        el.classList.remove("inactive");
+        el.classList.add("active");
+        el.textContent = "Active";
+      } else {
+        el.classList.remove("active");
+        el.classList.add("inactive");
+        el.textContent = "Inactive";
+      }
+    });
+  }
+</script>
+{% endblock %}

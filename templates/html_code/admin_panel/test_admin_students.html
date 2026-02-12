@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJOU Admin - O'quvchilar</title>
+    <link rel="stylesheet" href="test_admin-students.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> AJOU Admin</h1>
+            </div>
+
+            <nav class="menu">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>O'qituvchilar</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="#">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>O'quvchilar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-school"></i>
+                            <span>Sinflar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-cog"></i>
+                            <span>Sozlamalar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Chiqish</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h2>O'quvchilar</h2>
+                    <p>Barcha o'quvchilar ro'yxati</p>
+                </div>
+
+                <div class="header-right">
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="O'quvchi qidirish...">
+                        </div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Yangi o'quvchi
+                        </button>
+                        <div class="user-profile">
+                            <div class="avatar">A</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Stats Cards -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #e3f2fd;">
+                            <i class="fas fa-user-graduate" style="color: #2196f3;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>4</h3>
+                            <p>Jami o'quvchilar</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #e8f5e9;">
+                            <i class="fas fa-check-circle" style="color: #4caf50;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>0</h3>
+                            <p>Faol o'quvchilar</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #fff3e0;">
+                            <i class="fas fa-pause-circle" style="color: #ff9800;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>4</h3>
+                            <p>Faol emas</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #fce4ec;">
+                            <i class="fas fa-chart-line" style="color: #e91e63;"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>4</h3>
+                            <p>Bugun qo'shilgan</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Section -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>O'quvchilar ro'yxati</h3>
+                        <div class="table-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-filter"></i> Filtr
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-download"></i> Yuklab olish
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="students-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>F.I.SH</th>
+                                    <th>PASSPORT / ID</th>
+                                    <th>TUG'ILGAN SANA</th>
+                                    <th>SINF</th>
+                                    <th>STATUS</th>
+                                    <th>AMALLAR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="avatar-small">T1</div>
+                                            <div class="student-details">
+                                                <span class="student-name">talaba1 talaba1</span>
+                                                <span class="student-email">talaba1@ajou.uz</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>talaba1</td>
+                                    <td>13 Yan, 2026</td>
+                                    <td><span class="class-badge">5-A</span></td>
+                                    <td>
+                                        <span class="status-badge status-inactive">
+                                            <i class="fas fa-circle"></i> Inactive
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn">
+                                                <i class="fas fa-eye"></i> Ko'rish
+                                            </button>
+                                            <button class="action-btn edit-btn">
+                                                <i class="fas fa-edit"></i> Tahrirlash
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>2</td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="avatar-small">T4</div>
+                                            <div class="student-details">
+                                                <span class="student-name">talaba4 talaba4</span>
+                                                <span class="student-email">talaba4@ajou.uz</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>talaba4</td>
+                                    <td>13 Yan, 2026</td>
+                                    <td><span class="class-badge">5-A</span></td>
+                                    <td>
+                                        <span class="status-badge status-inactive">
+                                            <i class="fas fa-circle"></i> Inactive
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn">
+                                                <i class="fas fa-eye"></i> Ko'rish
+                                            </button>
+                                            <button class="action-btn edit-btn">
+                                                <i class="fas fa-edit"></i> Tahrirlash
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>3</td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="avatar-small">T5</div>
+                                            <div class="student-details">
+                                                <span class="student-name">talaba5 talaba5</span>
+                                                <span class="student-email">talaba5@ajou.uz</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>talaba5</td>
+                                    <td>11 Yan, 2026</td>
+                                    <td><span class="class-badge">6-A</span></td>
+                                    <td>
+                                        <span class="status-badge status-inactive">
+                                            <i class="fas fa-circle"></i> Inactive
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn">
+                                                <i class="fas fa-eye"></i> Ko'rish
+                                            </button>
+                                            <button class="action-btn edit-btn">
+                                                <i class="fas fa-edit"></i> Tahrirlash
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>4</td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="avatar-small">T6</div>
+                                            <div class="student-details">
+                                                <span class="student-name">talaba6 talaba6</span>
+                                                <span class="student-email">talaba6@ajou.uz</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>talaba6</td>
+                                    <td>11 Yan, 2026</td>
+                                    <td><span class="class-badge">5-B</span></td>
+                                    <td>
+                                        <span class="status-badge status-inactive">
+                                            <i class="fas fa-circle"></i> Inactive
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn">
+                                                <i class="fas fa-eye"></i> Ko'rish
+                                            </button>
+                                            <button class="action-btn edit-btn">
+                                                <i class="fas fa-edit"></i> Tahrirlash
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-footer">
+                        <div class="table-info">
+                            <p>4 ta o'quvchi ko'rsatilmoqda</p>
+                        </div>
+                        <div class="pagination">
+                            <button class="pagination-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span class="pagination-page active">1</span>
+                            <button class="pagination-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Backend bilan integratsiya qilishda foydalanish uchun JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Har bir o'quvchi uchun amallar
+            const viewButtons = document.querySelectorAll('.view-btn');
+            const editButtons = document.querySelectorAll('.edit-btn');
+
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const row = this.closest('tr');
+                    const studentId = row.cells[0].textContent;
+                    const studentName = row.querySelector('.student-name').textContent;
+
+                    alert(`${studentName} (ID: ${studentId}) ma'lumotlarini ko'rish`);
+                    // Backend uchun: window.location.href = `/students/${studentId}`;
+                });
+            });
+
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const row = this.closest('tr');
+                    const studentId = row.cells[0].textContent;
+                    const studentName = row.querySelector('.student-name').textContent;
+
+                    alert(`${studentName} (ID: ${studentId}) ma'lumotlarini tahrirlash`);
+                    // Backend uchun: window.location.href = `/students/${studentId}/edit`;
+                });
+            });
+
+            // Yangi o'quvchi qo'shish
+            const addStudentBtn = document.querySelector('.btn-primary');
+            addStudentBtn.addEventListener('click', function() {
+                alert("Yangi o'quvchi qo'shish formasini ochish");
+                // Backend uchun: window.location.href = '/students/create';
+            });
+
+            // Logout
+            const logoutBtn = document.querySelector('.logout-btn');
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm("Tizimdan chiqishni xohlaysizmi?")) {
+                    alert("Tizimdan chiqildi");
+                    // Backend uchun: window.location.href = '/logout';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

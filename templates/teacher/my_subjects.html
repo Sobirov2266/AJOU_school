@@ -1,0 +1,44 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Mening fanlarim</h1>
+    <p>Sizga biriktirilgan fanlar ro‘yxati</p>
+</div>
+
+<div class="subjects-grid">
+
+    {% for item in class_subjects %}
+    <div class="subject-card">
+
+        <div class="card-header">
+            <h3>{{ item.subject.name }}</h3>
+            <span class="badge {% if item.is_active %}active{% else %}completed{% endif %}">
+                {% if item.is_active %}active{% else %}completed{% endif %}
+            </span>
+        </div>
+
+        <p class="class-name">{{ item.school_class.name }} sinf</p>
+
+        <div class="card-info">
+            <div class="info-item">
+                👨‍🎓 {{ item.student_count }} o‘quvchi
+            </div>
+            <div class="info-item">
+                ⏱ Haftasiga {{ item.weekly_hours }} marta
+            </div>
+        </div>
+
+        <div class="card-actions">
+            <a href="#" class="btn-outline">Ko‘rish</a>
+            <a href="#" class="btn-primary">Boshqarish</a>
+        </div>
+
+    </div>
+    {% empty %}
+        <p>Hozircha sizga fan biriktirilmagan</p>
+    {% endfor %}
+
+</div>
+{% endblock %}

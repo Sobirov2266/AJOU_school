@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yangi O'quvchi Qo'shish</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .form-section {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .illustration-section {
+            flex: 0.8;
+            background: linear-gradient(to right, #4a6fa5, #2c4d80);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: white;
+            position: relative;
+        }
+
+        .logo {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header h1 i {
+            margin-right: 15px;
+            color: #4a6fa5;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: #4a6fa5;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+        }
+
+        .input-with-icon input,
+        .input-with-icon select {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #f8fafc;
+        }
+
+        .input-with-icon input:focus,
+        .input-with-icon select:focus {
+            border-color: #4a6fa5;
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+            outline: none;
+            background-color: white;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .file-upload {
+            border: 2px dashed #c3cfe2;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            background-color: #f8fafc;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: #4a6fa5;
+            background-color: #f0f5ff;
+        }
+
+        .file-upload i {
+            font-size: 40px;
+            color: #4a6fa5;
+            margin-bottom: 10px;
+        }
+
+        .file-upload p {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .file-upload span {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        #file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #4a6fa5;
+            font-weight: 500;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 16px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background-color: #4a6fa5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5a80;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 111, 165, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #f0f5ff;
+            color: #4a6fa5;
+            border: 2px solid #c3cfe2;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e9ff;
+            transform: translateY(-2px);
+        }
+
+        .btn i {
+            margin-right: 10px;
+        }
+
+        .illustration {
+            max-width: 80%;
+            margin-bottom: 30px;
+        }
+
+        .illustration-content h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .illustration-content p {
+            font-size: 16px;
+            text-align: center;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .feature i {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .illustration-section {
+                order: -1;
+                padding: 30px;
+            }
+
+            .illustration {
+                max-width: 60%;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .form-section {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .illustration-section {
+                padding: 20px;
+            }
+
+            .illustration-content h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-section">
+            <div class="header">
+                <h1><i class="fas fa-user-plus"></i> Yangi O'quvchi Qo'shish</h1>
+                <p>Yangi o'quvchi ma'lumotlarini quyidagi forma orqali kiriting</p>
+            </div>
+
+            <form id="studentForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> Username</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user-circle"></i>
+                            <input type="text" id="username" name="username" placeholder="janob" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Parol</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-key"></i>
+                            <input type="password" id="password" name="password" placeholder="********" required>
+                            <span class="password-toggle" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName"><i class="fas fa-signature"></i> Ismi</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="firstName" name="firstName" placeholder="O'quvchi ismi" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName"><i class="fas fa-signature"></i> Familiyasi</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="lastName" name="lastName" placeholder="O'quvchi familiyasi" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="birthDate"><i class="fas fa-calendar-alt"></i> Tug'ilgan sana</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-birthday-cake"></i>
+                            <input type="text" id="birthDate" name="birthDate" placeholder="ДД.ММ.ГГГГ" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passportId"><i class="fas fa-passport"></i> Passport ID</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-id-card"></i>
+                            <input type="text" id="passportId" name="passportId" placeholder="Passport raqami" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="parentPhone"><i class="fas fa-phone-alt"></i> Ota-ona telefon</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                            <input type="tel" id="parentPhone" name="parentPhone" placeholder="+998 (XX) XXX-XX-XX" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="class"><i class="fas fa-graduation-cap"></i> Sinf</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-school"></i>
+                            <select id="class" name="class" required>
+                                <option value="">— Sinfini tanlang —</option>
+                                <option value="1">1-sinf</option>
+                                <option value="2">2-sinf</option>
+                                <option value="3">3-sinf</option>
+                                <option value="4">4-sinf</option>
+                                <option value="5">5-sinf</option>
+                                <option value="6">6-sinf</option>
+                                <option value="7">7-sinf</option>
+                                <option value="8">8-sinf</option>
+                                <option value="9">9-sinf</option>
+                                <option value="10">10-sinf</option>
+                                <option value="11">11-sinf</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-portrait"></i> Profil rasmi</label>
+                    <div class="file-upload" id="fileUpload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Выбор файла</p>
+                        <span>Faylni bu yerga torting yoki tanlash uchun bosing</span>
+                        <div id="file-name"></div>
+                        <input type="file" id="profileImage" name="profileImage" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Saqlash
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="clearBtn">
+                        <i class="fas fa-times"></i> Tozalash
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="illustration-section">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i> EduSys
+            </div>
+
+            <div class="illustration">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400">
+                    <circle cx="250" cy="200" r="180" fill="#5a7bb0"/>
+                    <circle cx="250" cy="180" r="120" fill="#7d9bc9"/>
+                    <path d="M150,280 C150,220 200,180 250,180 C300,180 350,220 350,280 L150,280 Z" fill="#a0b6de"/>
+                    <circle cx="200" cy="140" r="20" fill="#2c3e50"/>
+                    <circle cx="300" cy="140" r="20" fill="#2c3e50"/>
+                    <path d="M220,190 Q250,220 280,190" stroke="#2c3e50" stroke-width="8" fill="none"/>
+                    <path d="M180,320 L220,360 L280,360 L320,320" fill="#e74c3c"/>
+                    <path d="M180,320 L320,320 L320,340 L180,340 Z" fill="#c0392b"/>
+                    <circle cx="250" cy="100" r="40" fill="#f1c40f"/>
+                </svg>
+            </div>
+
+            <div class="illustration-content">
+                <h2>Yangi O'quvchi Qo'shish</h2>
+                <p>O'quvchilarni tizimga qo'shish orqali ularning barcha ma'lumotlarini boshqarishingiz mumkin. Har bir o'quvchi uchun profil yaratib, o'qish jarayonini samarali tashkil eting.</p>
+
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i> <span>Xavfsiz ma'lumotlar</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i> <span>Tezkor qo'shish</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i> <span>Barcha ma'lumotlar saqlanadi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Parolni ko'rsatish/yashirish
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        // Fayl yuklash
+        const fileUpload = document.getElementById('fileUpload');
+        const profileImage = document.getElementById('profileImage');
+        const fileName = document.getElementById('file-name');
+
+        fileUpload.addEventListener('click', function() {
+            profileImage.click();
+        });
+
+        profileImage.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileName.textContent = `Tanlangan fayl: ${this.files[0].name}`;
+                fileUpload.style.borderColor = '#4a6fa5';
+                fileUpload.style.backgroundColor = '#f0f5ff';
+            } else {
+                fileName.textContent = '';
+                fileUpload.style.borderColor = '#c3cfe2';
+                fileUpload.style.backgroundColor = '#f8fafc';
+            }
+        });
+
+        // Faylni drag & drop qilish
+        fileUpload.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#4a6fa5';
+            this.style.backgroundColor = '#f0f5ff';
+        });
+
+        fileUpload.addEventListener('dragleave', function() {
+            this.style.borderColor = '#c3cfe2';
+            this.style.backgroundColor = '#f8fafc';
+        });
+
+        fileUpload.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#4a6fa5';
+            this.style.backgroundColor = '#f0f5ff';
+
+            if (e.dataTransfer.files.length > 0) {
+                profileImage.files = e.dataTransfer.files;
+                fileName.textContent = `Tanlangan fayl: ${e.dataTransfer.files[0].name}`;
+            }
+        });
+
+        // Formani tozalash
+        const clearBtn = document.getElementById('clearBtn');
+        clearBtn.addEventListener('click', function() {
+            document.getElementById('studentForm').reset();
+            fileName.textContent = '';
+            fileUpload.style.borderColor = '#c3cfe2';
+            fileUpload.style.backgroundColor = '#f8fafc';
+        });
+
+        // Formani yuborish
+        const form = document.getElementById('studentForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Bu yerda formani yuborish logikasi bo'lishi kerak
+            // Hozircha oddiy xabar ko'rsatamiz
+            alert('O\'quvchi muvaffaqiyatli qo\'shildi!');
+            form.reset();
+            fileName.textContent = '';
+            fileUpload.style.borderColor = '#c3cfe2';
+            fileUpload.style.backgroundColor = '#f8fafc';
+        });
+
+        // Tug'ilgan sanani formati
+        const birthDateInput = document.getElementById('birthDate');
+        birthDateInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '.' + value.substring(2);
+            }
+            if (value.length >= 5) {
+                value = value.substring(0, 5) + '.' + value.substring(5, 9);
+            }
+
+            e.target.value = value;
+        });
+
+        // Telefon raqami formati
+        const phoneInput = document.getElementById('parentPhone');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+
+            if (value.startsWith('998')) {
+                value = '+998 ' + value.substring(3);
+            }
+
+            if (value.length > 4) {
+                value = value.substring(0, 7) + ' ' + value.substring(7);
+            }
+            if (value.length > 9) {
+                value = value.substring(0, 10) + '-' + value.substring(10);
+            }
+            if (value.length > 13) {
+                value = value.substring(0, 13) + '-' + value.substring(13, 15);
+            }
+
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>

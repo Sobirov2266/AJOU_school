@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.dashboard',
     'apps.academic',
+    'apps.admin_panel',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -98,7 +99,7 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 
-SESSION_COOKIE_AGE = 60 * 60 * 6   # 6 soat
+SESSION_COOKIE_AGE = 1209600     # 6 soat
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
@@ -108,3 +109,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

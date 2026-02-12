@@ -1,0 +1,30 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>AJOU Admin</h2>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li>
+            <a href="{% url 'admin_panel:admin_dashboard' %}">🏠 Dashboard</a>
+        </li>
+        <li>
+            <a href="{% url 'admin_panel:teacher_list' %}">👨‍🏫 Teachers</a>
+        </li>
+        <li>
+            <a href="{% url 'admin_panel:admin_students' %}">🎓 Students</a>
+        </li>
+        <li>
+            <a href="{% url 'admin_panel:class_list' %}">📚 Classes</a>
+        </li>
+        <li>
+            <a href="{% url 'admin_panel:class_subject_list' %}">📌 Class Subjects</a>
+        </li>
+
+        <li>
+            <a href="#">⚙️ Settings</a>
+        </li>
+        <li class="logout">
+            <a href="{% url 'logout' %}">🚪 Logout</a>
+        </li>
+    </ul>
+</aside>

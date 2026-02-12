@@ -1,0 +1,453 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Teachers{% endblock %}
+
+{% block content %}
+
+<main class="main-content">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h2>O‘qituvchilar</h2>
+            <p>Barcha o‘qituvchilar ro‘yxati</p>
+        </div>
+    </header>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+        <form method="get" class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+                type="text"
+                name="q"
+                value="{{ request.GET.q }}"
+                placeholder="Ism, familiya, passport yoki JSHSHR"
+            >
+        </form>
+
+
+
+        <button class="btn btn-primary" id="openTeacherModal">
+            <i class="fas fa-user-plus"></i>
+            Yangi o‘qituvchi
+        </button>
+    </div>
+
+    <!-- Table -->
+    <div class="card table-container">
+        <div class="card-header">
+            <h3>O‘qituvchilar ro‘yxati</h3>
+            <span>{{ teacher_count }} ta o‘qituvchi</span>
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="teachers-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>F.I.Sh</th>
+                        <th>Passport</th>
+                        <th>Tug‘ilgan yili</th>
+                        <th>Jinsi</th>
+                        <th>Status</th>
+                        <th>Amallar</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for teacher in teachers %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ teacher.last_name }} {{ teacher.first_name }}</td>
+                        <td>{{ teacher.passport_id|default:"—" }}</td>
+                        <td>{{ teacher.birth_year|default:"—" }}</td>
+                        <td>
+                            {% if teacher.gender == 'male' %} Erkak
+                            {% elif teacher.gender == 'female' %} Ayol
+                            {% else %} — {% endif %}
+                        </td>
+                        <td>
+                            <span
+                              class="status-badge status-active"
+                              onclick="toggleStatus({{ teacher.id }})"
+                              style="cursor:pointer"
+                            >
+                              {{ teacher.user.is_active|yesno:"Active,Inactive" }}
+                            </span>
+
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <!-- Edit -->
+                                <button
+                                    class="action-btn edit"
+                                    data-id="{{ teacher.id }}"
+                                    data-first-name="{{ teacher.first_name }}"
+                                    data-last-name="{{ teacher.last_name }}"
+                                    data-birth-year="{{ teacher.birth_year }}"
+                                    data-gender="{{ teacher.gender }}"
+                                    data-active="{{ teacher.user.is_active }}"
+                                    data-subject="{{ teacher.subject.id|default:'' }}"
+                                >
+                                    <i class="fa-solid fa-pen"></i>
+                                </button>
+
+
+                                <!-- Delete -->
+                                <button class="action-btn delete" onclick="deleteTeacher({{ teacher.id }})">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+
+                            </div>
+                        </td>
+
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center text-muted" style="text-align:center;">Hech qanday o‘qituvchi topilmadi</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+
+<!-- MODAL: CREATE TEACHER (NEW DESIGN like student_create) -->
+<div class="modal" id="teacherCreateModal">
+  <div class="modal-content teacher-modal-card">
+
+    <!-- Header -->
+    <div class="teacher-modal-header">
+      <div class="teacher-modal-header-left">
+        <div class="teacher-modal-icon">
+          <i class="fa-solid fa-chalkboard-teacher"></i>
+        </div>
+        <div>
+          <h1>Yangi o‘qituvchi qo‘shish</h1>
+          <p>Xalqaro maktab uchun o‘qituvchi profilini yarating</p>
+        </div>
+      </div>
+
+      <button class="teacher-modal-close modal-close" type="button" aria-label="Close">
+        &times;
+      </button>
+    </div>
+
+      {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+              <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+
+    <!-- Body -->
+    <div class="teacher-modal-body">
+      <form method="post" action="{% url 'admin_panel:teacher_create' %}" class="teacher-form">
+        {% csrf_token %}
+
+        <!-- PERSONAL -->
+        <div class="teacher-form-section">
+          <h3>Shaxsiy ma’lumotlar</h3>
+
+          <div class="teacher-grid">
+            <div class="teacher-field">
+              <label>Ismi</label>
+              <input type="text" name="first_name" placeholder="Ismi" required>
+            </div>
+
+            <div class="teacher-field">
+              <label>Familiyasi</label>
+              <input type="text" name="last_name" placeholder="Familiyasi" required>
+            </div>
+
+            <div class="teacher-field">
+              <label>Otasining ismi</label>
+              <input type="text" name="father_name" placeholder="Otasining ismi" required>
+            </div>
+
+            <div class="teacher-field">
+              <label>Tug‘ilgan yili</label>
+              <input
+                type="number"
+                name="birth_year"
+                placeholder="Masalan: 1998"
+                min="1950"
+                max="2026"
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- DOCUMENTS -->
+        <div class="teacher-form-section">
+          <h3>Hujjatlar</h3>
+
+          <div class="teacher-grid">
+            <div class="teacher-field">
+              <label>Passport / ID</label>
+              <input type="text" name="passport_id" placeholder="passport_id" required>
+            </div>
+
+            <div class="teacher-field">
+              <label>JSHSHR</label>
+              <input type="text" name="jshshr" placeholder="jshshr" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCOUNT -->
+        <div class="teacher-form-section">
+          <h3>Account ma’lumotlari</h3>
+
+          <div class="teacher-grid">
+            <div class="teacher-field">
+              <label>Username</label>
+              <input type="text" name="username" placeholder="Username" required autocomplete="off">
+            </div>
+
+            <div class="teacher-field teacher-password-field">
+              <label>Parol</label>
+              <input type="password" name="password" id="teacherPasswordInput" placeholder="Parol" required autocomplete="new-password">
+              <span class="teacher-eye" onclick="toggleTeacherPassword(event)">
+                <i class="fa-solid fa-eye"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCHOOL -->
+            <div class="teacher-form-section">
+
+
+              <div class="teacher-grid">
+                <div class="teacher-field">
+                  <label>Jinsi</label>
+                  <select name="gender" required>
+                    <option value="">Jinsini tanlang</option>
+                    <option value="male">Erkak</option>
+                    <option value="female">Ayol</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+
+
+        <!-- ACTIONS -->
+        <div class="teacher-form-actions">
+          <button type="submit" class="btn primary">
+            Saqlash
+          </button>
+          <button type="button" class="btn secondary modal-close">
+            Bekor qilish
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Edit Teacher Modal -->
+<div class="modal" id="teacherEditModal">
+    <div class="modal-content modern-modal">
+
+        <div class="modal-header">
+            <h3>O‘qituvchini tahrirlash</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+
+        <form method="post" action="{% url 'admin_panel:teacher_update' %}" class="modal-form">
+            {% csrf_token %}
+            <input type="hidden" name="teacher_id" id="edit_teacher_id">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Ism</label>
+                    <input type="text" name="first_name" id="edit_first_name" placeholder="Ismi">
+                </div>
+
+                <div class="form-group">
+                    <label>Familiya</label>
+                    <input type="text" name="last_name" id="edit_last_name" placeholder="Familiyasi">
+                </div>
+
+                <div class="form-group">
+                    <label>Tug‘ilgan yili</label>
+                    <input type="number" name="birth_year" id="edit_birth_year" placeholder="1998">
+                </div>
+
+                <div class="form-group">
+                    <label>Jinsi</label>
+                    <select name="gender" id="edit_gender">
+                        <option value="">Tanlang</option>
+                        <option value="male">Erkak</option>
+                        <option value="female">Ayol</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Fan</label>
+                    <select name="subject" id="edit_subject">
+                        <option value="">Fan tanlanmagan</option>
+                        {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <div class="form-group full">
+                    <label>Status</label>
+                    <select name="is_active" id="edit_is_active">
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="form-group full">
+                    <label>Yangi parol (ixtiyoriy)</label>
+                    <input
+                        type="password"
+                        name="new_password"
+                        placeholder="Agar o‘zgartirmoqchi bo‘lsangiz kiriting"
+                        autocomplete="new-password"
+                    >
+                    <small style="color:#6b7280">
+                        Agar bo‘sh qoldirilsa, parol o‘zgarmaydi
+                    </small>
+                </div>
+
+
+            </div>
+
+            <div class="modal-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-save"></i> Saqlash
+                </button>
+                <button type="button" class="btn btn-secondary modal-close">
+                    Bekor qilish
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+<!-- MODAL SCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const createModal = document.getElementById("teacherCreateModal");
+  const editModal = document.getElementById("teacherEditModal");
+  const openBtn = document.getElementById("openTeacherModal");
+
+  function closeAll() {
+    document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
+  }
+
+  openBtn.addEventListener("click", () => createModal.classList.add("active"));
+
+  document.querySelectorAll(".modal-close").forEach(btn => {
+    btn.addEventListener("click", closeAll);
+  });
+
+  [createModal, editModal].forEach(m => {
+    m.addEventListener("click", e => {
+      if (e.target === m) m.classList.remove("active");
+    });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeAll();
+  });
+});
+</script>
+
+
+<!-- CREATE TEACHER UCHUN -->
+<script>
+function toggleTeacherPassword(ev) {
+  const input = document.getElementById("teacherPasswordInput");
+  const icon = ev.currentTarget.querySelector("i");
+
+  if (!input) return;
+
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.replace("fa-eye", "fa-eye-slash");
+  } else {
+    input.type = "password";
+    icon.classList.replace("fa-eye-slash", "fa-eye");
+  }
+}
+</script>
+
+
+<!-- tahrirlash uchun -->
+<script>
+document.querySelectorAll(".action-btn.edit").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.getElementById("teacherEditModal").classList.add("active");
+
+        document.getElementById("edit_teacher_id").value = btn.dataset.id;
+        document.getElementById("edit_first_name").value = btn.dataset.firstName || "";
+        document.getElementById("edit_last_name").value = btn.dataset.lastName || "";
+        document.getElementById("edit_birth_year").value = btn.dataset.birthYear || "";
+        document.getElementById("edit_gender").value = btn.dataset.gender || "";
+        document.getElementById("edit_is_active").value =
+            btn.dataset.active === "True" ? "1" : "0";
+
+        document.getElementById("edit_subject").value = btn.dataset.subject || "";
+    });
+});
+
+
+document.querySelectorAll(".modal-close").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
+    });
+});
+</script>
+
+
+<script>
+function toggleStatus(id) {
+    if (confirm("Statusni o‘zgartirmoqchimisiz?")) {
+        window.location.href = `/admin-panel/teachers/toggle-status/${id}/`;
+    }
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("open") === "create") {
+    document.getElementById("teacherCreateModal")?.classList.add("active");
+  }
+});
+</script>
+
+
+
+<!-- O'chirish uchun uchun  -->
+<script>
+function deleteTeacher(id) {
+    if (confirm("O‘qituvchini o‘chirishni tasdiqlaysizmi?")) {
+        window.location.href = `/admin-panel/teachers/delete/${id}/`;
+    }
+}
+</script>
+
+
+
+
+{% endblock %}

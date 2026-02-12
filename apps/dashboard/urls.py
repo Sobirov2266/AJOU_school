@@ -1,8 +1,12 @@
 from django.urls import path
-from .views import teacher_dashboard, student_dashboard, my_classes
+from . import views
+
+
+app_name = 'dashboard'
+
+
 
 urlpatterns = [
-    path('teacher/', teacher_dashboard, name='teacher_dashboard'),
-    path('student/', student_dashboard, name='student_dashboard'),
-    path("my-classes/", my_classes, name="my_classes"),
+    path('teacher/', views.teacher_dashboard, name='teacher_dashboard'),
+    path('my-subjects/', views.my_subjects, name='my_subjects'),
 ]

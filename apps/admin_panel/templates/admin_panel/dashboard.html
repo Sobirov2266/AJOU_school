@@ -1,0 +1,184 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<!--  Asosiy Kontent -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h2>Dashboard</h2>
+                    <p>Xush kelibsiz, Admin!</p>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" alt="Admin">
+                        <span>Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Statistik Kartalar -->
+            <section class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon teacher">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>O'qituvchilar</h3>
+                        <p class="count">{{ teacher_count }}</p>
+                        <p class="stat-desc">Faol o'qituvchilar</p>
+                    </div>
+                    <a href="#" class="stat-link">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon class">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Sinflar</h3>
+                        <p class="count">{{ class_count }}</p>
+                        <p class="stat-desc">Mavjud sinflar</p>
+                    </div>
+                    <a href="#" class="stat-link">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon student">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>O'quvchilar</h3>
+                        <p class="count">{{ student_count }}</p>
+                        <p class="stat-desc">Ro'yxatdan o'tgan o'quvchilar</p>
+                    </div>
+                    <a href="#" class="stat-link">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon activity">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Faollik</h3>
+                        <p class="count">85%</p>
+                        <p class="stat-desc">Bugungi faollik</p>
+                    </div>
+                    <a href="#" class="stat-link">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Chart va Jadval -->
+            <section class="content-grid">
+                <div class="chart-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Faollik statistikasi (7 kun)</h3>
+                            <div class="period-selector">
+                                <select>
+                                    <option>Haftalik</option>
+                                    <option>Oylik</option>
+                                    <option>Yillik</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-placeholder">
+                                <!-- Chart uchun joy -->
+                                <div class="chart-bars">
+                                    <div class="bar" style="height: 70%;">
+                                        <span>DU</span>
+                                    </div>
+                                    <div class="bar" style="height: 85%;">
+                                        <span>SE</span>
+                                    </div>
+                                    <div class="bar" style="height: 60%;">
+                                        <span>CH</span>
+                                    </div>
+                                    <div class="bar" style="height: 90%;">
+                                        <span>PA</span>
+                                    </div>
+                                    <div class="bar" style="height: 75%;">
+                                        <span>JU</span>
+                                    </div>
+                                    <div class="bar" style="height: 80%;">
+                                        <span>SH</span>
+                                    </div>
+                                    <div class="bar" style="height: 65%;">
+                                        <span>YA</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>So'nggi faollik</h3>
+                        </div>
+                        <div class="card-body">
+                            <ul class="activity-list">
+                                <li>
+                                    <div class="activity-icon new-user">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="activity-details">
+                                        <p>Yangi o'quvchi qo'shildi</p>
+                                        <span class="activity-time">10 daqiqa oldin</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="activity-icon class-added">
+                                        <i class="fas fa-school"></i>
+                                    </div>
+                                    <div class="activity-details">
+                                        <p>Yangi sinf yaratildi</p>
+                                        <span class="activity-time">1 soat oldin</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="activity-icon teacher-added">
+                                        <i class="fas fa-chalkboard-teacher"></i>
+                                    </div>
+                                    <div class="activity-details">
+                                        <p>Yangi o'qituvchi qo'shildi</p>
+                                        <span class="activity-time">Kecha, 14:30</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="activity-icon system-update">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </div>
+                                    <div class="activity-details">
+                                        <p>Tizim yangilandi</p>
+                                        <span class="activity-time">2 kun oldin</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>© 2026 AJOU School Admin Panel. Barcha huquqlar himoyalangan.</p>
+            </footer>
+        </main>
+
+
+
+{% endblock %}

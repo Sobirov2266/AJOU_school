@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/admin_sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_teacher_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_students.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_classes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_class_subjects.css' %}">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+{% include 'admin_panel/sidebar.html' %}
+
+<div class="main-content">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

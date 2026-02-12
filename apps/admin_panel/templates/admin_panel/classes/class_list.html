@@ -1,0 +1,302 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Classes{% endblock %}
+
+{% block content %}
+<main class="main-content classes-page">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <h2>Sinflar</h2>
+      <p>Maktabdagi barcha sinflarni boshqaring</p>
+    </div>
+  </header>
+
+  <!-- Action bar -->
+  <div class="classes-actions">
+    <form method="get" class="classes-search">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        name="q"
+        value="{{ q }}"
+        placeholder="Sinf nomi bo‘yicha qidirish (masalan: 7-A)"
+        autocomplete="off"
+      >
+    </form>
+
+    <button type="button" class="btn btn-primary" id="openCreateClass">
+      <i class="fa-solid fa-plus"></i>
+      Yangi sinf
+    </button>
+  </div>
+
+  <!-- Table card -->
+  <section class="card classes-card">
+    <div class="card-header classes-card-header">
+      <div>
+        <h3>Sinflar ro‘yxati</h3>
+        <span class="muted">{{ class_count }} ta sinf</span>
+      </div>
+
+      <div class="right">
+        <span class="pill">
+          <i class="fa-solid fa-circle-info"></i>
+          Statusni o‘zgartirish uchun badge ustiga bosing
+        </span>
+      </div>
+    </div>
+
+    <div class="card-body table-responsive">
+      <table class="classes-table">
+        <thead>
+          <tr>
+            <th style="width:60px;">#</th>
+            <th>Sinf</th>
+            <th style="width:180px;">Yaratilgan</th>
+            <th style="width:140px;">Status</th>
+            <th style="width:140px; text-align:right;">Amallar</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for c in classes %}
+          <tr>
+            <td class="muted">{{ forloop.counter }}</td>
+
+            <td>
+              <div class="class-cell">
+                <div class="class-icon">
+                  <i class="fa-solid fa-school"></i>
+                </div>
+                <div class="class-meta">
+                  <strong>{{ c.name }}</strong>
+                  <small class="muted">ID: {{ c.id }}</small>
+                </div>
+              </div>
+            </td>
+
+            <td class="muted">{{ c.created_at|date:"d M, Y" }}</td>
+
+            <td>
+              <span
+                class="status-badge {% if c.is_active %}status-active{% else %}status-inactive{% endif %}"
+                role="button"
+                tabindex="0"
+                onclick="toggleClassStatus({{ c.id }})"
+                title="Statusni o‘zgartirish"
+              >
+                {% if c.is_active %}Active{% else %}Inactive{% endif %}
+              </span>
+            </td>
+
+            <td style="text-align:right;">
+              <div class="actions">
+                <button
+                  type="button"
+                  class="icon-btn edit"
+                  title="Tahrirlash"
+                  data-id="{{ c.id }}"
+                  data-name="{{ c.name }}"
+                  data-active="{{ c.is_active }}"
+                >
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+
+                <button
+                  type="button"
+                  class="icon-btn delete"
+                  title="O‘chirish"
+                  onclick="deleteClass({{ c.id }})"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="empty">
+              <div class="empty-state">
+                <div class="empty-icon">
+                  <i class="fa-solid fa-folder-open"></i>
+                </div>
+                <h4>Hozircha sinflar yo‘q</h4>
+                <p class="muted">“Yangi sinf” tugmasi orqali sinf qo‘shing.</p>
+                <button type="button" class="btn btn-primary" id="openCreateClass2">
+                  <i class="fa-solid fa-plus"></i> Yangi sinf
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-footer classes-footer">
+      <span class="muted">{{ classes|length }} ta sinf ko‘rsatilmoqda</span>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============== CREATE MODAL ============== -->
+<div class="modal" id="createClassModal" aria-hidden="true">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-icon">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+        <div>
+          <h3>Yangi sinf qo‘shish</h3>
+          <p>Sinf nomini kiriting (masalan: 7-A)</p>
+        </div>
+      </div>
+
+      <button type="button" class="modal-close" data-close>&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <form method="post" action="{% url 'admin_panel:class_create' %}" class="modal-form">
+        {% csrf_token %}
+
+        <div class="field">
+          <label>Sinf nomi</label>
+          <input type="text" name="name" placeholder="Masalan: 7-A" required autofocus>
+          <div class="hint">Tavsiyalar: 5-A, 6-B, 11-IT va hokazo</div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-check"></i> Saqlash
+          </button>
+          <button type="button" class="btn btn-secondary" data-close>Bekor qilish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============== EDIT MODAL ============== -->
+<div class="modal" id="editClassModal" aria-hidden="true">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-icon">
+          <i class="fa-solid fa-pen"></i>
+        </div>
+        <div>
+          <h3>Sinfni tahrirlash</h3>
+          <p>Sinf nomi va statusni yangilang</p>
+        </div>
+      </div>
+
+      <button type="button" class="modal-close" data-close>&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <form method="post" action="{% url 'admin_panel:class_update' %}" class="modal-form">
+        {% csrf_token %}
+        <input type="hidden" name="class_id" id="edit_class_id">
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Sinf nomi</label>
+            <input type="text" name="name" id="edit_class_name" required>
+          </div>
+
+          <div class="field">
+            <label>Status</label>
+            <select name="is_active" id="edit_class_active">
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-save"></i> Saqlash
+          </button>
+          <button type="button" class="btn btn-secondary" data-close>Bekor qilish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ========= helpers =========
+  const openModal = (m) => {
+    m.classList.add("active");
+    m.setAttribute("aria-hidden", "false");
+    // focus first input if exists
+    const input = m.querySelector("input, select, textarea");
+    if (input) setTimeout(() => input.focus(), 50);
+  };
+
+  const closeModal = (m) => {
+    m.classList.remove("active");
+    m.setAttribute("aria-hidden", "true");
+  };
+
+  // ========= create modal =========
+  const createModal = document.getElementById("createClassModal");
+  const openCreateBtn = document.getElementById("openCreateClass");
+  const openCreateBtn2 = document.getElementById("openCreateClass2");
+
+  if (openCreateBtn) openCreateBtn.addEventListener("click", () => openModal(createModal));
+  if (openCreateBtn2) openCreateBtn2.addEventListener("click", () => openModal(createModal));
+
+  // ========= edit modal =========
+  const editModal = document.getElementById("editClassModal");
+
+  document.querySelectorAll(".icon-btn.edit").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.getElementById("edit_class_id").value = btn.dataset.id;
+      document.getElementById("edit_class_name").value = btn.dataset.name || "";
+      document.getElementById("edit_class_active").value = (btn.dataset.active === "True") ? "1" : "0";
+      openModal(editModal);
+    });
+  });
+
+  // ========= close handlers =========
+  document.querySelectorAll("[data-close]").forEach(el => {
+    el.addEventListener("click", () => {
+      closeModal(createModal);
+      closeModal(editModal);
+    });
+  });
+
+  [createModal, editModal].forEach(m => {
+    m.addEventListener("click", (e) => {
+      if (e.target === m) closeModal(m);
+    });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeModal(createModal);
+      closeModal(editModal);
+    }
+  });
+
+  // ========= actions =========
+  function deleteClass(id) {
+    if (confirm("Sinfni o‘chirishni tasdiqlaysizmi?")) {
+      window.location.href = `/admin-panel/classes/delete/${id}/`;
+    }
+  }
+
+  function toggleClassStatus(id) {
+    if (confirm("Statusni o‘zgartirmoqchimisiz?")) {
+      window.location.href = `/admin-panel/classes/toggle-status/${id}/`;
+    }
+  }
+</script>
+
+{% endblock %}

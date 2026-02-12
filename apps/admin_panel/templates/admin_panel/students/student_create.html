@@ -1,0 +1,140 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_student_create.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+
+    <div class="form-card">
+
+        <!-- HEADER -->
+        <div class="form-header">
+            <div class="header-left">
+                <div class="header-icon">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <div>
+                    <h1>Yangi o‘quvchi qo‘shish</h1>
+                    <p>Xalqaro maktab uchun o‘quvchi profilini yarating</p>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="student-form">
+            {% csrf_token %}
+
+            <!-- ACCOUNT -->
+            <div class="form-section">
+                <h3>Account ma’lumotlari</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label>Username</label>
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="username"
+                            required
+                            autocomplete="off"
+                        >
+                    </div>
+
+                    <div class="field password-field">
+                        <label>Parol</label>
+                        <input
+                            type="password"
+                            name="password"
+                            id="passwordInput"
+                            required
+                            autocomplete="new-password"
+                        >
+                        <span class="eye" onclick="togglePassword()">
+                            <i class="fa-solid fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!-- PERSONAL -->
+            <div class="form-section">
+                <h3>Shaxsiy ma’lumotlar</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label>Ismi</label>
+                        <input type="text" name="first_name" placeholder="O‘quvchi ismi" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Familiyasi</label>
+                        <input type="text" name="last_name" placeholder="O‘quvchi familiyasi" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Tug‘ilgan sana</label>
+                        <input type="date" name="birth_date">
+                    </div>
+
+                    <div class="field">
+                        <label>Passport / ID</label>
+                        <input type="text" name="passport_id">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCHOOL -->
+            <div class="form-section">
+                <h3>Maktab ma’lumotlari</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label>Ota-ona telefoni</label>
+                        <input type="text" name="parent_phone" placeholder="+998 XX XXX XX XX" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Sinf</label>
+                        <select name="school_class" required>
+                            <option value="">— Sinfni tanlang —</option>
+                            {% for c in classes %}
+                                <option value="{{ c.id }}">{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AVATAR -->
+            <div class="form-section">
+                <h3>Profil rasmi</h3>
+
+                <div class="upload-area" onclick="document.getElementById('avatar').click()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Rasm yuklash</p>
+                    <span id="fileName">PNG, JPG (max 5MB)</span>
+                </div>
+                <input type="file" name="avatar" id="avatar" hidden onchange="showFileName(this)">
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="form-actions">
+                <button type="submit" class="btn primary">
+                    Saqlash
+                </button>
+                <a href="{% url 'admin_panel:admin_students' %}" class="btn secondary">
+                    Bekor qilish
+                </a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<script src="{% static 'js/admin_students_create.js' %}"></script>
+{% endblock %}
