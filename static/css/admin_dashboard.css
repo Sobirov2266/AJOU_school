@@ -35,12 +35,20 @@ body {
 }
 
 
-/* Asosiy Kontent */
-.main-content {
-    flex: 1;
+/* Asosiy Kontent wrapper (sidebar dan keyin) */
+.main-content-wrapper {
     margin-left: var(--sidebar-width);
+    min-height: 100vh;
     padding: 20px;
     width: calc(100% - var(--sidebar-width));
+}
+
+/* Asosiy Kontent (markazda, max-width) */
+.main-content {
+    width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Header */
@@ -382,7 +390,7 @@ body {
         justify-content: center;
     }
 
-    .main-content {
+    .main-content-wrapper {
         margin-left: 70px;
         width: calc(100% - 70px);
     }

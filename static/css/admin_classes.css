@@ -97,6 +97,7 @@
   padding: 14px 16px;
   border-bottom: 1px solid var(--light-gray);
   vertical-align: middle;
+  font-weight: 400;
 }
 
 .classes-table tbody tr:hover {
@@ -125,10 +126,9 @@
   flex: 0 0 auto;
 }
 
-.class-meta strong {
-  display: block;
+.class-meta {
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 400;
   color: #111827;
 }
 
@@ -400,6 +400,23 @@
 .btn-secondary {
   background: var(--light-gray);
   color: var(--dark-color);
+}
+
+.classes-table .class-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-direction: row;
+}
+
+.classes-table td .actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 0;
+  border-top: 0;
+  margin-top: 0;
 }
 
 /* Responsive */

@@ -4,7 +4,7 @@
 {% block title %}Classes{% endblock %}
 
 {% block content %}
-<main class="main-content classes-page">
+<main class="classes-page">
 
   <!-- Header -->
   <header class="header">
@@ -72,7 +72,7 @@
                   <i class="fa-solid fa-school"></i>
                 </div>
                 <div class="class-meta">
-                  <strong>{{ c.name }}</strong>
+                  {{ c.name }}
                   <small class="muted">ID: {{ c.id }}</small>
                 </div>
               </div>

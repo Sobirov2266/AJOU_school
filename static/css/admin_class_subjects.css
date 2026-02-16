@@ -114,6 +114,10 @@
   font-size: 14px;
 }
 
+.cs-table td {
+  font-weight: 400;
+}
+
 .cs-table thead th{
   color:#6b7280;
   font-weight: 700;
@@ -129,8 +133,8 @@
 }
 
 /* cells */
-.subject-cell strong{ display:block; }
-.subject-cell small{ color:#6b7280; }
+.subject-cell { font-weight: 400; }
+.subject-cell small{ display: block; color:#6b7280; margin-top: 2px; }
 
 .badge{
   padding: 6px 12px;

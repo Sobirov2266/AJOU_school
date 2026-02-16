@@ -112,6 +112,7 @@ def teacher_update(request):
         teacher.user.save(update_fields=["is_active"])
 
 
+
         teacher.save()
 
         # 🔐 YANGI PAROL (ENG MUHIM)

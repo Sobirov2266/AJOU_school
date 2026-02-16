@@ -89,7 +89,6 @@
                                     data-birth-year="{{ teacher.birth_year }}"
                                     data-gender="{{ teacher.gender }}"
                                     data-active="{{ teacher.user.is_active }}"
-                                    data-subject="{{ teacher.subject.id|default:'' }}"
                                 >
                                     <i class="fa-solid fa-pen"></i>
                                 </button>
@@ -294,16 +293,6 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Fan</label>
-                    <select name="subject" id="edit_subject">
-                        <option value="">Fan tanlanmagan</option>
-                        {% for subject in subjects %}
-                            <option value="{{ subject.id }}">{{ subject.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
 
                 <div class="form-group full">
                     <label>Status</label>
@@ -406,7 +395,6 @@ document.querySelectorAll(".action-btn.edit").forEach(btn => {
         document.getElementById("edit_is_active").value =
             btn.dataset.active === "True" ? "1" : "0";
 
-        document.getElementById("edit_subject").value = btn.dataset.subject || "";
     });
 });
 

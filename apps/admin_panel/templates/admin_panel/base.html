@@ -21,8 +21,10 @@
 
 {% include 'admin_panel/sidebar.html' %}
 
-<div class="main-content">
-    {% block content %}{% endblock %}
+<div class="main-content-wrapper">
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
 </div>
 
 </body>

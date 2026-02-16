@@ -8,28 +8,73 @@ from django.utils.timezone import now
 from django.contrib import messages
 from apps.admin_panel.decorators import admin_required
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 
 User = get_user_model()
 @admin_required
 def student_list(request):
+    q = request.GET.get("q", "").strip()
+    name = request.GET.get("name", "").strip()
+    passport = request.GET.get("passport", "").strip()
+    class_id = request.GET.get("class_id", "").strip()
+    birth_date = request.GET.get("birth_date", "").strip()
+    status = request.GET.get("status", "").strip()
+
     students = (
         StudentProfile.objects
         .select_related('user')
         .prefetch_related('enrollment__school_class')
+        .all()
     )
 
+    # Umumiy qidiruv (action bar)
+    if q:
+        students = students.filter(
+            Q(first_name__icontains=q) |
+            Q(last_name__icontains=q) |
+            Q(passport_id__icontains=q)
+        )
+
+    # F.I.Sh bo‘yicha filtrlash
+    if name:
+        students = students.filter(
+            Q(first_name__icontains=name) | Q(last_name__icontains=name)
+        )
+
+    # Passport bo‘yicha filtrlash
+    if passport:
+        students = students.filter(passport_id__icontains=passport)
+
+    # Sinf bo‘yicha filtrlash
+    if class_id:
+        students = students.filter(enrollment__school_class_id=class_id)
+
+    # Tug‘ilgan sana bo‘yicha (ixtiyoriy, dizayn uchun)
+    if birth_date:
+        students = students.filter(birth_date=birth_date)
+
+    # Status bo‘yicha filtrlash (enrollment is_active)
+    if status == "active":
+        students = students.filter(enrollment__is_active=True)
+    elif status == "inactive":
+        students = students.filter(enrollment__is_active=False)
+
     total_students = students.count()
-    active_students = students.filter(enrollment__is_active=True).count()
-    inactive_students = total_students - active_students
-    today_students = students.filter(created_at__date=now().date()).count()
+    classes = SchoolClass.objects.order_by('name')
 
     return render(request, 'admin_panel/students/student_list.html', {
         'students': students,
         'total_students': total_students,
-        'active_students': active_students,
-        'inactive_students': inactive_students,
-        'today_students': today_students,
+        'classes': classes,
+        'filters': {
+            'q': q,
+            'name': name,
+            'passport': passport,
+            'class_id': class_id,
+            'birth_date': birth_date,
+            'status': status,
+        },
     })
 
 
@@ -160,7 +205,7 @@ def student_create(request):
     )
 
 
-@require_POST
+@admin_required
 def student_delete(request, pk):
     student = get_object_or_404(StudentProfile, pk=pk)
     user = student.user

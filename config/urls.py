@@ -10,7 +10,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('apps.accounts.urls')),
     path('dashboard/', include('apps.dashboard.urls')),
-    path("dashboard/", include("apps.dashboard.urls")),
     path("admin-panel/", include("apps.admin_panel.urls")),
     path('logout/', LogoutView.as_view(), name='logout'),
 

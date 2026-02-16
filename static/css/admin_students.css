@@ -1,122 +1,32 @@
-.students-page {
-    padding: 24px;
-}
+/* Student list — Teacher list bilan bir xil dizayn, qo‘shimcha student-specific stillar */
 
-/* HEADER */
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.page-actions {
-    display: flex;
-    gap: 12px;
-}
-
-.search-input {
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-}
-
-/* BUTTONS */
-.btn {
-    padding: 10px 18px;
-    border-radius: 10px;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    text-decoration: none;
-}
-
-.btn-primary {
-    background: #4f6ef7;
-    color: #fff;
-}
-
-.btn-outline {
-    background: #f4f6fb;
-    color: #333;
-}
-
-/* STATS */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin: 24px 0;
-}
-
-.stat-card {
-    background: #fff;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.05);
-}
-
-.stat-card span {
-    font-size: 28px;
-    font-weight: bold;
-}
-
-/* TABLE */
-.table-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.05);
-}
-
-.table-header {
-    padding: 16px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.students-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.students-table th,
-.students-table td {
-    padding: 14px 16px;
-    text-align: left;
-    font-size: 14px;
-}
-
-.students-table thead th {
-    color: #6b7280;
-    font-weight: 600;
-}
-
-.col-id {
-    width: 50px;
-    padding-left: 20px;
-}
-
-.col-actions {
-    width: 120px;
-    text-align: center;
-}
-
-/* USER */
+/* USER (F.I.Sh ustuni: avatar + ism) */
 .user-cell {
     display: flex;
     align-items: center;
     gap: 12px;
+    font-weight: 400;
 }
 
 .avatar {
     width: 38px;
     height: 38px;
+    min-width: 38px;
     border-radius: 50%;
-    background: #e6f0ff;
+    background: rgba(76, 201, 240, 0.15);
+    color: var(--primary-color, #4361ee);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.user-cell small {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
 }
 
 /* BADGES */
@@ -128,50 +38,157 @@
 }
 
 .badge.class {
-    background: #e9f7ec;
+    background: rgba(76, 201, 240, 0.15);
+    color: var(--success-color, #10b981);
 }
 
-.badge.status.active {
-    background: #e6f7ec;
-    color: #16a34a;
+/* ACTION-BTN anchor (student edit link) */
+a.action-btn {
+    text-decoration: none;
+}
+
+a.action-btn:hover {
+    color: inherit;
+}
+
+/* ===== TABLE FILTER ROW — zamonaviy dizayn ===== */
+.filter-row {
+    background: linear-gradient(to bottom, #f8fafc, #f1f5f9) !important;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+}
+.filter-row th {
+    padding: 14px 16px !important;
+    vertical-align: middle !important;
+    border-bottom: none !important;
+    font-weight: 400 !important;
+}
+.filter-cell-empty {
+    width: 1%;
+    white-space: nowrap;
+}
+.filter-cell {
+    min-width: 140px;
+}
+.filter-cell-actions {
+    min-width: 180px;
+    text-align: right !important;
+}
+
+/* Input wrapper (icon + input) */
+.filter-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.filter-input-icon {
+    position: absolute;
+    left: 12px;
+    color: #94a3b8;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 1;
+}
+.table-filter-input,
+.table-filter-select {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    background: #fff;
+    color: #334155;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+.table-filter-input::placeholder {
+    color: #94a3b8;
+}
+.table-filter-input:focus,
+.table-filter-select:focus {
+    outline: none;
+    border-color: var(--primary-color, #4361ee);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.12);
+}
+.table-filter-select {
+    padding-left: 36px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+.table-filter-date {
+    padding-left: 36px;
     cursor: pointer;
 }
-
-.badge.status.inactive {
-    background: #fee2e2;
-    color: #dc2626;
+.table-filter-date::-webkit-calendar-picker-indicator {
     cursor: pointer;
+    opacity: 0.6;
 }
 
-/* ACTIONS */
-.icon-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
+/* Filter action buttons */
+.filter-actions {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 10px;
+}
+.btn-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--primary-color, #4361ee);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 1px 3px rgba(67, 97, 238, 0.25);
+}
+.btn-filter:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.35);
+}
+.btn-filter:active {
+    transform: translateY(0);
+}
+.btn-filter i {
+    font-size: 12px;
+    opacity: 0.9;
+}
+.btn-filter-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: #fff;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
     text-decoration: none;
-    font-size: 16px;
-    transition: 0.2s;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.btn-filter-clear:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #475569;
+}
+.btn-filter-clear i {
+    font-size: 11px;
+    opacity: 0.8;
 }
 
-.icon-btn.edit {
-    background: #ede7f6;
-}
-
-.icon-btn.delete {
-    background: #ffecec;
-    color: #d63031;
-}
-
-.icon-btn:hover {
-    transform: scale(1.05);
-}
-
-/* FOOTER */
-.table-footer {
-    padding: 14px 20px;
-    font-size: 13px;
-    color: #777;
+/* Filter row responsive */
+@media (max-width: 900px) {
+    .filter-cell { min-width: 120px; }
+    .filter-actions { flex-wrap: wrap; }
+    .btn-filter, .btn-filter-clear { padding: 8px 14px; font-size: 13px; }
 }
