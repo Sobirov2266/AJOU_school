@@ -7,9 +7,11 @@ from .models import User, TeacherProfile, StudentProfile
 class UserAdmin(BaseUserAdmin):
     fieldsets = BaseUserAdmin.fieldsets + (
         ("Role information", {"fields": ("role",)}),
+        ("Profile", {"fields": ("profile_photo",)}),
+        ("Security", {"fields": ("must_change_password",)}),
     )
 
-    list_display = ("username", "email", "role", "is_staff", "is_active")
+    list_display = ("username", "email", "role", "must_change_password", "is_staff", "is_active")
     list_filter = ("role", "is_staff", "is_active")
 
 

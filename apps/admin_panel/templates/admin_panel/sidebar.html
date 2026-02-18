@@ -17,11 +17,14 @@
             <a href="{% url 'admin_panel:class_list' %}">📚 Classes</a>
         </li>
         <li>
+            <a href="{% url 'admin_panel:subject_list' %}">📘 Subjects</a>
+        </li>
+        <li>
             <a href="{% url 'admin_panel:class_subject_list' %}">📌 Class Subjects</a>
         </li>
 
         <li>
-            <a href="#">⚙️ Settings</a>
+            <a href="{% url 'admin_panel:admin_settings' %}">⚙️ Settings</a>
         </li>
         <li class="logout">
             <a href="{% url 'logout' %}">🚪 Logout</a>

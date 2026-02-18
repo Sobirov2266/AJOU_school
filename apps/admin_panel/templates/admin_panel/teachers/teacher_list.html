@@ -27,13 +27,140 @@
             >
         </form>
 
+        <div style="display:flex; gap:10px; align-items:center;">
+            <div style="display:flex; gap:8px; align-items:center;">
+                <a class="btn btn-secondary" href="{% url 'admin_panel:teacher_export_excel' %}">
+                    <i class="fa-solid fa-file-excel"></i>
+                    Excel
+                </a>
+                <a class="btn btn-secondary" href="{% url 'admin_panel:teacher_export_pdf' %}">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    PDF
+                </a>
+            </div>
 
-
-        <button class="btn btn-primary" id="openTeacherModal">
-            <i class="fas fa-user-plus"></i>
-            Yangi o‘qituvchi
-        </button>
+            <a class="btn btn-primary" href="{% url 'admin_panel:teacher_create' %}">
+                <i class="fas fa-user-plus"></i>
+                Yangi o‘qituvchi
+            </a>
+        </div>
     </div>
+
+    <!-- Filter Panel (yopiladigan) -->
+    <div class="filter-panel-card" id="filterPanel">
+        <div class="filter-panel-header">
+            <div class="filter-panel-title">
+                <i class="fas fa-filter filter-panel-icon"></i>
+                <span>Filtrlar</span>
+            </div>
+            <button type="button" class="filter-panel-close" id="closeFilterPanel" aria-label="Yopish">
+                <span class="filter-close-text">Yopish</span>
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form method="get" id="teacherFiltersForm" class="filter-panel-body">
+            <input type="hidden" name="q" value="{{ filters.q }}">
+            <div class="filter-panel-grid">
+                <div class="filter-field">
+                    <label>Ism yoki familiya</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-user filter-input-icon"></i>
+                        <input
+                            type="text"
+                            name="name"
+                            value="{{ filters.name }}"
+                            placeholder="Ism yoki familiya"
+                            class="filter-input"
+                            autocomplete="off"
+                        >
+                    </div>
+                </div>
+
+                <div class="filter-field">
+                    <label>Passport / ID</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-id-card filter-input-icon"></i>
+                        <input
+                            type="text"
+                            name="passport"
+                            value="{{ filters.passport }}"
+                            placeholder="Passport / ID"
+                            class="filter-input"
+                            autocomplete="off"
+                        >
+                    </div>
+                </div>
+
+                <div class="filter-field">
+                    <label>JSHSHR</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-hashtag filter-input-icon"></i>
+                        <input
+                            type="text"
+                            name="jshshr"
+                            value="{{ filters.jshshr }}"
+                            placeholder="JSHSHR"
+                            class="filter-input"
+                            autocomplete="off"
+                        >
+                    </div>
+                </div>
+
+                <div class="filter-field">
+                    <label>Tug‘ilgan yili</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-calendar-alt filter-input-icon"></i>
+                        <input
+                            type="number"
+                            name="birth_year"
+                            value="{{ filters.birth_year }}"
+                            class="filter-input"
+                            placeholder="Masalan: 1998"
+                        >
+                    </div>
+                </div>
+
+                <div class="filter-field">
+                    <label>Jinsi</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-venus-mars filter-input-icon"></i>
+                        <select name="gender" class="filter-select">
+                            <option value="">Barchasi</option>
+                            <option value="male" {% if filters.gender == "male" %}selected{% endif %}>Erkak</option>
+                            <option value="female" {% if filters.gender == "female" %}selected{% endif %}>Ayol</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-field">
+                    <label>Status</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-toggle-on filter-input-icon"></i>
+                        <select name="status" class="filter-select">
+                            <option value="">Barchasi</option>
+                            <option value="active" {% if filters.status == "active" %}selected{% endif %}>Faol</option>
+                            <option value="inactive" {% if filters.status == "inactive" %}selected{% endif %}>Nofaol</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-panel-actions">
+                <a href="{% url 'admin_panel:teacher_list' %}" class="btn-filter-tozalash">
+                    <i class="fas fa-trash-alt"></i>
+                    Tozalash
+                </a>
+                <button type="submit" class="btn-filter-qollash">
+                    <i class="fas fa-check"></i>
+                    Qo'llash
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <button type="button" class="btn-show-filters" id="showFilterPanel" style="display:none;">
+        <i class="fas fa-filter"></i>
+        Filtrlarni ko'rsatish
+    </button>
 
     <!-- Table -->
     <div class="card table-container">
@@ -49,6 +176,7 @@
                         <th>#</th>
                         <th>F.I.Sh</th>
                         <th>Passport</th>
+                        <th>JSHSHR</th>
                         <th>Tug‘ilgan yili</th>
                         <th>Jinsi</th>
                         <th>Status</th>
@@ -60,8 +188,27 @@
                     {% for teacher in teachers %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ teacher.last_name }} {{ teacher.first_name }}</td>
+                        <td>
+                            <div class="user-cell">
+                                {% if teacher.photo %}
+                                    <img
+                                        class="avatar avatar-img js-photo-preview"
+                                        src="{{ teacher.photo.url }}"
+                                        alt=""
+                                        data-photo-url="{{ teacher.photo.url }}"
+                                    >
+                                {% else %}
+                                    <div class="avatar">
+                                        {{ teacher.last_name|default:""|slice:":1" }}{{ teacher.first_name|default:""|slice:":1" }}
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    {{ teacher.last_name }} {{ teacher.first_name }}
+                                </div>
+                            </div>
+                        </td>
                         <td>{{ teacher.passport_id|default:"—" }}</td>
+                        <td>{{ teacher.jshshr|default:"—" }}</td>
                         <td>{{ teacher.birth_year|default:"—" }}</td>
                         <td>
                             {% if teacher.gender == 'male' %} Erkak
@@ -70,11 +217,14 @@
                         </td>
                         <td>
                             <span
-                              class="status-badge status-active"
-                              onclick="toggleStatus({{ teacher.id }})"
-                              style="cursor:pointer"
+                                class="status-badge js-teacher-status {% if teacher.user.is_active %}status-active{% else %}status-inactive{% endif %}"
+                                role="button"
+                                tabindex="0"
+                                data-teacher-id="{{ teacher.id }}"
+                                data-active="{% if teacher.user.is_active %}1{% else %}0{% endif %}"
+                                title="Statusni o‘zgartirish"
                             >
-                              {{ teacher.user.is_active|yesno:"Active,Inactive" }}
+                                {% if teacher.user.is_active %}Faol{% else %}Nofaol{% endif %}
                             </span>
 
                         </td>
@@ -95,7 +245,7 @@
 
 
                                 <!-- Delete -->
-                                <button class="action-btn delete" onclick="deleteTeacher({{ teacher.id }})">
+                                <button class="action-btn delete" onclick="deleteTeacher('{{ teacher.id }}')">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
 
@@ -113,149 +263,108 @@
         </div>
     </div>
 
+  {% if is_paginated %}
+  <nav class="pagination" aria-label="Pagination">
+    <a
+      class="page-link {% if not page_obj.has_previous %}disabled{% endif %}"
+      {% if page_obj.has_previous %}
+      href="?page={{ page_obj.previous_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+      {% endif %}
+    >
+      Previous
+    </a>
+
+    {% for num in paginator.page_range %}
+      {% if num == page_obj.number %}
+        <span class="page-link active">{{ num }}</span>
+      {% else %}
+        <a class="page-link" href="?page={{ num }}{% if qs %}&{{ qs }}{% endif %}">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    <a
+      class="page-link {% if not page_obj.has_next %}disabled{% endif %}"
+      {% if page_obj.has_next %}
+      href="?page={{ page_obj.next_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+      {% endif %}
+    >
+      Next
+    </a>
+  </nav>
+  {% endif %}
+
 </main>
 
-<!-- MODAL: CREATE TEACHER (NEW DESIGN like student_create) -->
-<div class="modal" id="teacherCreateModal">
-  <div class="modal-content teacher-modal-card">
-
-    <!-- Header -->
-    <div class="teacher-modal-header">
-      <div class="teacher-modal-header-left">
-        <div class="teacher-modal-icon">
-          <i class="fa-solid fa-chalkboard-teacher"></i>
-        </div>
-        <div>
-          <h1>Yangi o‘qituvchi qo‘shish</h1>
-          <p>Xalqaro maktab uchun o‘qituvchi profilini yarating</p>
-        </div>
-      </div>
-
-      <button class="teacher-modal-close modal-close" type="button" aria-label="Close">
-        &times;
-      </button>
+<!-- Photo preview modal (small preview) -->
+<div class="modal" id="photoPreviewModal" aria-hidden="true">
+    <div class="photo-preview-card" role="dialog" aria-modal="true">
+        <button type="button" class="photo-preview-close" aria-label="Yopish">&times;</button>
+        <img id="photoPreviewImg" src="" alt="">
     </div>
-
-      {% if messages %}
-          <div class="messages">
-            {% for message in messages %}
-              <div class="alert {{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-          </div>
-        {% endif %}
-
-
-    <!-- Body -->
-    <div class="teacher-modal-body">
-      <form method="post" action="{% url 'admin_panel:teacher_create' %}" class="teacher-form">
-        {% csrf_token %}
-
-        <!-- PERSONAL -->
-        <div class="teacher-form-section">
-          <h3>Shaxsiy ma’lumotlar</h3>
-
-          <div class="teacher-grid">
-            <div class="teacher-field">
-              <label>Ismi</label>
-              <input type="text" name="first_name" placeholder="Ismi" required>
-            </div>
-
-            <div class="teacher-field">
-              <label>Familiyasi</label>
-              <input type="text" name="last_name" placeholder="Familiyasi" required>
-            </div>
-
-            <div class="teacher-field">
-              <label>Otasining ismi</label>
-              <input type="text" name="father_name" placeholder="Otasining ismi" required>
-            </div>
-
-            <div class="teacher-field">
-              <label>Tug‘ilgan yili</label>
-              <input
-                type="number"
-                name="birth_year"
-                placeholder="Masalan: 1998"
-                min="1950"
-                max="2026"
-              >
-            </div>
-          </div>
-        </div>
-
-        <!-- DOCUMENTS -->
-        <div class="teacher-form-section">
-          <h3>Hujjatlar</h3>
-
-          <div class="teacher-grid">
-            <div class="teacher-field">
-              <label>Passport / ID</label>
-              <input type="text" name="passport_id" placeholder="passport_id" required>
-            </div>
-
-            <div class="teacher-field">
-              <label>JSHSHR</label>
-              <input type="text" name="jshshr" placeholder="jshshr" required>
-            </div>
-          </div>
-        </div>
-
-        <!-- ACCOUNT -->
-        <div class="teacher-form-section">
-          <h3>Account ma’lumotlari</h3>
-
-          <div class="teacher-grid">
-            <div class="teacher-field">
-              <label>Username</label>
-              <input type="text" name="username" placeholder="Username" required autocomplete="off">
-            </div>
-
-            <div class="teacher-field teacher-password-field">
-              <label>Parol</label>
-              <input type="password" name="password" id="teacherPasswordInput" placeholder="Parol" required autocomplete="new-password">
-              <span class="teacher-eye" onclick="toggleTeacherPassword(event)">
-                <i class="fa-solid fa-eye"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- SCHOOL -->
-            <div class="teacher-form-section">
-
-
-              <div class="teacher-grid">
-                <div class="teacher-field">
-                  <label>Jinsi</label>
-                  <select name="gender" required>
-                    <option value="">Jinsini tanlang</option>
-                    <option value="male">Erkak</option>
-                    <option value="female">Ayol</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-
-
-        <!-- ACTIONS -->
-        <div class="teacher-form-actions">
-          <button type="submit" class="btn primary">
-            Saqlash
-          </button>
-          <button type="button" class="btn secondary modal-close">
-            Bekor qilish
-          </button>
-        </div>
-
-      </form>
-    </div>
-
-  </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterPanel = document.getElementById('filterPanel');
+    const showBtn = document.getElementById('showFilterPanel');
 
-<!-- Edit Teacher Modal -->
+    document.getElementById('closeFilterPanel').addEventListener('click', function() {
+        filterPanel.classList.add('filter-panel-hidden');
+        if (showBtn) showBtn.style.display = 'inline-flex';
+    });
+
+    if (showBtn) {
+        showBtn.addEventListener('click', function() {
+            filterPanel.classList.remove('filter-panel-hidden');
+            showBtn.style.display = 'none';
+        });
+    }
+});
+</script>
+
+<script>
+// Photo preview logic:
+// Clicking on an avatar image opens a small modal preview.
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('photoPreviewModal');
+    const img = document.getElementById('photoPreviewImg');
+    const closeBtn = modal ? modal.querySelector('.photo-preview-close') : null;
+
+    if (!modal || !img) return;
+
+    const open = (url) => {
+        img.src = url;
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+    };
+
+    const close = () => {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        img.src = '';
+    };
+
+    document.querySelectorAll('.js-photo-preview[data-photo-url]').forEach((el) => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', () => {
+            const url = el.getAttribute('data-photo-url');
+            if (url) open(url);
+        });
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', close);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+    });
+});
+</script>
+
+<!-- MODAL: EDIT TEACHER -->
 <div class="modal" id="teacherEditModal">
     <div class="modal-content modern-modal">
 
@@ -297,8 +406,8 @@
                 <div class="form-group full">
                     <label>Status</label>
                     <select name="is_active" id="edit_is_active">
-                        <option value="1">Active</option>
-                        <option value="0">Inactive</option>
+                        <option value="1">Faol</option>
+                        <option value="0">Nofaol</option>
                     </select>
                 </div>
 
@@ -332,55 +441,6 @@
 </div>
 
 
-<!-- MODAL SCRIPT -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const createModal = document.getElementById("teacherCreateModal");
-  const editModal = document.getElementById("teacherEditModal");
-  const openBtn = document.getElementById("openTeacherModal");
-
-  function closeAll() {
-    document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
-  }
-
-  openBtn.addEventListener("click", () => createModal.classList.add("active"));
-
-  document.querySelectorAll(".modal-close").forEach(btn => {
-    btn.addEventListener("click", closeAll);
-  });
-
-  [createModal, editModal].forEach(m => {
-    m.addEventListener("click", e => {
-      if (e.target === m) m.classList.remove("active");
-    });
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeAll();
-  });
-});
-</script>
-
-
-<!-- CREATE TEACHER UCHUN -->
-<script>
-function toggleTeacherPassword(ev) {
-  const input = document.getElementById("teacherPasswordInput");
-  const icon = ev.currentTarget.querySelector("i");
-
-  if (!input) return;
-
-  if (input.type === "password") {
-    input.type = "text";
-    icon.classList.replace("fa-eye", "fa-eye-slash");
-  } else {
-    input.type = "password";
-    icon.classList.replace("fa-eye-slash", "fa-eye");
-  }
-}
-</script>
-
-
 <!-- tahrirlash uchun -->
 <script>
 document.querySelectorAll(".action-btn.edit").forEach(btn => {
@@ -408,19 +468,63 @@ document.querySelectorAll(".modal-close").forEach(btn => {
 
 
 <script>
-function toggleStatus(id) {
-    if (confirm("Statusni o‘zgartirmoqchimisiz?")) {
-        window.location.href = `/admin-panel/teachers/toggle-status/${id}/`;
-    }
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const csrfToken = getCookie("csrftoken");
+
+    document.querySelectorAll(".js-teacher-status[data-teacher-id]").forEach((badge) => {
+        const teacherId = badge.dataset.teacherId;
+
+        const onToggle = async () => {
+            if (!teacherId) return;
+            if (!confirm("Statusni o‘zgartirmoqchimisiz?")) return;
+
+            try {
+                const res = await fetch(`/admin-panel/teachers/toggle-status/${teacherId}/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken || "",
+                    },
+                    body: JSON.stringify({})
+                });
+
+                const data = await res.json();
+                if (!res.ok || !data.success) {
+                    throw new Error(data.error || "Toggle failed");
+                }
+
+                const isActive = data.new_status === "active";
+                badge.dataset.active = isActive ? "1" : "0";
+
+                badge.classList.toggle("status-active", isActive);
+                badge.classList.toggle("status-inactive", !isActive);
+                badge.textContent = isActive ? "Faol" : "Nofaol";
+            } catch (e) {
+                alert("Statusni o‘zgartirishda xatolik yuz berdi.");
+            }
+        };
+
+        badge.addEventListener("click", onToggle);
+        badge.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onToggle();
+            }
+        });
+    });
+});
 </script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("open") === "create") {
-    document.getElementById("teacherCreateModal")?.classList.add("active");
-  }
+  // create modal removed; teacher create is now a dedicated page
 });
 </script>
 

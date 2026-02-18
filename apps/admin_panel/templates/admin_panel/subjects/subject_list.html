@@ -1,0 +1,360 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Subjects{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_class_subjects.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="cs-page">
+
+  <div class="cs-header">
+    <div>
+      <h1>Fanlar</h1>
+      <p>Fanlarni boshqarish (qo‘shish, tahrirlash, o‘chirish)</p>
+    </div>
+
+    <div style="display:flex; gap:10px; align-items:center;">
+      <div style="display:flex; gap:8px; align-items:center;">
+        <a class="btn secondary" href="{% url 'admin_panel:subjects_export_excel' %}">
+          <i class="fa-solid fa-file-excel"></i> Excel
+        </a>
+        <a class="btn secondary" href="{% url 'admin_panel:subjects_export_pdf' %}">
+          <i class="fa-solid fa-file-pdf"></i> PDF
+        </a>
+      </div>
+
+      <button class="btn primary" id="openCreateModal">
+        <i class="fa-solid fa-plus"></i> Yangi fan
+      </button>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <form method="get" class="search-box">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        name="q"
+        value="{{ filters.q }}"
+        placeholder="Fan nomi yoki kod..."
+      >
+    </form>
+  </div>
+
+  <div class="filter-panel-card" id="filterPanel">
+    <div class="filter-panel-header">
+      <div class="filter-panel-title">
+        <i class="fas fa-filter filter-panel-icon"></i>
+        <span>Filtrlar</span>
+      </div>
+      <button type="button" class="filter-panel-close" id="closeFilterPanel" aria-label="Yopish">
+        <span class="filter-close-text">Yopish</span>
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <form method="get" class="filter-panel-body">
+      <input type="hidden" name="q" value="{{ filters.q }}">
+
+      <div class="filter-panel-grid">
+        <div class="filter-field">
+          <label>Status</label>
+          <div class="filter-input-wrap">
+            <i class="fas fa-toggle-on filter-input-icon"></i>
+            <select name="status" class="filter-select">
+              <option value="">Barchasi</option>
+              <option value="active" {% if filters.status == "active" %}selected{% endif %}>Faol</option>
+              <option value="inactive" {% if filters.status == "inactive" %}selected{% endif %}>Nofaol</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-panel-actions">
+        <a href="{% url 'admin_panel:subject_list' %}" class="btn-filter-tozalash">
+          <i class="fas fa-trash-alt"></i>
+          Tozalash
+        </a>
+        <button type="submit" class="btn-filter-qollash">
+          <i class="fas fa-check"></i>
+          Qo'llash
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <button type="button" class="btn-show-filters" id="showFilterPanel" style="display:none;">
+    <i class="fas fa-filter"></i>
+    Filtrlarni ko'rsatish
+  </button>
+
+  <div class="cs-count">
+    <span>{{ count }} ta</span>
+  </div>
+
+  <div class="cs-card">
+    <div class="cs-card-head">
+      <h3>Ro‘yxat</h3>
+    </div>
+
+    <div class="cs-table-wrap">
+      <table class="cs-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Fan</th>
+            <th>Kod</th>
+            <th>Status</th>
+            <th class="right">Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in subjects %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ s.name }}</td>
+            <td><span class="badge class">{{ s.code }}</span></td>
+            <td>
+              <span class="status-badge {% if s.is_active %}status-active{% else %}status-inactive{% endif %}">
+                {% if s.is_active %}Faol{% else %}Nofaol{% endif %}
+              </span>
+            </td>
+            <td class="right">
+              <button
+                class="icon-btn edit"
+                onclick="openEditModal(this)"
+                data-id="{{ s.id }}"
+                data-name="{{ s.name }}"
+                data-code="{{ s.code }}"
+                data-active="{{ s.is_active }}"
+                title="Tahrirlash"
+              >
+                <i class="fa-solid fa-pen"></i>
+              </button>
+
+              <a class="icon-btn delete" href="{% url 'admin_panel:subject_delete' s.id %}"
+                 onclick="return confirm('O‘chirishni tasdiqlaysizmi?')"
+                 title="O‘chirish"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="empty">Hozircha fanlar yo‘q</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if is_paginated %}
+  <nav class="pagination" aria-label="Pagination">
+    <a
+      class="page-link {% if not page_obj.has_previous %}disabled{% endif %}"
+      {% if page_obj.has_previous %}
+      href="?page={{ page_obj.previous_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+      {% endif %}
+    >
+      Previous
+    </a>
+
+    {% for num in paginator.page_range %}
+      {% if num == page_obj.number %}
+        <span class="page-link active">{{ num }}</span>
+      {% else %}
+        <a class="page-link" href="?page={{ num }}{% if qs %}&{{ qs }}{% endif %}">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    <a
+      class="page-link {% if not page_obj.has_next %}disabled{% endif %}"
+      {% if page_obj.has_next %}
+      href="?page={{ page_obj.next_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+      {% endif %}
+    >
+      Next
+    </a>
+  </nav>
+  {% endif %}
+
+</div>
+
+<!-- CREATE MODAL (same pattern as Class Subjects) -->
+<div class="modal" id="createModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="mh-left">
+        <div class="mh-icon"><i class="fa-solid fa-book"></i></div>
+        <div>
+          <h2>Yangi fan</h2>
+          <p>Fan ma’lumotlarini kiriting</p>
+        </div>
+      </div>
+      <button class="mh-close" onclick="closeModal('createModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <form method="post" action="{% url 'admin_panel:subject_create' %}" class="modal-body">
+      {% csrf_token %}
+
+      <div class="grid">
+        <div class="field">
+          <label>Fan nomi</label>
+          <input type="text" name="name" required autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label>Kod</label>
+          <input type="text" name="code" required autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select name="is_active">
+            <option value="True">Faol</option>
+            <option value="False">Nofaol</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">
+          <i class="fa-solid fa-check"></i>
+          Saqlash
+        </button>
+        <button type="button" class="btn" onclick="closeModal('createModal')">Bekor qilish</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal" id="editModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="mh-left">
+        <div class="mh-icon"><i class="fa-solid fa-pen"></i></div>
+        <div>
+          <h2>Fanni tahrirlash</h2>
+          <p>Fan ma’lumotlarini yangilang</p>
+        </div>
+      </div>
+      <button class="mh-close" onclick="closeModal('editModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <form method="post" action="{% url 'admin_panel:subject_update' %}" class="modal-body">
+      {% csrf_token %}
+      <input type="hidden" name="id" id="edit_id">
+
+      <div class="grid">
+        <div class="field">
+          <label>Fan nomi</label>
+          <input type="text" name="name" id="edit_name" required autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label>Kod</label>
+          <input type="text" name="code" id="edit_code" required autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select name="is_active" id="edit_active">
+            <option value="True">Faol</option>
+            <option value="False">Nofaol</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">
+          <i class="fa-solid fa-save"></i>
+          Saqlash
+        </button>
+        <button type="button" class="btn" onclick="closeModal('editModal')">Bekor qilish</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // filter panel (same pattern as class_subjects)
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterPanel = document.getElementById('filterPanel');
+    const showBtn = document.getElementById('showFilterPanel');
+
+    document.getElementById('closeFilterPanel').addEventListener('click', function() {
+      filterPanel.classList.add('filter-panel-hidden');
+      if (showBtn) showBtn.style.display = 'inline-flex';
+    });
+
+    if (showBtn) {
+      showBtn.addEventListener('click', function() {
+        filterPanel.classList.remove('filter-panel-hidden');
+        showBtn.style.display = 'none';
+      });
+    }
+  });
+
+  // modal logic (same behavior as other admin pages)
+  function openModal(modalId) {
+    const m = document.getElementById(modalId);
+    if (!m) return;
+    m.classList.add('active');
+  }
+
+  function closeModal(modalId) {
+    const m = document.getElementById(modalId);
+    if (!m) return;
+    m.classList.remove('active');
+  }
+
+  document.getElementById('openCreateModal').addEventListener('click', () => openModal('createModal'));
+
+  function openEditModal(btn) {
+    document.getElementById('edit_id').value = btn.dataset.id;
+    document.getElementById('edit_name').value = btn.dataset.name || '';
+    document.getElementById('edit_code').value = btn.dataset.code || '';
+    document.getElementById('edit_active').value = (btn.dataset.active === 'True') ? 'True' : 'False';
+    openModal('editModal');
+  }
+
+  // CSRF helper (for toggle status POST)
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  async function toggleSubjectStatus(el) {
+    const id = el.dataset.id;
+    const res = await fetch(`/admin-panel/subjects/toggle-status/${id}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken')
+      }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    const isActive = data.is_active;
+
+    el.classList.toggle('active', isActive);
+    el.classList.toggle('inactive', !isActive);
+    el.textContent = isActive ? 'Faol' : 'Nofaol';
+  }
+
+  // Close modal when clicking outside card
+  ['createModal', 'editModal'].forEach((id) => {
+    const m = document.getElementById(id);
+    if (!m) return;
+    m.addEventListener('click', (e) => {
+      if (e.target === m) closeModal(id);
+    });
+  });
+</script>
+{% endblock %}

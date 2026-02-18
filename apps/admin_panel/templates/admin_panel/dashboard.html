@@ -9,12 +9,16 @@
             <header class="header">
                 <div class="header-left">
                     <h2>Dashboard</h2>
-                    <p>Xush kelibsiz, Admin!</p>
+                    <p>Xush kelibsiz, {{ request.user.username }}!</p>
                 </div>
                 <div class="header-right">
                     <div class="user-profile">
-                        <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" alt="Admin">
-                        <span>Admin</span>
+                        {% if request.user.profile_photo %}
+                            <img src="{{ request.user.profile_photo.url }}" alt="{{ request.user.username }}">
+                        {% else %}
+                            <img src="https://ui-avatars.com/api/?name={{ request.user.username|urlencode }}&background=4361ee&color=fff" alt="{{ request.user.username }}">
+                        {% endif %}
+                        <span>{{ request.user.username }}</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                 </div>
@@ -22,7 +26,7 @@
 
             <!-- Statistik Kartalar -->
             <section class="stats-cards">
-                <div class="stat-card">
+                <div class="stat-card" data-href="{% url 'admin_panel:teacher_list' %}" role="link" tabindex="0">
                     <div class="stat-icon teacher">
                         <i class="fas fa-chalkboard-teacher"></i>
                     </div>
@@ -31,12 +35,12 @@
                         <p class="count">{{ teacher_count }}</p>
                         <p class="stat-desc">Faol o'qituvchilar</p>
                     </div>
-                    <a href="#" class="stat-link">
+                    <a href="{% url 'admin_panel:teacher_list' %}" class="stat-link">
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="stat-card">
+                <div class="stat-card" data-href="{% url 'admin_panel:class_list' %}" role="link" tabindex="0">
                     <div class="stat-icon class">
                         <i class="fas fa-school"></i>
                     </div>
@@ -45,12 +49,12 @@
                         <p class="count">{{ class_count }}</p>
                         <p class="stat-desc">Mavjud sinflar</p>
                     </div>
-                    <a href="#" class="stat-link">
+                    <a href="{% url 'admin_panel:class_list' %}" class="stat-link">
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="stat-card">
+                <div class="stat-card" data-href="{% url 'admin_panel:admin_students' %}" role="link" tabindex="0">
                     <div class="stat-icon student">
                         <i class="fas fa-user-graduate"></i>
                     </div>
@@ -59,7 +63,21 @@
                         <p class="count">{{ student_count }}</p>
                         <p class="stat-desc">Ro'yxatdan o'tgan o'quvchilar</p>
                     </div>
-                    <a href="#" class="stat-link">
+                    <a href="{% url 'admin_panel:admin_students' %}" class="stat-link">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="stat-card" data-href="{% url 'admin_panel:subject_list' %}" role="link" tabindex="0">
+                    <div class="stat-icon class">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Fanlar</h3>
+                        <p class="count">{{ subject_count }}</p>
+                        <p class="stat-desc">Mavjud fanlar</p>
+                    </div>
+                    <a href="{% url 'admin_panel:subject_list' %}" class="stat-link">
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -78,6 +96,30 @@
                     </a>
                 </div>
             </section>
+
+            <script>
+                // Make whole dashboard cards clickable without changing the visual layout.
+                // - Click on card navigates to data-href
+                // - Arrow link still works normally
+                // - Keyboard: Enter/Space triggers navigation
+                document.querySelectorAll('.stat-card[data-href]').forEach((card) => {
+                    const href = card.getAttribute('data-href');
+                    if (!href) return;
+
+                    card.addEventListener('click', (e) => {
+                        // Do not hijack clicks on inner links/buttons
+                        if (e.target.closest('a, button')) return;
+                        window.location.href = href;
+                    });
+
+                    card.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            window.location.href = href;
+                        }
+                    });
+                });
+            </script>
 
             <!-- Chart va Jadval -->
             <section class="content-grid">

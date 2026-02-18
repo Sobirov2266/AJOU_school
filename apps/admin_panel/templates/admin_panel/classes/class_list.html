@@ -27,14 +27,116 @@
       >
     </form>
 
-    <button type="button" class="btn btn-primary" id="openCreateClass">
-      <i class="fa-solid fa-plus"></i>
-      Yangi sinf
-    </button>
+    <div class="classes-actions-right">
+      <div class="view-toggle" id="classViewToggle" role="group" aria-label="Ko‘rinish rejimi">
+        <button type="button" class="view-btn" data-view="table">
+          <i class="fa-solid fa-table"></i>
+          Jadval
+        </button>
+        <button type="button" class="view-btn" data-view="cards">
+          <i class="fa-solid fa-border-all"></i>
+          Kartalar
+        </button>
+      </div>
+
+      <div style="display:flex; gap:8px; align-items:center;">
+        <a class="btn btn-secondary" href="{% url 'admin_panel:classes_export_excel' %}">
+          <i class="fa-solid fa-file-excel"></i>
+          Excel
+        </a>
+        <a class="btn btn-secondary" href="{% url 'admin_panel:classes_export_pdf' %}">
+          <i class="fa-solid fa-file-pdf"></i>
+          PDF
+        </a>
+      </div>
+
+      <button type="button" class="btn btn-primary" id="openCreateClass">
+        <i class="fa-solid fa-plus"></i>
+        Yangi sinf
+      </button>
+    </div>
   </div>
 
-  <!-- Table card -->
-  <section class="card classes-card">
+  <!-- Card view -->
+  <section class="card classes-card card-view" id="classesCardView">
+    <div class="card-header classes-card-header">
+      <div>
+        <h3>Sinflar ro‘yxati</h3>
+        <span class="muted">{{ class_count }} ta sinf</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="classes-grid">
+        {% for c in classes %}
+        <div class="class-card">
+          <div class="class-card__top">
+            <div class="class-icon">
+              <i class="fa-solid fa-school"></i>
+            </div>
+            <span class="status-badge {% if c.is_active %}status-active{% else %}status-inactive{% endif %}">
+              {% if c.is_active %}FAOL{% else %}NOFAOL{% endif %}
+            </span>
+          </div>
+
+          <div class="class-card__main">
+            <div class="class-card__name">{{ c.name }}</div>
+            <div class="muted">Sinf ID: #{{ c.id }}</div>
+          </div>
+
+          <div class="class-card__info">
+            <i class="fa-solid fa-user-graduate"></i>
+            <span>{{ c.students_count }} o‘quvchi</span>
+          </div>
+
+          <div class="class-card__bottom">
+            <div class="muted">{{ c.created_at|date:"d M, Y" }}</div>
+            <div class="actions">
+              <a
+                class="icon-btn"
+                title="Ko‘rish"
+                href="{% url 'admin_panel:class_students' c.id %}"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </a>
+
+              <button
+                type="button"
+                class="icon-btn edit"
+                title="Tahrirlash"
+                data-id="{{ c.id }}"
+                data-name="{{ c.name }}"
+                data-active="{{ c.is_active }}"
+              >
+                <i class="fa-solid fa-pen"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="empty" style="padding:40px 10px;">
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h4>Hozircha sinflar yo‘q</h4>
+            <p class="muted">“Yangi sinf” tugmasi orqali sinf qo‘shing.</p>
+            <button type="button" class="btn btn-primary" id="openCreateClass2">
+              <i class="fa-solid fa-plus"></i> Yangi sinf
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card-footer classes-footer">
+      <span class="muted">{{ classes|length }} ta sinf ko‘rsatilmoqda</span>
+    </div>
+  </section>
+
+  <!-- Table view -->
+  <section class="card classes-card table-view" id="classesTableView">
     <div class="card-header classes-card-header">
       <div>
         <h3>Sinflar ro‘yxati</h3>
@@ -51,13 +153,22 @@
 
     <div class="card-body table-responsive">
       <table class="classes-table">
+        <colgroup>
+          <col style="width:60px;">
+          <col style="width:240px;">
+          <col style="width:160px;">
+          <col style="width:180px;">
+          <col style="width:140px;">
+          <col style="width:160px;">
+        </colgroup>
         <thead>
           <tr>
-            <th style="width:60px;">#</th>
-            <th>Sinf</th>
-            <th style="width:180px;">Yaratilgan</th>
-            <th style="width:140px;">Status</th>
-            <th style="width:140px; text-align:right;">Amallar</th>
+            <th>#</th>
+            <th>CLASS</th>
+            <th>STUDENT COUNT</th>
+            <th>CREATED</th>
+            <th>STATUS</th>
+            <th style="text-align:right;">ACTIONS</th>
           </tr>
         </thead>
 
@@ -67,16 +178,13 @@
             <td class="muted">{{ forloop.counter }}</td>
 
             <td>
-              <div class="class-cell">
-                <div class="class-icon">
-                  <i class="fa-solid fa-school"></i>
-                </div>
-                <div class="class-meta">
-                  {{ c.name }}
-                  <small class="muted">ID: {{ c.id }}</small>
-                </div>
+              <div class="class-meta">
+                {{ c.name }}
+                <small class="muted">ID: {{ c.id }}</small>
               </div>
             </td>
+
+            <td class="muted">{{ c.students_count }}</td>
 
             <td class="muted">{{ c.created_at|date:"d M, Y" }}</td>
 
@@ -88,12 +196,20 @@
                 onclick="toggleClassStatus({{ c.id }})"
                 title="Statusni o‘zgartirish"
               >
-                {% if c.is_active %}Active{% else %}Inactive{% endif %}
+                {% if c.is_active %}Faol{% else %}Nofaol{% endif %}
               </span>
             </td>
 
             <td style="text-align:right;">
               <div class="actions">
+                <a
+                  class="icon-btn"
+                  title="Ko‘rish"
+                  href="{% url 'admin_panel:class_students' c.id %}"
+                >
+                  <i class="fa-solid fa-eye"></i>
+                </a>
+
                 <button
                   type="button"
                   class="icon-btn edit"
@@ -118,14 +234,14 @@
           </tr>
           {% empty %}
           <tr>
-            <td colspan="5" class="empty">
+            <td colspan="6" class="empty">
               <div class="empty-state">
                 <div class="empty-icon">
                   <i class="fa-solid fa-folder-open"></i>
                 </div>
                 <h4>Hozircha sinflar yo‘q</h4>
                 <p class="muted">“Yangi sinf” tugmasi orqali sinf qo‘shing.</p>
-                <button type="button" class="btn btn-primary" id="openCreateClass2">
+                <button type="button" class="btn btn-primary" id="openCreateClass2b">
                   <i class="fa-solid fa-plus"></i> Yangi sinf
                 </button>
               </div>
@@ -140,6 +256,36 @@
       <span class="muted">{{ classes|length }} ta sinf ko‘rsatilmoqda</span>
     </div>
   </section>
+
+  {% if is_paginated %}
+  <nav class="pagination" aria-label="Pagination">
+    <a
+      class="page-link {% if not page_obj.has_previous %}disabled{% endif %}"
+      {% if page_obj.has_previous %}
+      href="?page={{ page_obj.previous_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+      {% endif %}
+    >
+      Previous
+    </a>
+
+    {% for num in paginator.page_range %}
+      {% if num == page_obj.number %}
+        <span class="page-link active">{{ num }}</span>
+      {% else %}
+        <a class="page-link" href="?page={{ num }}{% if qs %}&{{ qs }}{% endif %}">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    <a
+      class="page-link {% if not page_obj.has_next %}disabled{% endif %}"
+      {% if page_obj.has_next %}
+      href="?page={{ page_obj.next_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+      {% endif %}
+    >
+      Next
+    </a>
+  </nav>
+  {% endif %}
 
 </main>
 
@@ -166,7 +312,17 @@
 
         <div class="field">
           <label>Sinf nomi</label>
-          <input type="text" name="name" placeholder="Masalan: 7-A" required autofocus>
+          <input
+            type="text"
+            name="name"
+            id="create_class_name"
+            placeholder="Masalan: 7-A"
+            required
+            autofocus
+            maxlength="20"
+            pattern="[0-9]+-[A-Za-z]"
+            autocomplete="off"
+          >
           <div class="hint">Tavsiyalar: 5-A, 6-B, 11-IT va hokazo</div>
         </div>
 
@@ -206,14 +362,22 @@
         <div class="grid-2">
           <div class="field">
             <label>Sinf nomi</label>
-            <input type="text" name="name" id="edit_class_name" required>
+            <input
+              type="text"
+              name="name"
+              id="edit_class_name"
+              required
+              maxlength="20"
+              pattern="[0-9]+-[A-Za-z]"
+              autocomplete="off"
+            >
           </div>
 
           <div class="field">
             <label>Status</label>
             <select name="is_active" id="edit_class_active">
-              <option value="1">Active</option>
-              <option value="0">Inactive</option>
+              <option value="1">Faol</option>
+              <option value="0">Nofaol</option>
             </select>
           </div>
         </div>
@@ -230,6 +394,51 @@
 </div>
 
 <script>
+  // ========= view mode toggle =========
+  const VIEW_KEY = "admin_classes_view_mode";
+  const cardView = document.getElementById("classesCardView");
+  const tableView = document.getElementById("classesTableView");
+  const toggleWrap = document.getElementById("classViewToggle");
+
+  function setViewMode(mode) {
+    const safeMode = (mode === "cards" || mode === "table") ? mode : "table";
+    if (cardView) cardView.style.display = (safeMode === "cards") ? "block" : "none";
+    if (tableView) tableView.style.display = (safeMode === "table") ? "block" : "none";
+
+    if (toggleWrap) {
+      [...toggleWrap.querySelectorAll(".view-btn")].forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.view === mode);
+      });
+    }
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", mode);
+    url.searchParams.delete("page");
+    window.history.replaceState({}, "", url);
+  }
+
+  function getSavedViewMode() {
+    try {
+      const initial = localStorage.getItem(VIEW_KEY) || "table";
+      const urlMode = new URL(window.location.href).searchParams.get("view");
+      const initialMode = urlMode || initial;
+      return initialMode;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  if (toggleWrap) {
+    toggleWrap.addEventListener("click", (e) => {
+      const btn = e.target.closest(".view-btn");
+      if (!btn) return;
+
+      const mode = btn.dataset.view;
+      localStorage.setItem(VIEW_KEY, mode);
+      setViewMode(mode);
+    });
+  }
+
   // ========= helpers =========
   const openModal = (m) => {
     m.classList.add("active");
@@ -248,9 +457,11 @@
   const createModal = document.getElementById("createClassModal");
   const openCreateBtn = document.getElementById("openCreateClass");
   const openCreateBtn2 = document.getElementById("openCreateClass2");
+  const openCreateBtn2b = document.getElementById("openCreateClass2b");
 
   if (openCreateBtn) openCreateBtn.addEventListener("click", () => openModal(createModal));
   if (openCreateBtn2) openCreateBtn2.addEventListener("click", () => openModal(createModal));
+  if (openCreateBtn2b) openCreateBtn2b.addEventListener("click", () => openModal(createModal));
 
   // ========= edit modal =========
   const editModal = document.getElementById("editClassModal");
@@ -260,6 +471,7 @@
       document.getElementById("edit_class_id").value = btn.dataset.id;
       document.getElementById("edit_class_name").value = btn.dataset.name || "";
       document.getElementById("edit_class_active").value = (btn.dataset.active === "True") ? "1" : "0";
+      normalizeClassNameInput(document.getElementById("edit_class_name"));
       openModal(editModal);
     });
   });
@@ -288,15 +500,72 @@
   // ========= actions =========
   function deleteClass(id) {
     if (confirm("Sinfni o‘chirishni tasdiqlaysizmi?")) {
-      window.location.href = `/admin-panel/classes/delete/${id}/`;
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = `/admin-panel/classes/delete/${id}/`;
+      const csrf = document.querySelector("[name=csrfmiddlewaretoken]");
+      if (csrf) {
+        form.appendChild(csrf.cloneNode());
+      }
+      document.body.appendChild(form);
+      form.submit();
     }
   }
 
   function toggleClassStatus(id) {
     if (confirm("Statusni o‘zgartirmoqchimisiz?")) {
-      window.location.href = `/admin-panel/classes/toggle-status/${id}/`;
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = `/admin-panel/classes/toggle-status/${id}/`;
+      const csrf = document.querySelector("[name=csrfmiddlewaretoken]");
+      if (csrf) {
+        form.appendChild(csrf.cloneNode());
+      }
+      document.body.appendChild(form);
+      form.submit();
     }
   }
+
+  // Class name UX:
+  // - auto insert '-' after digits
+  // - only one letter after '-'
+  // - force uppercase letter
+  function normalizeClassNameInput(input) {
+    if (!input) return;
+    let v = (input.value || "").toUpperCase().replace(/\s+/g, "");
+
+    // keep only digits and letters and '-'
+    v = v.replace(/[^0-9A-Z-]/g, "");
+
+    // If user typed digits then a letter without dash, insert dash
+    const m = v.match(/^(\d+)([A-Z])$/);
+    if (m) v = `${m[1]}-${m[2]}`;
+
+    // Enforce single letter after dash
+    const m2 = v.match(/^(\d+)-(.*)$/);
+    if (m2) {
+      const digits = m2[1];
+      const letter = (m2[2] || "").replace(/[^A-Z]/g, "").slice(0, 1);
+      v = letter ? `${digits}-${letter}` : `${digits}-`;
+    }
+
+    input.value = v;
+  }
+
+  const createNameInput = document.getElementById("create_class_name");
+  if (createNameInput) {
+    createNameInput.addEventListener("input", () => normalizeClassNameInput(createNameInput));
+    createNameInput.addEventListener("blur", () => normalizeClassNameInput(createNameInput));
+  }
+
+  const editNameInput = document.getElementById("edit_class_name");
+  if (editNameInput) {
+    editNameInput.addEventListener("input", () => normalizeClassNameInput(editNameInput));
+    editNameInput.addEventListener("blur", () => normalizeClassNameInput(editNameInput));
+  }
+
+  // Restore mode after DOM is ready
+  setViewMode(getSavedViewMode() || "table");
 </script>
 
 {% endblock %}

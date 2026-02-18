@@ -69,6 +69,252 @@
   color:#374151;
 }
 
+/* ===== ACTION BAR + FILTER PANEL (Students/Teachers bilan bir xil) ===== */
+.cs-page .action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.cs-page .search-box {
+  position: relative;
+  width: 320px;
+}
+
+.cs-page .search-box i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.cs-page .search-box input {
+  width: 100%;
+  padding: 12px 15px 12px 45px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  outline: none;
+  background: #fff;
+}
+
+.cs-page .search-box input:focus {
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.12);
+}
+
+.cs-page .filter-panel-card {
+  background: linear-gradient(135deg, #f0f4f8 0%, #e8eef4 100%);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #dce4ec;
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cs-page .filter-panel-card.filter-panel-hidden {
+  display: none;
+}
+
+.cs-page .filter-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.6);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cs-page .filter-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.cs-page .filter-panel-icon {
+  color: #4361ee;
+  font-size: 18px;
+}
+
+.cs-page .filter-panel-close {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #4361ee;
+  transition: opacity 0.2s;
+}
+
+.cs-page .filter-panel-close:hover {
+  opacity: 0.8;
+}
+
+.cs-page .filter-close-text {
+  font-weight: 500;
+}
+
+.cs-page .filter-panel-close i {
+  font-size: 16px;
+}
+
+.cs-page .filter-panel-body {
+  padding: 20px 24px;
+}
+
+.cs-page .filter-panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px 24px;
+  margin-bottom: 20px;
+}
+
+.cs-page .filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cs-page .filter-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.cs-page .filter-input-wrap {
+  position: relative;
+}
+
+.cs-page .filter-input-wrap .filter-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.cs-page .filter-input,
+.cs-page .filter-select {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  border: 1px solid #d1d9e6;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  background: #fff;
+  color: #334155;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.cs-page .filter-input:focus,
+.cs-page .filter-select:focus {
+  outline: none;
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.12);
+}
+
+.cs-page .filter-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.cs-page .filter-panel-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.cs-page .btn-filter-tozalash {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.cs-page .btn-filter-tozalash:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+.cs-page .btn-filter-qollash {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #4361ee;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.cs-page .btn-filter-qollash:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.4);
+}
+
+.cs-page .btn-show-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  margin-bottom: 20px;
+  background: #fff;
+  color: #4361ee;
+  border: 1px solid #d1d9e6;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.cs-page .btn-show-filters:hover {
+  background: #f8fafc;
+  border-color: #4361ee;
+}
+
+@media (max-width: 700px) {
+  .cs-page .filter-panel-grid { grid-template-columns: 1fr; }
+  .cs-page .filter-panel-actions { flex-direction: column; }
+}
+
 /* buttons */
 .btn{
   border:none;

@@ -1,0 +1,169 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_student_create.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+
+    <div class="form-card">
+
+        <div class="form-header">
+            <div class="header-left">
+                <div class="header-icon">
+                    <i class="fa-solid fa-chalkboard-teacher"></i>
+                </div>
+                <div>
+                    <h1>Yangi o‘qituvchi qo‘shish</h1>
+                    <p>Xalqaro maktab uchun o‘qituvchi profilini yarating</p>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="student-form">
+            {% csrf_token %}
+
+            <div class="form-section">
+                <h3>Account ma’lumotlari</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label>Username</label>
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="username"
+                            required
+                            autocomplete="off"
+                            value="{{ form.username|default:'' }}"
+                        >
+                    </div>
+
+                    <div class="field password-field">
+                        <label>Parol</label>
+                        <input
+                            type="password"
+                            name="password"
+                            id="passwordInput"
+                            required
+                            autocomplete="new-password"
+                        >
+                        <span class="eye" onclick="togglePassword()">
+                            <i class="fa-solid fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Shaxsiy ma’lumotlar</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label>Ismi</label>
+                        <input type="text" name="first_name" placeholder="O‘qituvchi ismi" required value="{{ form.first_name|default:'' }}">
+                    </div>
+
+                    <div class="field">
+                        <label>Familiyasi</label>
+                        <input type="text" name="last_name" placeholder="O‘qituvchi familiyasi" required value="{{ form.last_name|default:'' }}">
+                    </div>
+
+                    <div class="field">
+                        <label>Otasining ismi</label>
+                        <input type="text" name="father_name" placeholder="Otasining ismi" required value="{{ form.father_name|default:'' }}">
+                    </div>
+
+                    <div class="field">
+                        <label>Tug‘ilgan yili</label>
+                        <input
+                            type="number"
+                            name="birth_year"
+                            placeholder="Masalan: 1998"
+                            min="1950"
+                            max="2026"
+                            value="{{ form.birth_year|default:'' }}"
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Hujjatlar</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label>Passport / ID</label>
+                        <input
+                            type="text"
+                            name="passport_id"
+                            placeholder="AB1234567"
+                            required
+                            maxlength="9"
+                            pattern="[A-Z]{2}[0-9]{7}"
+                            autocomplete="off"
+                            value="{{ form.passport_id|default:'' }}"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label>JSHSHR</label>
+                        <input
+                            type="text"
+                            name="jshshr"
+                            placeholder="14 xonali"
+                            required
+                            maxlength="14"
+                            pattern="[0-9]{14}"
+                            inputmode="numeric"
+                            autocomplete="off"
+                            value="{{ form.jshshr|default:'' }}"
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Maktab ma’lumotlari</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label>Jinsi</label>
+                        <select name="gender" required>
+                            <option value="">Jinsini tanlang</option>
+                            <option value="male" {% if form.gender == 'male' %}selected{% endif %}>Erkak</option>
+                            <option value="female" {% if form.gender == 'female' %}selected{% endif %}>Ayol</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Profil rasmi</h3>
+
+                <div class="upload-area" onclick="document.getElementById('avatar').click()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Rasm yuklash</p>
+                    <span id="fileName">PNG, JPG (max 5MB)</span>
+                </div>
+                <input type="file" name="photo" id="avatar" hidden accept="image/*" onchange="showFileName(this)">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn primary">
+                    Saqlash
+                </button>
+                <a href="{% url 'admin_panel:teacher_list' %}" class="btn secondary">
+                    Bekor qilish
+                </a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<script src="{% static 'js/admin_students_create.js' %}"></script>
+{% endblock %}

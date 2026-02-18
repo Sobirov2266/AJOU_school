@@ -20,6 +20,47 @@
   box-shadow: var(--box-shadow);
 }
 
+.classes-actions-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.view-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--light-gray);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f8f9fa;
+}
+
+.view-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+}
+
+.view-btn.active {
+  background: rgba(67, 97, 238, 0.12);
+  color: var(--primary-color);
+}
+
+.view-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.12);
+}
+
 .classes-search {
   position: relative;
   width: 420px;
@@ -80,28 +121,134 @@
   width: 100%;
   border-collapse: collapse;
   min-width: 760px;
+  table-layout: fixed;
+}
+
+/* Views */
+.card-view {
+  display: none;
+}
+
+.table-view {
+  display: block;
+}
+
+/* Cards grid */
+.classes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.class-card {
+  border: 1px solid var(--light-gray);
+  border-radius: 18px;
+  background: var(--white);
+  padding: 16px;
+  box-shadow: 0 10px 22px rgba(17, 24, 39, 0.06);
+  transition: var(--transition);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.class-card:hover {
+  transform: translateY(-2px);
+}
+
+.class-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.class-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.class-card__name {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  color: #111827;
+}
+
+.class-card__info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #111827;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.class-card__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+}
+
+@media (max-width: 1100px) {
+  .classes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .classes-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .classes-actions-right {
+    justify-content: space-between;
+  }
+
+  .classes-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .classes-table thead th {
   background: #f8f9fa;
-  padding: 14px 16px;
+  padding: 16px 18px;
   text-align: left;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #111827;
-  border-bottom: 1px solid var(--light-gray);
+  border-bottom: 2px solid var(--light-gray);
   white-space: nowrap;
 }
 
 .classes-table tbody td {
-  padding: 14px 16px;
+  padding: 16px 18px;
   border-bottom: 1px solid var(--light-gray);
   vertical-align: middle;
   font-weight: 400;
+  font-size: 15px;
+  line-height: 1.35;
 }
 
 .classes-table tbody tr:hover {
   background: #fafafa;
+}
+
+/* Fixed layout: prevent long class names from stretching the table */
+.classes-table th,
+.classes-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.classes-table th:last-child,
+.classes-table td:last-child {
+  text-align: right;
 }
 
 
@@ -209,6 +356,47 @@
 .classes-footer {
   padding: 16px 20px;
   border-top: 1px solid var(--light-gray);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 6px;
+}
+
+.page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--light-gray);
+  background: var(--white);
+  color: #111827;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.page-link:hover {
+  background: #f3f4f6;
+}
+
+.page-link.active {
+  background: rgba(67, 97, 238, 0.12);
+  border-color: rgba(67, 97, 238, 0.25);
+  color: var(--primary-color);
+}
+
+.page-link.disabled {
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 /* Empty state */

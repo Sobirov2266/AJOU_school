@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/admin_students.css' %}">
     <link rel="stylesheet" href="{% static 'css/admin_classes.css' %}">
     <link rel="stylesheet" href="{% static 'css/admin_class_subjects.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_notifications.css' %}">
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,11 +22,30 @@
 
 {% include 'admin_panel/sidebar.html' %}
 
+{# Global admin toast notifications (Django messages) #}
+{% if messages %}
+    <div class="admin-toast-container" id="adminToastContainer" aria-live="polite" aria-atomic="true">
+        {% for message in messages %}
+            <div
+                class="admin-toast admin-toast--{% if 'error' in message.tags %}error{% elif 'success' in message.tags %}success{% elif 'warning' in message.tags %}warning{% else %}info{% endif %}"
+                role="alert"
+                data-autodismiss="1"
+            >
+                <div class="admin-toast__bar" aria-hidden="true"></div>
+                <div class="admin-toast__content">{{ message }}</div>
+                <button type="button" class="admin-toast__close" aria-label="Yopish" data-admin-toast-close>×</button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
 <div class="main-content-wrapper">
     <div class="main-content">
         {% block content %}{% endblock %}
     </div>
 </div>
+
+<script src="{% static 'js/admin_notifications.js' %}"></script>
 
 </body>
 </html>

@@ -1,4 +1,5 @@
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 
@@ -14,6 +15,16 @@ class User(AbstractUser):
         choices=Role.choices,
         default=Role.STUDENT
     )
+
+    # Admin profil rasmi (ixtiyoriy)
+    profile_photo = models.ImageField(
+        upload_to="users/profile_photos/",
+        null=True,
+        blank=True,
+    )
+
+    # First-login security: require user to change password after initial account creation.
+    must_change_password = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.username} ({self.role})"
@@ -38,8 +49,40 @@ class TeacherProfile(models.Model):
 
     birth_year = models.PositiveIntegerField(null=True, blank=True)
 
-    passport_id = models.CharField(max_length=20, unique=True, null=True, blank=True)
-    jshshr = models.CharField(max_length=14, unique=True, null=True, blank=True)
+    # Passport: 2 ta katta harf + 7 ta raqam (masalan: AB1234567)
+    passport_id = models.CharField(
+        max_length=20,
+        unique=True,
+        null=True,
+        blank=True,
+        validators=[
+            RegexValidator(
+                regex=r"^[A-Z]{2}\d{7}$",
+                message="Passport formati: 2 ta katta harf + 7 ta raqam (masalan: AB1234567).",
+            )
+        ],
+    )
+
+    # JSHSHR: faqat 14 ta raqam
+    jshshr = models.CharField(
+        max_length=14,
+        unique=True,
+        null=True,
+        blank=True,
+        validators=[
+            RegexValidator(
+                regex=r"^\d{14}$",
+                message="JSHSHR 14 ta raqamdan iborat bo‘lishi kerak.",
+            )
+        ],
+    )
+
+    # Profil rasmi (ixtiyoriy)
+    photo = models.ImageField(
+        upload_to="teachers/photos/",
+        null=True,
+        blank=True,
+    )
 
     subject = models.ForeignKey(
         'academic.Subject',

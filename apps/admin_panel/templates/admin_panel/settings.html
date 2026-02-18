@@ -1,0 +1,142 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Settings{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_student_create.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+
+    <div class="form-card">
+
+        <div class="form-header">
+            <div class="header-left">
+                <div class="header-icon">
+                    <i class="fa-solid fa-gear"></i>
+                </div>
+                <div>
+                    <h1>Sozlamalar</h1>
+                    <p>Admin profilingizni boshqaring</p>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="student-form" style="margin-bottom: 32px;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="profile">
+
+            <div class="form-section">
+                <h3>Profil ma’lumotlari</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label>Username</label>
+                        {{ profile_form.username }}
+                        {% if profile_form.username.errors %}
+                            <small style="color:#dc2626">{{ profile_form.username.errors|join:", " }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="field">
+                        <label>Email</label>
+                        {{ profile_form.email }}
+                        {% if profile_form.email.errors %}
+                            <small style="color:#dc2626">{{ profile_form.email.errors|join:", " }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="field">
+                        <label>Ism</label>
+                        {{ profile_form.first_name }}
+                        {% if profile_form.first_name.errors %}
+                            <small style="color:#dc2626">{{ profile_form.first_name.errors|join:", " }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="field">
+                        <label>Familiya</label>
+                        {{ profile_form.last_name }}
+                        {% if profile_form.last_name.errors %}
+                            <small style="color:#dc2626">{{ profile_form.last_name.errors|join:", " }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Profil rasmi (ixtiyoriy)</h3>
+
+                <div class="upload-area" onclick="document.getElementById('profile_photo').click()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Rasm yuklash</p>
+                    <span id="fileName">PNG, JPG (max 5MB)</span>
+                </div>
+                <input type="file" name="profile_photo" id="profile_photo" hidden accept="image/*" onchange="showFileName(this)">
+
+                {% if request.user.profile_photo %}
+                    <div style="margin-top: 12px;">
+                        <small style="color:#6b7280">Joriy rasm:</small><br>
+                        <img src="{{ request.user.profile_photo.url }}" alt="{{ request.user.username }}" style="width:64px;height:64px;border-radius:14px;object-fit:cover;">
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn primary">Saqlash</button>
+            </div>
+        </form>
+
+        <form method="post" class="student-form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="password">
+
+            <div class="form-section">
+                <h3>Parolni o‘zgartirish</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label>Eski parol</label>
+                        {{ password_form.old_password }}
+                        {% if password_form.old_password.errors %}
+                            <small style="color:#dc2626">{{ password_form.old_password.errors|join:", " }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="field">
+                        <label>Yangi parol</label>
+                        {{ password_form.new_password1 }}
+                        {% if password_form.new_password1.errors %}
+                            <small style="color:#dc2626">{{ password_form.new_password1.errors|join:", " }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="field">
+                        <label>Yangi parol (tasdiqlash)</label>
+                        {{ password_form.new_password2 }}
+                        {% if password_form.new_password2.errors %}
+                            <small style="color:#dc2626">{{ password_form.new_password2.errors|join:", " }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if password_form.non_field_errors %}
+                    <div style="margin-top: 10px;">
+                        <small style="color:#dc2626">{{ password_form.non_field_errors|join:", " }}</small>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn primary">Parolni yangilash</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<script src="{% static 'js/admin_students_create.js' %}"></script>
+{% endblock %}

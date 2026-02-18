@@ -32,28 +32,13 @@
 
                 <div class="grid">
                     <div class="field">
-                        <label>Username</label>
-                        <input
-                            type="text"
-                            name="username"
-                            placeholder="username"
-                            required
-                            autocomplete="off"
-                        >
+                        <label>Login</label>
+                        <input type="text" value="Avtomatik yaratiladi" disabled>
                     </div>
 
-                    <div class="field password-field">
-                        <label>Parol</label>
-                        <input
-                            type="password"
-                            name="password"
-                            id="passwordInput"
-                            required
-                            autocomplete="new-password"
-                        >
-                        <span class="eye" onclick="togglePassword()">
-                            <i class="fa-solid fa-eye"></i>
-                        </span>
+                    <div class="field">
+                        <label>Birinchi parol</label>
+                        <input type="text" value="Passport/ID bo‘yicha" disabled>
                     </div>
                 </div>
 
@@ -67,22 +52,39 @@
                 <div class="grid">
                     <div class="field">
                         <label>Ismi</label>
-                        <input type="text" name="first_name" placeholder="O‘quvchi ismi" required>
+                        <input
+                            type="text"
+                            name="first_name"
+                            placeholder="O‘quvchi ismi"
+                            required
+                            pattern="[A-Za-zÀ-ÖØ-öø-ÿʻʼ’`\s-]+"
+                            title="Faqat harflar"
+                            value="{% if form %}{{ form.data.first_name }}{% endif %}"
+                        >
                     </div>
 
                     <div class="field">
                         <label>Familiyasi</label>
-                        <input type="text" name="last_name" placeholder="O‘quvchi familiyasi" required>
+                        <input type="text" name="last_name" placeholder="O‘quvchi familiyasi" required value="{% if form %}{{ form.data.last_name }}{% endif %}">
                     </div>
 
                     <div class="field">
                         <label>Tug‘ilgan sana</label>
-                        <input type="date" name="birth_date">
+                        <input type="date" name="birth_date" value="{% if form %}{{ form.data.birth_date }}{% endif %}">
                     </div>
 
                     <div class="field">
                         <label>Passport / ID</label>
-                        <input type="text" name="passport_id">
+                        <input
+                            type="text"
+                            name="passport_id"
+                            placeholder="AB1234567"
+                            maxlength="9"
+                            pattern="[A-Z]{2}[0-9]{7}"
+                            autocomplete="off"
+                            required
+                            value="{% if form %}{{ form.data.passport_id }}{% endif %}"
+                        >
                     </div>
                 </div>
             </div>
@@ -94,7 +96,17 @@
                 <div class="grid">
                     <div class="field">
                         <label>Ota-ona telefoni</label>
-                        <input type="text" name="parent_phone" placeholder="+998 XX XXX XX XX" required>
+                        <input
+                            type="text"
+                            name="parent_phone"
+                            placeholder="+998901234567"
+                            required
+                            maxlength="13"
+                            pattern="\+[0-9]{12}"
+                            inputmode="numeric"
+                            autocomplete="off"
+                            value="{% if form %}{{ form.data.parent_phone }}{% endif %}"
+                        >
                     </div>
 
                     <div class="field">
@@ -102,7 +114,7 @@
                         <select name="school_class" required>
                             <option value="">— Sinfni tanlang —</option>
                             {% for c in classes %}
-                                <option value="{{ c.id }}">{{ c.name }}</option>
+                                <option value="{{ c.id }}" {% if form and form.data.school_class == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
                             {% endfor %}
                         </select>
                     </div>

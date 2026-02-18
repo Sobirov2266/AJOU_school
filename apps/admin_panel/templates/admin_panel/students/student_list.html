@@ -27,11 +27,105 @@
             >
         </form>
 
-        <a href="{% url 'admin_panel:student_create' %}" class="btn btn-primary">
-            <i class="fas fa-user-plus"></i>
-            Yangi o‘quvchi
-        </a>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <div style="display:flex; gap:8px; align-items:center;">
+                <a class="btn btn-secondary" href="{% url 'admin_panel:students_export_excel' %}">
+                    <i class="fa-solid fa-file-excel"></i>
+                    Excel
+                </a>
+                <a class="btn btn-secondary" href="{% url 'admin_panel:students_export_pdf' %}">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    PDF
+                </a>
+            </div>
+
+            <a href="{% url 'admin_panel:student_create' %}" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i>
+                Yangi o‘quvchi
+            </a>
+        </div>
     </div>
+
+    <!-- Filter Panel (yopiladigan) -->
+    <div class="filter-panel-card" id="filterPanel">
+        <div class="filter-panel-header">
+            <div class="filter-panel-title">
+                <i class="fas fa-filter filter-panel-icon"></i>
+                <span>Filtrlar</span>
+            </div>
+            <button type="button" class="filter-panel-close" id="closeFilterPanel" aria-label="Yopish">
+                <span class="filter-close-text">Yopish</span>
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form method="get" id="studentFiltersForm" class="filter-panel-body">
+            <input type="hidden" name="q" value="{{ filters.q }}">
+            <div class="filter-panel-grid">
+                <div class="filter-field">
+                    <label>Ism yoki familiya</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-user filter-input-icon"></i>
+                        <input type="text" name="name" value="{{ filters.name }}" placeholder="Ism yoki familiya"
+                               class="filter-input" autocomplete="off">
+                    </div>
+                </div>
+                <div class="filter-field">
+                    <label>Passport / ID</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-id-card filter-input-icon"></i>
+                        <input type="text" name="passport" value="{{ filters.passport }}" placeholder="Passport / ID"
+                               class="filter-input" autocomplete="off">
+                    </div>
+                </div>
+                <div class="filter-field">
+                    <label>Tug'ilgan sana</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-calendar-alt filter-input-icon"></i>
+                        <input type="date" name="birth_date" value="{{ filters.birth_date }}"
+                               class="filter-input filter-date" placeholder="dd.mm.yyyy">
+                    </div>
+                </div>
+                <div class="filter-field">
+                    <label>Sinfi</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-school filter-input-icon"></i>
+                        <select name="class_id" class="filter-select">
+                            <option value="">Barcha sinflar</option>
+                            {% for c in classes %}
+                                <option value="{{ c.id }}" {% if filters.class_id == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-field">
+                    <label>Status</label>
+                    <div class="filter-input-wrap">
+                        <i class="fas fa-toggle-on filter-input-icon"></i>
+                        <select name="status" class="filter-select">
+                            <option value="">Barchasi</option>
+                            <option value="active" {% if filters.status == "active" %}selected{% endif %}>Faol</option>
+                            <option value="inactive" {% if filters.status == "inactive" %}selected{% endif %}>Nofaol</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-panel-actions">
+                <a href="{% url 'admin_panel:admin_students' %}" class="btn-filter-tozalash">
+                    <i class="fas fa-trash-alt"></i>
+                    Tozalash
+                </a>
+                <button type="submit" class="btn-filter-qollash">
+                    <i class="fas fa-check"></i>
+                    Qo'llash
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <button type="button" class="btn-show-filters" id="showFilterPanel" style="display:none;">
+        <i class="fas fa-filter"></i>
+        Filtrlarni ko'rsatish
+    </button>
 
     <!-- Table -->
     <div class="card table-container">
@@ -41,86 +135,39 @@
         </div>
 
         <div class="card-body table-responsive">
-            <form method="get" id="studentFiltersForm">
-                <input type="hidden" name="q" value="{{ filters.q }}">
-                <table class="teachers-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>F.I.Sh</th>
-                            <th>Passport / ID</th>
-                            <th>Tug‘ilgan sana</th>
-                            <th>Sinf</th>
-                            <th>Status</th>
-                            <th>Amallar</th>
-                        </tr>
-                        <tr class="filter-row">
-                            <th class="filter-cell-empty"></th>
-                            <th class="filter-cell">
-                                <div class="filter-input-wrap">
-                                    <i class="fas fa-user filter-input-icon"></i>
-                                    <input type="text" name="name" value="{{ filters.name }}" placeholder="Ism yoki familiya"
-                                           class="table-filter-input" autocomplete="off">
-                                </div>
-                            </th>
-                            <th class="filter-cell">
-                                <div class="filter-input-wrap">
-                                    <i class="fas fa-id-card filter-input-icon"></i>
-                                    <input type="text" name="passport" value="{{ filters.passport }}" placeholder="Passport / ID"
-                                           class="table-filter-input" autocomplete="off">
-                                </div>
-                            </th>
-                            <th class="filter-cell">
-                                <div class="filter-input-wrap">
-                                    <i class="fas fa-calendar-alt filter-input-icon"></i>
-                                    <input type="date" name="birth_date" value="{{ filters.birth_date }}"
-                                           class="table-filter-input table-filter-date" title="Tug‘ilgan sana">
-                                </div>
-                            </th>
-                            <th class="filter-cell">
-                                <div class="filter-input-wrap">
-                                    <i class="fas fa-school filter-input-icon"></i>
-                                    <select name="class_id" class="table-filter-select">
-                                        <option value="">Barcha sinflar</option>
-                                        {% for c in classes %}
-                                            <option value="{{ c.id }}" {% if filters.class_id == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </th>
-                            <th class="filter-cell">
-                                <div class="filter-input-wrap">
-                                    <i class="fas fa-toggle-on filter-input-icon"></i>
-                                    <select name="status" class="table-filter-select">
-                                        <option value="">Barchasi</option>
-                                        <option value="active" {% if filters.status == "active" %}selected{% endif %}>Active</option>
-                                        <option value="inactive" {% if filters.status == "inactive" %}selected{% endif %}>Inactive</option>
-                                    </select>
-                                </div>
-                            </th>
-                            <th class="filter-cell-actions">
-                                <div class="filter-actions">
-                                    <button type="submit" class="btn-filter">
-                                        <i class="fas fa-filter"></i>
-                                        Filtrlash
-                                    </button>
-                                    <a href="{% url 'admin_panel:admin_students' %}" class="btn-filter-clear">
-                                        <i class="fas fa-times"></i>
-                                        Tozalash
-                                    </a>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
+            <table class="teachers-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Photo</th>
+                        <th>F.I.Sh</th>
+                        <th>Passport / ID</th>
+                        <th>Tug‘ilgan sana</th>
+                        <th>Sinf</th>
+                        <th>Status</th>
+                        <th>Amallar</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {% for student in students %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>
-                            <div class="user-cell">
+                            {% if student.avatar %}
+                                <img
+                                    class="avatar avatar-img js-photo-preview"
+                                    src="{{ student.avatar.url }}"
+                                    alt=""
+                                    data-photo-url="{{ student.avatar.url }}"
+                                >
+                            {% else %}
                                 <div class="avatar">
                                     {{ student.first_name|first }}{{ student.last_name|first }}
                                 </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="user-cell">
                                 <div>
                                     {{ student.first_name }} {{ student.last_name }}
                                     {% if student.user.email %}
@@ -147,7 +194,7 @@
                                     style="cursor:pointer"
                                     title="Statusni o‘zgartirish"
                                 >
-                                    {% if student.enrollment.is_active %}Active{% else %}Inactive{% endif %}
+                                    {% if student.enrollment.is_active %}Faol{% else %}Nofaol{% endif %}
                                 </span>
                             {% else %}—{% endif %}
                         </td>
@@ -172,13 +219,42 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="text-center text-muted" style="text-align:center;">Hech qanday o‘quvchi topilmadi</td>
+                        <td colspan="8" class="text-center text-muted" style="text-align:center;">Hech qanday o‘quvchi topilmadi</td>
                     </tr>
                     {% endfor %}
                 </tbody>
-                </table>
-            </form>
+            </table>
         </div>
+
+  {% if is_paginated %}
+  <nav class="pagination" aria-label="Pagination">
+    <a
+      class="page-link {% if not page_obj.has_previous %}disabled{% endif %}"
+      {% if page_obj.has_previous %}
+      href="?page={{ page_obj.previous_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+      {% endif %}
+    >
+      Previous
+    </a>
+
+    {% for num in paginator.page_range %}
+      {% if num == page_obj.number %}
+        <span class="page-link active">{{ num }}</span>
+      {% else %}
+        <a class="page-link" href="?page={{ num }}{% if qs %}&{{ qs }}{% endif %}">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    <a
+      class="page-link {% if not page_obj.has_next %}disabled{% endif %}"
+      {% if page_obj.has_next %}
+      href="?page={{ page_obj.next_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+      {% endif %}
+    >
+      Next
+    </a>
+  </nav>
+  {% endif %}
 
         <div class="card-footer">
             <span>{{ students|length }} ta o‘quvchi ko‘rsatilmoqda</span>
@@ -187,14 +263,70 @@
 
 </main>
 
+<!-- Photo preview modal (small preview) -->
+<div class="modal" id="photoPreviewModal" aria-hidden="true">
+    <div class="photo-preview-card" role="dialog" aria-modal="true">
+        <button type="button" class="photo-preview-close" aria-label="Yopish">&times;</button>
+        <img id="photoPreviewImg" src="" alt="">
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Sinf va Status select o‘zgarganda avtomatik filtrlash
-    document.querySelectorAll('select[name="class_id"], select[name="status"]').forEach(function(sel) {
-        sel.addEventListener('change', function() {
-            document.getElementById('studentFiltersForm').submit();
+    const filterPanel = document.getElementById('filterPanel');
+    const showBtn = document.getElementById('showFilterPanel');
+
+    document.getElementById('closeFilterPanel').addEventListener('click', function() {
+        filterPanel.classList.add('filter-panel-hidden');
+        if (showBtn) showBtn.style.display = 'inline-flex';
+    });
+
+    // Photo preview logic:
+    // Clicking on an avatar image opens a small modal preview.
+    const modal = document.getElementById('photoPreviewModal');
+    const previewImg = document.getElementById('photoPreviewImg');
+    const closeBtn = modal ? modal.querySelector('.photo-preview-close') : null;
+
+    const openPreview = (url) => {
+        if (!modal || !previewImg) return;
+        previewImg.src = url;
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+    };
+
+    const closePreview = () => {
+        if (!modal || !previewImg) return;
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        previewImg.src = '';
+    };
+
+    document.querySelectorAll('.js-photo-preview[data-photo-url]').forEach((el) => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', () => {
+            const url = el.getAttribute('data-photo-url');
+            if (url) openPreview(url);
         });
     });
+
+    if (closeBtn) closeBtn.addEventListener('click', closePreview);
+
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closePreview();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closePreview();
+    });
+
+    if (showBtn) {
+        showBtn.addEventListener('click', function() {
+            filterPanel.classList.remove('filter-panel-hidden');
+            showBtn.style.display = 'none';
+        });
+    }
 });
 function deleteStudent(studentId) {
     if (!confirm("Rostdan o‘chirmoqchimisiz?")) return;
@@ -237,11 +369,11 @@ function toggleStatus(el) {
         if (data.is_active) {
             el.classList.remove("status-inactive");
             el.classList.add("status-active");
-            el.textContent = "Active";
+            el.textContent = "Faol";
         } else {
             el.classList.remove("status-active");
             el.classList.add("status-inactive");
-            el.textContent = "Inactive";
+            el.textContent = "Nofaol";
         }
     })
     .catch(err => {
