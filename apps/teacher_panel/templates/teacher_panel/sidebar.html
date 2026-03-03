@@ -1,0 +1,33 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>AJOU School</h2>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li>
+            <a href="{% url 'teacher_panel:dashboard' %}">🏠 Dashboard</a>
+        </li>
+        <li>
+            <a href="{% url 'teacher_panel:subject_list' %}">👨‍🏫 Mening fanlarim</a>
+        </li>
+        <li>
+            <a href="{% url 'teacher_panel:grade_enter' %}">🎓 Dars jadvali</a>
+        </li>
+        <li>
+            <a href="{% url 'teacher_panel:assignments_list' %}">📚 Topshiriqlar</a>
+        </li>
+        <li>
+            <a href="{% url 'teacher_panel:test_list' %}">📘 Testlar</a>
+        </li>
+        <li>
+            <a href="{% url 'teacher_panel:attendance_mark' %}">📌 Davomat</a>
+        </li>
+
+        <li>
+            <a href="{% url 'teacher_panel:teacher_settings' %}">⚙️ Settings</a>
+        </li>
+        <li class="logout">
+            <a href="{% url 'logout' %}">🚪 Logout</a>
+        </li>
+    </ul>
+</aside>

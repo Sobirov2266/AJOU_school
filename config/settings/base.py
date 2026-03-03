@@ -20,9 +20,10 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'apps.accounts',
     'apps.core',
-    'apps.dashboard',
     'apps.academic',
     'apps.admin_panel',
+    'apps.teacher_panel',
+
 
     'django.contrib.admin',
     'django.contrib.auth',

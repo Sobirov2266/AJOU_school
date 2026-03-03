@@ -2,7 +2,7 @@ from functools import wraps
 from django.shortcuts import redirect
 from django.http import HttpResponseForbidden
 from django.urls import reverse
-from apps.accounts.models import User
+from ..accounts.models import User
 
 def admin_required(view_func):
     @wraps(view_func)

@@ -1,19 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
-from apps.accounts.models import StudentProfile
-from apps.academic.models import Enrollment, SchoolClass
-from django.utils.timezone import now
+from ...accounts.models import StudentProfile
+from ...academic.models import Enrollment, SchoolClass
 from django.contrib import messages
-from apps.admin_panel.decorators import admin_required
+from ..decorators import admin_required
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
-from apps.admin_panel.forms import StudentCreateForm
+from ..forms import StudentCreateForm
 
-from apps.admin_panel.exports import export_to_excel, export_to_pdf
+from ..exports import export_to_excel, export_to_pdf
 
 
 User = get_user_model()

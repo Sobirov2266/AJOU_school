@@ -5,11 +5,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 
-from apps.academic.models import Subject
-from apps.admin_panel.decorators import admin_required
-from apps.admin_panel.forms import SubjectForm
+from ...academic.models import Subject
+from ..decorators import admin_required
+from ..forms import SubjectForm
 
-from apps.admin_panel.exports import export_to_excel, export_to_pdf
+from ..exports import export_to_excel, export_to_pdf
 
 
 @admin_required

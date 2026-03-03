@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from apps.accounts.models import TeacherProfile, StudentProfile
-from apps.academic.models import SchoolClass, Subject
-from apps.admin_panel.decorators import admin_required
+from ...accounts.models import TeacherProfile, StudentProfile
+from ...academic.models import SchoolClass, Subject
+from ..decorators import admin_required
 
 
 @admin_required

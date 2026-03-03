@@ -1,20 +1,15 @@
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
 from django.db import transaction
-from django.db.models import Q
 from django.core.paginator import Paginator
-from django.views.decorators.http import require_POST
-from django.urls import reverse
 from django.core.exceptions import ValidationError
-import re
-from apps.admin_panel.decorators import admin_required
-from apps.accounts.models import TeacherProfile, User
+from ..decorators import admin_required
+from ...accounts.models import TeacherProfile, User
 from django.db.models import Q
 import re
 
-from apps.admin_panel.exports import export_to_excel, export_to_pdf
+from ..exports import export_to_excel, export_to_pdf
 
 
 @admin_required

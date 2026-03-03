@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import redirect, render
 
-from apps.admin_panel.decorators import admin_required
-from apps.admin_panel.forms import AdminPasswordChangeForm, AdminProfileForm
+from ..decorators import admin_required
+from ..forms import AdminPasswordChangeForm, AdminProfileForm
 
 
 @admin_required

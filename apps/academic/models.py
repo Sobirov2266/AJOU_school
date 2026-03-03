@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from apps.accounts.models import TeacherProfile, StudentProfile
+from ..accounts.models import TeacherProfile, StudentProfile
 
 
 

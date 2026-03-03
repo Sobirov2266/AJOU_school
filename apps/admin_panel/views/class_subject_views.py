@@ -1,4 +1,4 @@
-# apps/admin_panel/views/class_subject_views.py
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q, Count
 from django.views.decorators.http import require_POST
@@ -6,11 +6,12 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.core.paginator import Paginator
 
-from apps.admin_panel.decorators import admin_required
-from apps.academic.models import ClassSubject, SchoolClass, Subject
-from apps.accounts.models import TeacherProfile
 
-from apps.admin_panel.exports import export_to_excel, export_to_pdf
+from ..decorators import admin_required
+from ...academic.models import ClassSubject, SchoolClass, Subject
+from ...accounts.models import TeacherProfile
+
+from ..exports import export_to_excel, export_to_pdf
 
 
 @admin_required

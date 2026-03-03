@@ -4,13 +4,13 @@ from django.db.models import Count, Q
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 
-from apps.academic.models import Enrollment, SchoolClass
-from apps.admin_panel.decorators import admin_required
+from ...academic.models import Enrollment, SchoolClass
+from ..decorators import admin_required
 from django.contrib import messages
 
-from apps.admin_panel.exports import export_to_excel, export_to_pdf
+from ..exports import export_to_excel, export_to_pdf
 
-from apps.admin_panel.forms import ClassNameForm
+from ..forms import ClassNameForm
 
 @admin_required
 def class_list(request):
