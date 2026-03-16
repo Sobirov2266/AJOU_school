@@ -68,6 +68,7 @@
           <div class="class-card__main">
             <div class="class-card__name">{{ item.subject.name }}</div>
             <div class="muted">Kod: {{ item.subject.code }}</div>
+            <div class="muted">Soni: {{ item.student_count }} ta </div>
           </div>
 
           <div class="class-card__info">
@@ -139,6 +140,7 @@
             <th>FAN</th>
             <th>KOD</th>
             <th>SINF</th>
+            <th>O'QUVCHI SONI</th>
             <th>HAFTALIK SOAT</th>
             <th style="text-align:right;">ACTIONS</th>
           </tr>
@@ -158,6 +160,7 @@
 
             <td class="muted">{{ item.subject.code }}</td>
             <td class="muted">{{ item.school_class.name }}</td>
+            <td class="muted">{{ item.student_count }}</td>
             <td class="muted">{{ item.weekly_hours }}</td>
 
             <td style="text-align:right;">

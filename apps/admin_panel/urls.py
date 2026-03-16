@@ -47,6 +47,8 @@ from .views.subject_views import (
     subjects_export_pdf,
 )
 
+from .views.timetable_views import timetable_list, timetable_create, timetable_update, timetable_delete
+
 
 
 app_name = "admin_panel"
@@ -116,6 +118,12 @@ urlpatterns = [
     path("class-subjects/export/excel/", class_subjects_export_excel, name="class_subjects_export_excel"),
     path("class-subjects/export/pdf/", class_subjects_export_pdf, name="class_subjects_export_pdf"),
 
+    # dars jadvali
+    path("timetable/", timetable_list, name="timetable_list"),
+    path("timetable/", timetable_list, name="timetable_list"),
+    path("timetable/create/", timetable_create, name="timetable_create"),
+    path("timetable/update/", timetable_update, name="timetable_update"),
+    path("timetable/delete/<int:id>/", timetable_delete, name="timetable_delete"),
 
 ]
 

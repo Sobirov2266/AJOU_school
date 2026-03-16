@@ -1,0 +1,496 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Timetable{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_timetable.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="timetable-page">
+
+  <header class="header">
+    <div class="header-left">
+      <h2>Dars jadvali</h2>
+      <p>Maktab dars jadvalini boshqaring</p>
+    </div>
+  </header>
+
+  <div class="action-bar">
+  <form method="get" class="search-box">
+    <i class="fas fa-search"></i>
+    <input
+      type="text"
+      name="q"
+      value="{{ filters.q }}"
+      placeholder="Sinf, fan, teacher yoki xona bo‘yicha qidirish"
+    >
+  </form>
+
+  <div style="display:flex; gap:10px; align-items:center;">
+    <button type="button" class="btn btn-primary" id="openCreateTimetable">
+      <i class="fa-solid fa-plus"></i>
+      Yangi jadval
+    </button>
+  </div>
+</div>
+
+<div class="filter-panel-card" id="filterPanel">
+  <div class="filter-panel-header">
+    <div class="filter-panel-title">
+      <i class="fas fa-filter filter-panel-icon"></i>
+      <span>Filtrlar</span>
+    </div>
+    <button type="button" class="filter-panel-close" id="closeFilterPanel" aria-label="Yopish">
+      <span class="filter-close-text">Yopish</span>
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <form method="get" id="timetableFiltersForm" class="filter-panel-body">
+    <input type="hidden" name="q" value="{{ filters.q }}">
+
+    <div class="filter-panel-grid">
+      <div class="filter-field">
+        <label>Hafta kuni</label>
+        <div class="filter-input-wrap">
+          <i class="fas fa-calendar-alt filter-input-icon"></i>
+          <select name="weekday" class="filter-select">
+            <option value="">Barchasi</option>
+            {% for value, label in weekday_choices %}
+              <option value="{{ value }}" {% if filters.weekday == value %}selected{% endif %}>
+                {{ label }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-field">
+        <label>Status</label>
+        <div class="filter-input-wrap">
+          <i class="fas fa-toggle-on filter-input-icon"></i>
+          <select name="status" class="filter-select">
+            <option value="">Barchasi</option>
+            <option value="active" {% if filters.status == "active" %}selected{% endif %}>Faol</option>
+            <option value="inactive" {% if filters.status == "inactive" %}selected{% endif %}>Nofaol</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-panel-actions">
+      <a href="{% url 'admin_panel:timetable_list' %}" class="btn-filter-tozalash">
+        <i class="fas fa-trash-alt"></i>
+        Tozalash
+      </a>
+      <button type="submit" class="btn-filter-qollash">
+        <i class="fas fa-check"></i>
+        Qo'llash
+      </button>
+    </div>
+  </form>
+</div>
+
+<button type="button" class="btn-show-filters" id="showFilterPanel" style="display:none;">
+  <i class="fas fa-filter"></i>
+  Filtrlarni ko'rsatish
+</button>
+
+  <section class="card timetable-card">
+    <div class="card-header timetable-card-header">
+      <div>
+        <h3>Jadval ro‘yxati</h3>
+        <span class="muted">{{ timetable_count }} ta yozuv</span>
+      </div>
+    </div>
+
+    <div class="card-body table-responsive">
+      <table class="timetable-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>SINF</th>
+            <th>FAN</th>
+            <th>TEACHER</th>
+            <th>KUN</th>
+            <th>PARA</th>
+            <th>VAQT</th>
+            <th>XONA</th>
+            <th>STATUS</th>
+            <th class="timetable-actions-head">ACTIONS</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in timetables %}
+          <tr>
+            <td class="muted">{{ forloop.counter }}</td>
+
+            <td>
+              <div class="timetable-meta">
+                <strong>{{ item.class_subject.school_class.name }}</strong>
+                <small>ID: {{ item.class_subject.school_class.id }}</small>
+              </div>
+            </td>
+
+            <td>
+              <div class="timetable-meta">
+                <strong>{{ item.class_subject.subject.name }}</strong>
+                <small>{{ item.class_subject.subject.code }}</small>
+              </div>
+            </td>
+
+            <td class="muted">{{ item.class_subject.teacher }}</td>
+            <td class="muted">{{ item.get_weekday_display }}</td>
+            <td class="muted">{{ item.lesson_order }}</td>
+            <td class="muted">{{ item.start_time }} - {{ item.end_time }}</td>
+            <td class="muted">{{ item.room|default:"—" }}</td>
+
+            <td>
+              {% if item.is_active %}
+                <span class="status-badge status-active">Faol</span>
+              {% else %}
+                <span class="status-badge status-inactive">Nofaol</span>
+              {% endif %}
+            </td>
+
+            <td class="timetable-actions-cell">
+              <div class="timetable-row-actions">
+                <button
+                  type="button"
+                  class="icon-btn edit edit-timetable-btn"
+                  title="Tahrirlash"
+                  data-id="{{ item.id }}"
+                  data-class-subject="{{ item.class_subject.id }}"
+                  data-weekday="{{ item.weekday }}"
+                  data-lesson-order="{{ item.lesson_order }}"
+                  data-room="{{ item.room|default:'' }}"
+                  data-active="{% if item.is_active %}1{% else %}0{% endif %}"
+                >
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+
+                <button
+                  type="button"
+                  class="icon-btn delete delete-timetable-btn"
+                  title="O‘chirish"
+                  data-id="{{ item.id }}"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="10" class="empty">
+              <div class="empty-state">
+                <div class="empty-icon">
+                  <i class="fa-solid fa-folder-open"></i>
+                </div>
+                <h4>Hozircha dars jadvali yo‘q</h4>
+                <p class="muted">Yangi jadval qo‘shilgandan keyin shu yerda ko‘rinadi.</p>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-footer timetable-footer">
+      <span class="muted">{{ page_obj.object_list|length }} ta yozuv ko‘rsatilmoqda</span>
+    </div>
+
+  </section>
+
+  {% if is_paginated %}
+  <nav class="pagination" aria-label="Pagination">
+    <a
+      class="page-link {% if not page_obj.has_previous %}disabled{% endif %}"
+      {% if page_obj.has_previous %}
+      href="?page={{ page_obj.previous_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+      {% endif %}
+    >
+      Previous
+    </a>
+
+    {% for num in paginator.page_range %}
+      {% if num == page_obj.number %}
+        <span class="page-link active">{{ num }}</span>
+      {% else %}
+        <a class="page-link" href="?page={{ num }}{% if qs %}&{{ qs }}{% endif %}">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    <a
+      class="page-link {% if not page_obj.has_next %}disabled{% endif %}"
+      {% if page_obj.has_next %}
+      href="?page={{ page_obj.next_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+      {% endif %}
+    >
+      Next
+    </a>
+  </nav>
+  {% endif %}
+
+</main>
+
+<div class="modal" id="createTimetableModal" aria-hidden="true">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-icon">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+        <div>
+          <h3>Yangi dars jadvali</h3>
+          <p>Yangi dars yozuvini kiriting</p>
+        </div>
+      </div>
+
+      <button type="button" class="modal-close" data-close-timetable>&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <form method="post" action="{% url 'admin_panel:timetable_create' %}" class="modal-form">
+        {% csrf_token %}
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Class Subject</label>
+            {{ create_form.class_subject }}
+          </div>
+
+          <div class="field">
+            <label>Hafta kuni</label>
+            {{ create_form.weekday }}
+          </div>
+
+          <div class="field">
+            <label>Para</label>
+            {{ create_form.lesson_order }}
+          </div>
+
+          <div class="field">
+            <label>Status</label>
+            {{ create_form.is_active }}
+          </div>
+        </div>
+
+        <div class="field field-mt">
+          <label>Xona</label>
+          {{ create_form.room }}
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-check"></i> Saqlash
+          </button>
+          <button type="button" class="btn btn-secondary" data-close-timetable>Bekor qilish</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="modal" id="editTimetableModal" aria-hidden="true">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-icon">
+          <i class="fa-solid fa-pen"></i>
+        </div>
+        <div>
+          <h3>Dars jadvalini tahrirlash</h3>
+          <p>Mavjud jadval yozuvini yangilang</p>
+        </div>
+      </div>
+
+      <button type="button" class="modal-close" data-close-edit-timetable>&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <form method="post" action="{% url 'admin_panel:timetable_update' %}" class="modal-form">
+        {% csrf_token %}
+        <input type="hidden" name="id" id="edit_timetable_id">
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Class Subject</label>
+            <select name="class_subject" id="edit_class_subject" class="form-control">
+              {% for obj in create_form.fields.class_subject.queryset %}
+                <option value="{{ obj.id }}">{{ obj.school_class.name }} → {{ obj.subject.name }} → {{ obj.teacher }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Hafta kuni</label>
+            <select name="weekday" id="edit_weekday" class="form-control">
+              {% for value, label in weekday_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Para</label>
+            <select name="lesson_order" id="edit_lesson_order" class="form-control">
+              <option value="1">1-soat</option>
+              <option value="2">2-soat</option>
+              <option value="3">3-soat</option>
+              <option value="4">4-soat</option>
+              <option value="5">5-soat</option>
+              <option value="6">6-soat</option>
+              <option value="7">7-soat</option>
+              <option value="8">8-soat</option>
+              <option value="9">9-soat</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Status</label>
+            <select name="is_active" id="edit_is_active" class="form-control">
+              <option value="True">Faol</option>
+              <option value="False">Nofaol</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field field-mt">
+          <label>Xona</label>
+          <input type="text" name="room" id="edit_room" class="form-control" placeholder="Masalan: 203-xona">
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-save"></i> Saqlash
+          </button>
+          <button type="button" class="btn btn-secondary" data-close-edit-timetable>Bekor qilish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterPanel = document.getElementById('filterPanel');
+    const showBtn = document.getElementById('showFilterPanel');
+    const closeBtn = document.getElementById('closeFilterPanel');
+
+    if (closeBtn && filterPanel) {
+      closeBtn.addEventListener('click', function() {
+        filterPanel.classList.add('filter-panel-hidden');
+        if (showBtn) showBtn.style.display = 'inline-flex';
+      });
+    }
+
+    if (showBtn && filterPanel) {
+      showBtn.addEventListener('click', function() {
+        filterPanel.classList.remove('filter-panel-hidden');
+        showBtn.style.display = 'none';
+      });
+    }
+  });
+</script>
+
+<script>
+  const createTimetableModal = document.getElementById("createTimetableModal");
+  const editTimetableModal = document.getElementById("editTimetableModal");
+  const openCreateTimetableBtn = document.getElementById("openCreateTimetable");
+
+  function openTimetableModal() {
+    if (!createTimetableModal) return;
+    createTimetableModal.classList.add("active");
+    createTimetableModal.setAttribute("aria-hidden", "false");
+
+    const firstInput = createTimetableModal.querySelector("input, select, textarea");
+    if (firstInput) {
+      setTimeout(() => firstInput.focus(), 50);
+    }
+  }
+
+  function closeTimetableModal() {
+    if (!createTimetableModal) return;
+    createTimetableModal.classList.remove("active");
+    createTimetableModal.setAttribute("aria-hidden", "true");
+  }
+
+  function openEditTimetableModal() {
+    if (!editTimetableModal) return;
+    editTimetableModal.classList.add("active");
+    editTimetableModal.setAttribute("aria-hidden", "false");
+  }
+
+  function closeEditTimetableModal() {
+    if (!editTimetableModal) return;
+    editTimetableModal.classList.remove("active");
+    editTimetableModal.setAttribute("aria-hidden", "true");
+  }
+
+  if (openCreateTimetableBtn) {
+    openCreateTimetableBtn.addEventListener("click", openTimetableModal);
+  }
+
+  document.querySelectorAll("[data-close-timetable]").forEach((el) => {
+    el.addEventListener("click", closeTimetableModal);
+  });
+
+  document.querySelectorAll("[data-close-edit-timetable]").forEach((el) => {
+    el.addEventListener("click", closeEditTimetableModal);
+  });
+
+  if (createTimetableModal) {
+    createTimetableModal.addEventListener("click", (e) => {
+      if (e.target === createTimetableModal) {
+        closeTimetableModal();
+      }
+    });
+  }
+
+  if (editTimetableModal) {
+    editTimetableModal.addEventListener("click", (e) => {
+      if (e.target === editTimetableModal) {
+        closeEditTimetableModal();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeTimetableModal();
+      closeEditTimetableModal();
+    }
+  });
+
+  document.querySelectorAll(".edit-timetable-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.getElementById("edit_timetable_id").value = btn.dataset.id;
+      document.getElementById("edit_class_subject").value = btn.dataset.classSubject;
+      document.getElementById("edit_weekday").value = btn.dataset.weekday;
+      document.getElementById("edit_lesson_order").value = btn.dataset.lessonOrder;
+      document.getElementById("edit_room").value = btn.dataset.room || "";
+      document.getElementById("edit_is_active").value = btn.dataset.active === "1" ? "True" : "False";
+
+      openEditTimetableModal();
+    });
+  });
+
+  document.querySelectorAll(".delete-timetable-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      if (confirm("Dars jadvalini o‘chirishni tasdiqlaysizmi?")) {
+        window.location.href = `/admin-panel/timetable/delete/${id}/`;
+      }
+    });
+  });
+</script>
+
+{% endblock %}

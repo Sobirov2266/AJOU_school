@@ -19,14 +19,14 @@
                             <img src="https://ui-avatars.com/api/?name={{ request.user.username|urlencode }}&background=4361ee&color=fff" alt="{{ request.user.username }}">
                         {% endif %}
                         <span>{{ request.user.username }}</span>
-                        <i class="fas fa-chevron-down"></i>
+
                     </div>
                 </div>
             </header>
 
             <!-- Statistik Kartalar -->
             <section class="stats-cards">
-                <div class="stat-card" data-href="{% url 'admin_panel:teacher_list' %}" role="link" tabindex="0">
+                <div class="stat-card"  role="link" tabindex="0">
                     <div class="stat-icon teacher">
                         <i class="fas fa-chalkboard-teacher"></i>
                     </div>
@@ -35,12 +35,12 @@
                         <p class="count">{{ teacher_count }}</p>
                         <p class="stat-desc">Faol o'qituvchilar</p>
                     </div>
-                    <a href="{% url 'admin_panel:teacher_list' %}" class="stat-link">
+                    <a class="stat-link">
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="stat-card" data-href="{% url 'admin_panel:class_list' %}" role="link" tabindex="0">
+                <div class="stat-card"  role="link" tabindex="0">
                     <div class="stat-icon class">
                         <i class="fas fa-school"></i>
                     </div>
@@ -49,12 +49,12 @@
                         <p class="count">{{ class_count }}</p>
                         <p class="stat-desc">Mavjud sinflar</p>
                     </div>
-                    <a href="{% url 'admin_panel:class_list' %}" class="stat-link">
+                    <a class="stat-link">
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="stat-card" data-href="{% url 'admin_panel:admin_students' %}" role="link" tabindex="0">
+                <div class="stat-card"  role="link" tabindex="0">
                     <div class="stat-icon student">
                         <i class="fas fa-user-graduate"></i>
                     </div>
@@ -63,12 +63,12 @@
                         <p class="count">{{ student_count }}</p>
                         <p class="stat-desc">Ro'yxatdan o'tgan o'quvchilar</p>
                     </div>
-                    <a href="{% url 'admin_panel:admin_students' %}" class="stat-link">
+                    <a  class="stat-link">
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="stat-card" data-href="{% url 'admin_panel:subject_list' %}" role="link" tabindex="0">
+                <div class="stat-card"  role="link" tabindex="0">
                     <div class="stat-icon class">
                         <i class="fas fa-book"></i>
                     </div>
@@ -77,7 +77,7 @@
                         <p class="count">{{ subject_count }}</p>
                         <p class="stat-desc">Mavjud fanlar</p>
                     </div>
-                    <a href="{% url 'admin_panel:subject_list' %}" class="stat-link">
+                    <a  class="stat-link">
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>

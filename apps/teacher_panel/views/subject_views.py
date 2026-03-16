@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.contrib import messages
 
 from ..decorators import teacher_required
 from ...academic.models import ClassSubject
+
 
 
 @teacher_required
@@ -39,6 +40,13 @@ def subject_list_view(request):
             subject__is_active=True,
             school_class__is_active=True,
         )
+        .annotate(
+            student_count=Count(
+                "school_class__enrollments",
+                filter=Q(school_class__enrollments__is_active=True),
+                distinct=True,
+            )
+        )
         .order_by("subject__name", "school_class__name")
     )
 
@@ -57,6 +65,8 @@ def subject_list_view(request):
     if "page" in query_params:
         query_params.pop("page")
     qs = query_params.urlencode()
+
+
 
     return render(
         request,

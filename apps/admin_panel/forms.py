@@ -4,8 +4,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.core.validators import RegexValidator
 from django.db import transaction
 
-from apps.academic.models import Enrollment, SchoolClass, Subject
-from apps.accounts.models import StudentProfile
+from ..academic.models import Enrollment, SchoolClass, Subject, Timetable, ClassSubject
+from ..accounts.models import StudentProfile
 
 User = get_user_model()
 
@@ -247,3 +247,115 @@ class SubjectForm(forms.ModelForm):
             self.add_error("code", "Bu fan kodi allaqachon mavjud.")
 
         return cleaned
+
+
+class TimetableForm(forms.ModelForm):
+    LESSON_ORDER_CHOICES = (
+        (1, "1-soat"),
+        (2, "2-soat"),
+        (3, "3-soat"),
+        (4, "4-soat"),
+        (5, "5-soat"),
+        (6, "6-soat"),
+        (7, "7-soat"),
+        (8, "8-soat"),
+        (9, "9-soat"),
+    )
+
+    lesson_order = forms.ChoiceField(
+        choices=LESSON_ORDER_CHOICES,
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+
+    class Meta:
+        model = Timetable
+        fields = [
+            "class_subject",
+            "weekday",
+            "lesson_order",
+            "room",
+            "is_active",
+        ]
+        widgets = {
+            "class_subject": forms.Select(attrs={"class": "form-control"}),
+            "weekday": forms.Select(attrs={"class": "form-control"}),
+            "room": forms.TextInput(attrs={"class": "form-control", "placeholder": "Masalan: 203-xona"}),
+            "is_active": forms.Select(
+                choices=((True, "Faol"), (False, "Nofaol")),
+                attrs={"class": "form-control"}
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["class_subject"].queryset = (
+            ClassSubject.objects.select_related("school_class", "subject", "teacher")
+            .filter(is_active=True, subject__is_active=True, school_class__is_active=True)
+            .order_by("school_class__name", "subject__name")
+        )
+        self.fields["class_subject"].label_from_instance = (
+            lambda obj: f"{obj.school_class.name} → {obj.subject.name} → {obj.teacher}"
+        )
+
+    def clean_lesson_order(self):
+        lesson_order = self.cleaned_data.get("lesson_order")
+        return int(lesson_order)
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        class_subject = cleaned_data.get("class_subject")
+        weekday = cleaned_data.get("weekday")
+        lesson_order = cleaned_data.get("lesson_order")
+        is_active = cleaned_data.get("is_active")
+
+        if lesson_order and not Timetable.get_period_times(lesson_order):
+            self.add_error("lesson_order", "Faqat 1 dan 9 gacha bo‘lgan dars raqami mumkin.")
+            return cleaned_data
+
+        # Faqat faol jadval uchun conflict tekshiramiz
+        if not class_subject or not weekday or not lesson_order or is_active in [None, ""]:
+            return cleaned_data
+
+        if not is_active:
+            return cleaned_data
+
+        teacher = class_subject.teacher
+        school_class = class_subject.school_class
+
+        # Teacher conflict:
+        teacher_conflict = Timetable.objects.filter(
+            class_subject__teacher=teacher,
+            weekday=weekday,
+            lesson_order=lesson_order,
+            is_active=True,
+        )
+
+        # Edit holati uchun o'zini hisobga olmaslik
+        if self.instance and self.instance.pk:
+            teacher_conflict = teacher_conflict.exclude(pk=self.instance.pk)
+
+        if teacher_conflict.exists():
+            self.add_error(
+                "lesson_order",
+                f"{teacher} uchun {dict(Timetable.WEEKDAY_CHOICES).get(weekday)} kuni {lesson_order}-soatda boshqa dars allaqachon mavjud."
+            )
+
+        # Class conflict:
+        class_conflict = Timetable.objects.filter(
+            class_subject__school_class=school_class,
+            weekday=weekday,
+            lesson_order=lesson_order,
+            is_active=True,
+        )
+
+        if self.instance and self.instance.pk:
+            class_conflict = class_conflict.exclude(pk=self.instance.pk)
+
+        if class_conflict.exists():
+            self.add_error(
+                "lesson_order",
+                f"{school_class.name} sinfi uchun {dict(Timetable.WEEKDAY_CHOICES).get(weekday)} kuni {lesson_order}-soatda boshqa dars allaqachon mavjud."
+            )
+
+        return cleaned_data
