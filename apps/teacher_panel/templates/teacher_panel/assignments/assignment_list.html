@@ -1,0 +1,96 @@
+{% extends "teacher_panel/base.html" %}
+{% load static %}
+
+{% block title %}Topshiriqlar{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/assignments.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="as-page">
+    <div class="as-header">
+        <div>
+            <h1 class="as-title">Topshiriqlar</h1>
+            <p class="as-subtitle">O‘zingizga biriktirilgan sinf va fanlar uchun yaratilgan topshiriqlar</p>
+        </div>
+        <a href="{% url 'teacher_panel:assignment_create' %}" class="as-btn as-btn-primary">
+            + Yangi topshiriq
+        </a>
+    </div>
+
+    <div class="as-stats">
+        <div class="as-stat-card">
+            <span>Jami</span>
+            <strong>{{ total_count }}</strong>
+        </div>
+        <div class="as-stat-card">
+            <span>Published</span>
+            <strong>{{ published_count }}</strong>
+        </div>
+        <div class="as-stat-card">
+            <span>Draft</span>
+            <strong>{{ draft_count }}</strong>
+        </div>
+    </div>
+
+    {% if assignments %}
+        <div class="as-grid">
+            {% for assignment in assignments %}
+                <div class="as-card">
+                    <div class="as-card-top">
+                        <div>
+                            <h3 class="as-card-title">
+                                <a href="{% url 'teacher_panel:assignment_detail' assignment.pk %}">
+                                    {{ assignment.title }}
+                                </a>
+                            </h3>
+                            <p class="as-card-meta">
+                                {{ assignment.class_subject.school_class.name }} ·
+                                {{ assignment.class_subject.subject.name }}
+                            </p>
+                        </div>
+
+                        {% if assignment.is_published %}
+                            <span class="as-badge as-badge-success">Published</span>
+                        {% else %}
+                            <span class="as-badge as-badge-muted">Draft</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="as-card-body">
+                        <p class="as-description">
+                            {% if assignment.description %}
+                                {{ assignment.description|truncatechars:140 }}
+                            {% else %}
+                                Tavsif kiritilmagan.
+                            {% endif %}
+                        </p>
+
+                        <div class="as-info-list">
+                            <div><strong>Deadline:</strong> {{ assignment.due_date|date:"d.m.Y H:i" }}</div>
+                            <div><strong>Maksimal baho:</strong> {{ assignment.max_score }}</div>
+                            <div><strong>Javoblar:</strong> {{ assignment.submissions.count }}</div>
+                        </div>
+                    </div>
+
+                    <div class="as-card-actions">
+                        <a href="{% url 'teacher_panel:assignment_detail' assignment.pk %}" class="as-btn as-btn-light">
+                            Batafsil
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="as-empty">
+            <div class="as-empty-icon">📚</div>
+            <h2>Hozircha topshiriqlar yo‘q</h2>
+            <p>Birinchi topshiriqni yaratib, o‘quvchilarga biriktiring.</p>
+            <a href="{% url 'teacher_panel:assignment_create' %}" class="as-btn as-btn-primary">
+                Topshiriq yaratish
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

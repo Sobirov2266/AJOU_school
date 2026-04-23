@@ -1,0 +1,270 @@
+.tt-page {
+    padding: 24px;
+}
+
+.tt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.tt-title {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.tt-subtitle {
+    margin: 8px 0 0;
+    font-size: 15px;
+    color: #6b7280;
+}
+
+.tt-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.tt-stat-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.tt-stat-label {
+    display: block;
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.tt-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.tt-days-wrapper {
+    display: grid;
+    gap: 22px;
+}
+
+.tt-day-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    transition: all 0.2s ease;
+}
+
+.tt-day-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+.tt-day-card--today {
+    border: 1px solid #2563eb;
+    box-shadow: 0 12px 30px rgba(37, 99, 235, 0.12);
+}
+
+.tt-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.tt-day-title {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.tt-day-subtitle {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.tt-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.tt-table-wrapper {
+    overflow-x: auto;
+    border-radius: 16px;
+    border: 1px solid #eef2f7;
+}
+
+.tt-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.tt-table thead th {
+    background: #f8fafc;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tt-table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 15px;
+    color: #111827;
+    vertical-align: middle;
+}
+
+.tt-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tt-table tbody tr:hover {
+    background: #f9fbff;
+}
+
+.tt-order {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-weight: 700;
+}
+
+.tt-room {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: #f3f4f6;
+    color: #111827;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.tt-room--empty {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.tt-time-separator {
+    color: #9ca3af;
+    margin: 0 6px;
+}
+
+.tt-empty {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    border: 1px dashed #d1d5db;
+    border-radius: 16px;
+    background: #f9fafb;
+}
+
+.tt-empty-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef2ff;
+    font-size: 24px;
+}
+
+.tt-empty h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    color: #111827;
+}
+
+.tt-empty p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.tt-global-empty {
+    text-align: center;
+    padding: 70px 24px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+.tt-global-empty-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+}
+
+.tt-global-empty h2 {
+    margin: 0 0 10px;
+    color: #111827;
+    font-size: 24px;
+}
+
+.tt-global-empty p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+@media (max-width: 992px) {
+    .tt-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .tt-title {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 576px) {
+    .tt-page {
+        padding: 14px;
+    }
+
+    .tt-day-card {
+        padding: 14px;
+        border-radius: 18px;
+    }
+
+    .tt-title {
+        font-size: 24px;
+    }
+
+    .tt-day-title {
+        font-size: 18px;
+    }
+}

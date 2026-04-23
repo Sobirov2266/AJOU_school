@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'apps.academic',
     'apps.admin_panel',
     'apps.teacher_panel',
+    'apps.assignments',
 
 
     'django.contrib.admin',

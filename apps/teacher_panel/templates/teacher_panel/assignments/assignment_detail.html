@@ -1,0 +1,128 @@
+{% extends "teacher_panel/base.html" %}
+{% load static %}
+
+{% block title %}{{ assignment.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/assignments.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="as-page">
+    <div class="as-header">
+        <div>
+            <h1 class="as-title">{{ assignment.title }}</h1>
+            <p class="as-subtitle">
+                {{ assignment.class_subject.school_class.name }} ·
+                {{ assignment.class_subject.subject.name }}
+            </p>
+        </div>
+        <a href="{% url 'teacher_panel:assignment_list' %}" class="as-btn as-btn-light">
+            ← Ro‘yxatga qaytish
+        </a>
+    </div>
+
+    <div class="as-detail-layout">
+        <div class="as-detail-main">
+            <div class="as-detail-card">
+                <h3>Topshiriq haqida</h3>
+
+                <div class="as-detail-info">
+                    <div><strong>Deadline:</strong> {{ assignment.due_date|date:"d.m.Y H:i" }}</div>
+                    <div><strong>Maksimal baho:</strong> {{ assignment.max_score }}</div>
+                    <div>
+                        <strong>Holati:</strong>
+                        {% if assignment.is_published %}
+                            <span class="as-badge as-badge-success">Published</span>
+                        {% else %}
+                            <span class="as-badge as-badge-muted">Draft</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="as-description-block">
+                    {% if assignment.description %}
+                        {{ assignment.description|linebreaks }}
+                    {% else %}
+                        <p>Tavsif mavjud emas.</p>
+                    {% endif %}
+                </div>
+
+                {% if assignment.attachment %}
+                    <div class="as-file-box">
+                        <strong>Biriktirilgan fayl:</strong>
+                        <a href="{{ assignment.attachment.url }}" target="_blank">Faylni ochish</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="as-detail-side">
+            <div class="as-detail-card">
+                <h3>Qisqa statistika</h3>
+                <div class="as-side-stats">
+                    <div class="as-side-stat">
+                        <span>Jami javoblar</span>
+                        <strong>{{ submission_count }}</strong>
+                    </div>
+                    <div class="as-side-stat">
+                        <span>Baholangan</span>
+                        <strong>{{ reviewed_count }}</strong>
+                    </div>
+                    <div class="as-side-stat">
+                        <span>Baholanmagan</span>
+                        <strong>{{ submission_count|add:"-"|add:reviewed_count }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="as-detail-card">
+        <h3>Kelgan javoblar</h3>
+
+        {% if submissions %}
+            <div class="as-table-wrapper">
+                <table class="as-table">
+                    <thead>
+                        <tr>
+                            <th>O‘quvchi</th>
+                            <th>Status</th>
+                            <th>Topshirgan vaqti</th>
+                            <th>Baho</th>
+                            <th>Izoh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for submission in submissions %}
+                            <tr>
+                                <td>{{ submission.student }}</td>
+                                <td>{{ submission.get_status_display }}</td>
+                                <td>{{ submission.submitted_at|date:"d.m.Y H:i" }}</td>
+                                <td>
+                                    {% if submission.score != None %}
+                                        {{ submission.score }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if submission.feedback %}
+                                        {{ submission.feedback|truncatechars:60 }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="as-empty-small">
+                Hozircha bu topshiriq bo‘yicha javoblar kelmagan.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

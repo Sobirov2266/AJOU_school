@@ -1,0 +1,99 @@
+{% extends "teacher_panel/base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/assignments.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="as-page">
+    <div class="as-header">
+        <div>
+            <h1 class="as-title">{{ page_title }}</h1>
+            <p class="as-subtitle">Yangi topshiriq yarating va uni kerakli sinfga biriktiring</p>
+        </div>
+        <a href="{% url 'teacher_panel:assignment_list' %}" class="as-btn as-btn-light">
+            ← Orqaga
+        </a>
+    </div>
+
+    <div class="as-form-card">
+        <form method="post" enctype="multipart/form-data" class="as-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="as-alert as-alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="as-form-grid">
+                <div class="as-form-group">
+                    <label for="{{ form.class_subject.id_for_label }}">Sinf va fan</label>
+                    {{ form.class_subject }}
+                    {% if form.class_subject.errors %}
+                        <div class="as-field-error">{{ form.class_subject.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="as-form-group">
+                    <label for="{{ form.title.id_for_label }}">Sarlavha</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <div class="as-field-error">{{ form.title.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="as-form-group as-form-group-full">
+                    <label for="{{ form.description.id_for_label }}">Tavsif</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="as-field-error">{{ form.description.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="as-form-group">
+                    <label for="{{ form.due_date.id_for_label }}">Deadline</label>
+                    {{ form.due_date }}
+                    {% if form.due_date.errors %}
+                        <div class="as-field-error">{{ form.due_date.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="as-form-group">
+                    <label for="{{ form.max_score.id_for_label }}">Maksimal baho</label>
+                    {{ form.max_score }}
+                    {% if form.max_score.errors %}
+                        <div class="as-field-error">{{ form.max_score.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="as-form-group as-form-group-full">
+                    <label for="{{ form.attachment.id_for_label }}">Fayl biriktirish</label>
+                    {{ form.attachment }}
+                    {% if form.attachment.errors %}
+                        <div class="as-field-error">{{ form.attachment.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="as-form-group as-form-group-full">
+                    <label class="as-check-row">
+                        {{ form.is_published }}
+                        <span>Topshiriqni darhol o‘quvchilarga ko‘rsatish</span>
+                    </label>
+                    {% if form.is_published.errors %}
+                        <div class="as-field-error">{{ form.is_published.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="as-form-actions">
+                <a href="{% url 'teacher_panel:assignment_list' %}" class="as-btn as-btn-light">Bekor qilish</a>
+                <button type="submit" class="as-btn as-btn-primary">Saqlash</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

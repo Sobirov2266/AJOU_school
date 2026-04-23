@@ -1,0 +1,115 @@
+{% extends "teacher_panel/base.html" %}
+{% load static %}
+
+{% block title %}Dars jadvalim{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'teacher_panel/css/timetable.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="tt-page">
+    <div class="tt-header">
+        <div>
+            <h1 class="tt-title">Dars jadvalim</h1>
+            <p class="tt-subtitle">
+                Menga biriktirilgan barcha faol darslar ro‘yxati
+            </p>
+        </div>
+    </div>
+
+    <div class="tt-stats">
+        <div class="tt-stat-card">
+            <span class="tt-stat-label">Haftalik darslar</span>
+            <strong class="tt-stat-value">{{ weekly_lessons_count }}</strong>
+        </div>
+        <div class="tt-stat-card">
+            <span class="tt-stat-label">Faol kunlar</span>
+            <strong class="tt-stat-value">{{ active_days_count }}</strong>
+        </div>
+        <div class="tt-stat-card">
+            <span class="tt-stat-label">Biriktirilgan sinflar</span>
+            <strong class="tt-stat-value">{{ class_count }}</strong>
+        </div>
+    </div>
+
+    {% if timetables %}
+        <div class="tt-days-wrapper">
+            {% for day_code, day_data in grouped_timetable.items %}
+                <section class="tt-day-card {% if day_code == today_code %}tt-day-card--today{% endif %}">
+                    <div class="tt-day-header">
+                        <div>
+                            <h2 class="tt-day-title">
+                                {{ day_data.label }}
+                                {% if day_code == today_code %}
+                                    <span class="tt-badge">Bugun</span>
+                                {% endif %}
+                            </h2>
+                            <p class="tt-day-subtitle">
+                                {% if day_data.lessons %}
+                                    {{ day_data.lessons|length }} ta dars biriktirilgan
+                                {% else %}
+                                    Bugun dars mavjud emas
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    {% if day_data.lessons %}
+                        <div class="tt-table-wrapper">
+                            <table class="tt-table">
+                                <thead>
+                                    <tr>
+                                        <th>Soat</th>
+                                        <th>Sinf</th>
+                                        <th>Fan</th>
+                                        <th>Vaqt</th>
+                                        <th>Xona</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in day_data.lessons %}
+                                        <tr>
+                                            <td>
+                                                <span class="tt-order">{{ item.lesson_order }}</span>
+                                            </td>
+                                            <td>{{ item.class_subject.school_class.name }}</td>
+                                            <td>{{ item.class_subject.subject.name }}</td>
+                                            <td>
+                                                {{ item.start_time|time:"H:i" }}
+                                                <span class="tt-time-separator">—</span>
+                                                {{ item.end_time|time:"H:i" }}
+                                            </td>
+                                            <td>
+                                                {% if item.room %}
+                                                    <span class="tt-room">{{ item.room }}</span>
+                                                {% else %}
+                                                    <span class="tt-room tt-room--empty">Belgilanmagan</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="tt-empty">
+                            <div class="tt-empty-icon">📘</div>
+                            <div>
+                                <h3>Bu kunga dars biriktirilmagan</h3>
+                                <p>Admin keyinchalik dars qo‘shsa, shu yerda ko‘rinadi.</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </section>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="tt-global-empty">
+            <div class="tt-global-empty-icon">🗓️</div>
+            <h2>Hozircha sizga dars jadvali biriktirilmagan</h2>
+            <p>Admin timetable biriktirgandan keyin bu sahifada ko‘rinadi.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
