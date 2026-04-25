@@ -1,0 +1,85 @@
+{% extends 'student_panel/base.html' %}
+{% load static %}
+
+{% block title %}Dars jadvali{% endblock %}
+
+{% block content %}
+<main class="classes-page">
+
+    <header class="header">
+        <div class="header-left">
+            <h2>Dars jadvali</h2>
+            <p>
+                {% if school_class %}
+                    {{ school_class.name }} sinfi — haftalik jadval
+                {% else %}
+                    Sinfga biriktirilmagan
+                {% endif %}
+            </p>
+        </div>
+    </header>
+
+    {% if school_class %}
+    <div class="timetable-grid">
+        {% for day in timetable_by_day %}
+        <div class="timetable-day card">
+            <div class="card-header timetable-day__header">
+                <h3>{{ day.name }}</h3>
+                <span class="muted">{{ day.lessons|length }} ta dars</span>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                {% if day.lessons %}
+                <table class="classes-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Fan</th>
+                            <th>O'qituvchi</th>
+                            <th>Vaqt</th>
+                            <th>Xona</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lesson in day.lessons %}
+                        <tr>
+                            <td class="muted">{{ lesson.lesson_order }}</td>
+                            <td>
+                                <div class="class-meta">
+                                    <span class="class-name">{{ lesson.class_subject.subject.name }}</span>
+                                    <span class="class-code muted">{{ lesson.class_subject.subject.code }}</span>
+                                </div>
+                            </td>
+                            <td class="muted">{{ lesson.class_subject.teacher|default:"—" }}</td>
+                            <td>
+                                <span class="pill pill--info">
+                                    {{ lesson.start_time|time:"H:i" }} – {{ lesson.end_time|time:"H:i" }}
+                                </span>
+                            </td>
+                            <td class="muted">{{ lesson.room|default:"—" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div style="padding: 20px 24px;">
+                    <p class="muted">Bu kuni dars yo'q</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-body">
+            <div class="empty-state">
+                <div class="empty-icon"><i class="fa-solid fa-calendar-xmark"></i></div>
+                <h4>Sinfga biriktirilmagan</h4>
+                <p class="muted">Admin sinfga biriktirgandan keyin jadval ko'rinadi.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</main>
+{% endblock %}

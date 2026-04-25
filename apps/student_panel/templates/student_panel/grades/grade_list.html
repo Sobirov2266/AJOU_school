@@ -1,0 +1,120 @@
+{% extends 'student_panel/base.html' %}
+{% load static %}
+
+{% block title %}Baholar{% endblock %}
+
+{% block content %}
+<main class="classes-page">
+
+    <header class="header">
+        <div class="header-left">
+            <h2>Baholar</h2>
+            <p>
+                {% if school_class %}
+                    {{ school_class.name }} sinfi — fanlar bo'yicha baholar
+                {% else %}
+                    Sinfga biriktirilmagan
+                {% endif %}
+            </p>
+        </div>
+    </header>
+
+    {% if subject_grades %}
+        {% for sg in subject_grades %}
+        <section class="card classes-card" style="margin-bottom: 16px;">
+            <div class="card-header classes-card-header">
+                <div>
+                    <h3>{{ sg.class_subject.subject.name }}</h3>
+                    <span class="muted">
+                        O'qituvchi: {{ sg.class_subject.teacher|default:"—" }}
+                        &nbsp;·&nbsp;
+                        Kod: {{ sg.class_subject.subject.code }}
+                    </span>
+                </div>
+                <div>
+                    {% if sg.average is not None %}
+                    <span class="pill
+                        {% if sg.average >= 4.5 %}pill--success
+                        {% elif sg.average >= 3.5 %}pill--info
+                        {% elif sg.average >= 2.5 %}pill--warning
+                        {% else %}pill--danger{% endif %}">
+                        O'rtacha: {{ sg.average }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body table-responsive">
+                {% if sg.total_count > 0 %}
+                <table class="classes-table">
+                    <thead>
+                        <tr>
+                            <th>SANA</th>
+                            <th>BAHO TURI</th>
+                            <th>BAHO</th>
+                            <th>IZOH</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Joriy baholar -->
+                        {% for g in sg.current_grades %}
+                        <tr>
+                            <td class="muted">{{ g.date|date:"d.m.Y" }}</td>
+                            <td>
+                                <span class="pill pill--info">Joriy</span>
+                            </td>
+                            <td>
+                                <span class="grade-badge grade-badge--{{ g.value }}">{{ g.value }}</span>
+                            </td>
+                            <td class="muted">{{ g.note|default:"—" }}</td>
+                        </tr>
+                        {% endfor %}
+                        <!-- Oraliq baholar -->
+                        {% for g in sg.midterm_grades %}
+                        <tr>
+                            <td class="muted">{{ g.date|date:"d.m.Y" }}</td>
+                            <td>
+                                <span class="pill pill--warning">Oraliq</span>
+                            </td>
+                            <td>
+                                <span class="grade-badge grade-badge--{{ g.value }}">{{ g.value }}</span>
+                            </td>
+                            <td class="muted">{{ g.note|default:"—" }}</td>
+                        </tr>
+                        {% endfor %}
+                        <!-- Yakuniy baholar -->
+                        {% for g in sg.final_grades %}
+                        <tr>
+                            <td class="muted">{{ g.date|date:"d.m.Y" }}</td>
+                            <td>
+                                <span class="pill pill--success">Yakuniy</span>
+                            </td>
+                            <td>
+                                <span class="grade-badge grade-badge--{{ g.value }}">{{ g.value }}</span>
+                            </td>
+                            <td class="muted">{{ g.note|default:"—" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div style="padding: 16px 0;">
+                    <p class="muted">Bu fan bo'yicha hali baho kiritilmagan.</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        {% endfor %}
+    {% else %}
+    <div class="card">
+        <div class="card-body">
+            <div class="empty-state">
+                <div class="empty-icon"><i class="fa-solid fa-star"></i></div>
+                <h4>Baholar yo'q</h4>
+                <p class="muted">O'qituvchilar baho kiritgandan keyin shu yerda ko'rinadi.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</main>
+{% endblock %}

@@ -1,0 +1,339 @@
+/* ============================================================
+   teacher_attendance.css
+   Davomat sahifalari uchun CSS
+   Loyihadagi mavjud CSS uslibiga (admin_teacher_list, admin_classes) mos yozildi
+   ============================================================ */
+
+/* ---- Sinf tanlash sahifasi (attendance_list) ---- */
+
+.att-select-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.att-select-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 10px;
+  background: var(--card-bg, #fff);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.18s, box-shadow 0.18s, transform 0.15s;
+  cursor: pointer;
+}
+
+.att-select-card:hover {
+  border-color: var(--primary, #4361ee);
+  box-shadow: 0 4px 16px rgba(67, 97, 238, 0.10);
+  transform: translateY(-2px);
+}
+
+.att-select-card__icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(67, 97, 238, 0.10);
+  color: var(--primary, #4361ee);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.att-select-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.att-select-card__subject {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text, #1e293b);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.att-select-card__class,
+.att-select-card__code {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.att-select-card__arrow {
+  flex-shrink: 0;
+  color: var(--muted, #94a3b8);
+  font-size: 14px;
+  transition: color 0.18s;
+}
+
+.att-select-card:hover .att-select-card__arrow {
+  color: var(--primary, #4361ee);
+}
+
+/* ---- Sana tanlash paneli ---- */
+
+.att-date-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.att-date-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 8px;
+  padding: 8px 14px;
+}
+
+.att-date-form label {
+  font-size: 13px;
+  color: var(--muted, #64748b);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.att-date-form input[type="date"] {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--text, #1e293b);
+  cursor: pointer;
+}
+
+/* Pill badge-lar */
+.pill--success {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.pill--warning {
+  background: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+/* ---- Statistika qatori ---- */
+
+.att-stats-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.att-stat {
+  flex: 1;
+  min-width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  background: var(--card-bg, #fff);
+  font-size: 13px;
+}
+
+.att-stat i {
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+
+.att-stat__count {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.att-stat__label {
+  font-size: 12px;
+  color: var(--muted, #64748b);
+}
+
+.att-stat--total   { border-left: 3px solid var(--primary, #4361ee); }
+.att-stat--present { border-left: 3px solid #22c55e; color: #16a34a; }
+.att-stat--absent  { border-left: 3px solid #ef4444; color: #dc2626; }
+.att-stat--late    { border-left: 3px solid #f59e0b; color: #b45309; }
+
+.att-stat--total .att-stat__count  { color: var(--primary, #4361ee); }
+.att-stat--present .att-stat__count{ color: #16a34a; }
+.att-stat--absent .att-stat__count { color: #dc2626; }
+.att-stat--late .att-stat__count   { color: #b45309; }
+
+/* ---- Bulk action tugmalari ---- */
+
+.att-bulk-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+  transition: opacity 0.15s;
+}
+
+.btn-sm:hover { opacity: 0.88; }
+
+.btn-success {
+  background: #22c55e;
+  color: #fff;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* ---- Davomat jadval qatori ---- */
+
+.att-status-group {
+  display: flex;
+  gap: 6px;
+}
+
+.att-status-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-color, #e5e7eb);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--muted, #94a3b8);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.att-status-btn:hover {
+  border-color: currentColor;
+}
+
+/* Keldi */
+.att-status-btn--present:hover,
+.att-status-btn--present.active {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: #22c55e;
+  color: #16a34a;
+}
+
+/* Kelmadi */
+.att-status-btn--absent:hover,
+.att-status-btn--absent.active {
+  background: rgba(239, 68, 68, 0.10);
+  border-color: #ef4444;
+  color: #dc2626;
+}
+
+/* Kech keldi */
+.att-status-btn--late:hover,
+.att-status-btn--late.active {
+  background: rgba(245, 158, 11, 0.10);
+  border-color: #f59e0b;
+  color: #b45309;
+}
+
+/* Izoh input */
+.att-note-input {
+  width: 100%;
+  min-width: 160px;
+  padding: 6px 10px;
+  border: 1.5px solid var(--border-color, #e5e7eb);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--text, #1e293b);
+  background: var(--input-bg, #f8fafc);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.att-note-input:focus {
+  border-color: var(--primary, #4361ee);
+  background: #fff;
+}
+
+/* ---- Footer — saqlash tugmasi ---- */
+
+.att-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Saqlandi holati */
+.btn--saved {
+  background: #22c55e !important;
+  pointer-events: none;
+}
+
+/* ---- Orqaga linki ---- */
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted, #64748b);
+  text-decoration: none;
+  margin-bottom: 6px;
+  transition: color 0.15s;
+}
+
+.back-link:hover {
+  color: var(--primary, #4361ee);
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 640px) {
+  .att-stats-row {
+    gap: 8px;
+  }
+
+  .att-stat {
+    padding: 10px 8px;
+    min-width: 80px;
+  }
+
+  .att-stat__count {
+    font-size: 18px;
+  }
+
+  .att-bulk-actions {
+    flex-wrap: wrap;
+  }
+
+  .att-date-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -15,6 +15,7 @@ class CustomLoginView(LoginView):
         if user.role == User.Role.TEACHER:
             return "/teacher-panel/dashboard/"
 
-
+        if user.role == User.Role.STUDENT:
+            return "/student-panel/dashboard/"
 
         return "/"

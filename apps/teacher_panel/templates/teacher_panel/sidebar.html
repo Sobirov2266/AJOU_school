@@ -5,26 +5,52 @@
 
     <ul class="sidebar-menu">
         <li>
-            <a href="{% url 'teacher_panel:dashboard' %}">🏠 Dashboard</a>
+            <a href="{% url 'teacher_panel:dashboard' %}"
+               class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+               🏠 Dashboard
+            </a>
         </li>
         <li>
-            <a href="{% url 'teacher_panel:subject_list' %}">👨‍🏫 Mening fanlarim</a>
+            <a href="{% url 'teacher_panel:subject_list' %}"
+               class="{% if request.resolver_match.url_name == 'subject_list' %}active{% endif %}">
+               👨‍🏫 Mening fanlarim
+            </a>
         </li>
         <li>
-            <a href="{% url 'teacher_panel:timetable' %}">🎓 Dars jadvali</a>
+            <a href="{% url 'teacher_panel:timetable' %}"
+               class="{% if request.resolver_match.url_name == 'timetable' %}active{% endif %}">
+               🗓️ Dars jadvali
+            </a>
         </li>
         <li>
-            <a href="{% url 'teacher_panel:assignment_list' %}">📚 Topshiriqlar</a>
+            <a href="{% url 'teacher_panel:attendance_list' %}"
+               class="{% if 'attendance' in request.resolver_match.url_name %}active{% endif %}">
+               📌 Davomat
+            </a>
         </li>
         <li>
-            <a href="{% url 'teacher_panel:test_list' %}">📘 Testlar</a>
+            <a href="{% url 'teacher_panel:grade_enter' %}"
+               class="{% if request.resolver_match.url_name == 'grade_enter' %}active{% endif %}">
+               🎓 Baholar
+            </a>
         </li>
         <li>
-            <a href="{% url 'teacher_panel:attendance_mark' %}">📌 Davomat</a>
+            <a href="{% url 'teacher_panel:assignment_list' %}"
+               class="{% if 'assignment' in request.resolver_match.url_name %}active{% endif %}">
+               📚 Topshiriqlar
+            </a>
         </li>
-
         <li>
-            <a href="{% url 'teacher_panel:teacher_settings' %}">⚙️ Settings</a>
+            <a href="{% url 'teacher_panel:test_list' %}"
+               class="{% if request.resolver_match.url_name == 'test_list' %}active{% endif %}">
+               📘 Testlar
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'teacher_panel:teacher_settings' %}"
+               class="{% if request.resolver_match.url_name == 'teacher_settings' %}active{% endif %}">
+               ⚙️ Settings
+            </a>
         </li>
         <li class="logout">
             <a href="{% url 'logout' %}">🚪 Logout</a>

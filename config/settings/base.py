@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'apps.admin_panel',
     'apps.teacher_panel',
     'apps.assignments',
+    'apps.student_panel',
 
 
     'django.contrib.admin',

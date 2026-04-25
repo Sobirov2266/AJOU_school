@@ -1,0 +1,146 @@
+{% extends 'student_panel/base.html' %}
+{% load static %}
+
+{% block title %}Mening profilim{% endblock %}
+
+{% block content %}
+<main class="classes-page">
+
+    <header class="header">
+        <div class="header-left">
+            <h2>Mening profilim</h2>
+            <p>Shaxsiy ma'lumotlar va parol sozlamalari</p>
+        </div>
+    </header>
+
+    <div class="profile-grid">
+
+        <!-- Chap: profil kartasi -->
+        <div class="profile-card card">
+            <div class="card-body profile-card__body">
+                <div class="profile-card__avatar-wrap">
+                    {% if student.avatar %}
+                        <img src="{{ student.avatar.url }}" alt="{{ student.first_name }}" class="profile-card__avatar">
+                    {% else %}
+                        <img src="https://ui-avatars.com/api/?name={{ student.first_name|urlencode }}+{{ student.last_name|urlencode }}&background=4361ee&color=fff&size=128" alt="{{ student.first_name }}" class="profile-card__avatar">
+                    {% endif %}
+                </div>
+                <h3 class="profile-card__name">{{ student.last_name }} {{ student.first_name }}</h3>
+                <p class="profile-card__username muted">@{{ request.user.username }}</p>
+
+                <div class="profile-card__info-list">
+                    <div class="profile-info-row">
+                        <span class="profile-info-row__label"><i class="fa-solid fa-school"></i> Sinf</span>
+                        <span class="profile-info-row__value">{{ enrollment.school_class.name|default:"—" }}</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-row__label"><i class="fa-solid fa-id-card"></i> Passport ID</span>
+                        <span class="profile-info-row__value">{{ student.passport_id|default:"—" }}</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-row__label"><i class="fa-solid fa-cake-candles"></i> Tug'ilgan sana</span>
+                        <span class="profile-info-row__value">{{ student.birth_date|date:"d.m.Y"|default:"—" }}</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-row__label"><i class="fa-solid fa-phone"></i> Ota-ona telefoni</span>
+                        <span class="profile-info-row__value">{{ student.parent_phone|default:"—" }}</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-row__label"><i class="fa-solid fa-calendar-days"></i> Ro'yxatga olingan</span>
+                        <span class="profile-info-row__value">{{ student.created_at|date:"d.m.Y" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- O'ng: formalar -->
+        <div class="profile-forms">
+
+            <!-- Profil ma'lumotlarini tahrirlash -->
+            <div class="card">
+                <div class="card-header classes-card-header">
+                    <div>
+                        <h3>Ma'lumotlarni tahrirlash</h3>
+                        <span class="muted">Faqat ota-ona telefoni va avatar o'zgartirilishi mumkin</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="update_profile">
+
+                        <div class="form-group">
+                            <label class="form-label">Ota-ona telefoni</label>
+                            <input
+                                type="text"
+                                name="parent_phone"
+                                class="form-input"
+                                value="{{ student.parent_phone|default:'' }}"
+                                placeholder="+998901234567"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Profil rasmi</label>
+                            <input type="file" name="avatar" class="form-input" accept="image/*">
+                            {% if student.avatar %}
+                                <p class="muted" style="margin-top:6px; font-size:13px;">
+                                    <i class="fa-solid fa-image"></i>
+                                    Hozirgi rasm mavjud. Yangi rasm yuklasangiz almashtiriladi.
+                                </p>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                Saqlash
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Parol o'zgartirish -->
+            <div class="card" style="margin-top: 16px;">
+                <div class="card-header classes-card-header">
+                    <div>
+                        <h3>Parolni o'zgartirish</h3>
+                        <span class="muted">Kamida 6 ta belgi</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="change_password">
+
+                        <div class="form-group">
+                            <label class="form-label">Eski parol</label>
+                            <input type="password" name="old_password" class="form-input" placeholder="••••••••" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Yangi parol</label>
+                            <input type="password" name="new_password" class="form-input" placeholder="••••••••" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Yangi parolni tasdiqlang</label>
+                            <input type="password" name="confirm_password" class="form-input" placeholder="••••••••" required>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-lock"></i>
+                                Parolni o'zgartirish
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends 'student_panel/base.html' %}
+{% load static %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<main class="classes-page">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h2>Dashboard</h2>
+            <p>Xush kelibsiz, {{ student.first_name }} {{ student.last_name }}!</p>
+        </div>
+        <div class="header-right">
+            <div class="user-profile">
+                {% if student.avatar %}
+                    <img src="{{ student.avatar.url }}" alt="{{ student.first_name }}">
+                {% else %}
+                    <img src="https://ui-avatars.com/api/?name={{ student.first_name|urlencode }}+{{ student.last_name|urlencode }}&background=4361ee&color=fff" alt="{{ student.first_name }}">
+                {% endif %}
+                <span>{{ student.first_name }}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Statistik kartalar -->
+    <section class="stats-cards">
+
+        <!-- Sinf -->
+        <div class="stat-card">
+            <div class="stat-icon class">
+                <i class="fas fa-school"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Mening sinfim</h3>
+                <p class="count">{{ school_class.name|default:"—" }}</p>
+                <p class="stat-desc">Hozirgi sinf</p>
+            </div>
+        </div>
+
+        <!-- Bugungi darslar -->
+        <div class="stat-card">
+            <div class="stat-icon teacher">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Bugungi darslar</h3>
+                <p class="count">{{ today_timetable|length }}</p>
+                <p class="stat-desc">Bugun o'tiladigan darslar</p>
+            </div>
+        </div>
+
+        <!-- Davomat foizi -->
+        <div class="stat-card">
+            <div class="stat-icon activity">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Davomat (joriy oy)</h3>
+                <p class="count">
+                    {% if attendance_percent is not None %}
+                        {{ attendance_percent }}%
+                    {% else %}
+                        —
+                    {% endif %}
+                </p>
+                <p class="stat-desc">{{ present_att }} / {{ total_att }} dars</p>
+            </div>
+        </div>
+
+        <!-- Oxirgi baho -->
+        <div class="stat-card">
+            <div class="stat-icon student">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Oxirgi baho</h3>
+                <p class="count">
+                    {% if recent_grades %}
+                        {{ recent_grades.0.value }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </p>
+                <p class="stat-desc">
+                    {% if recent_grades %}
+                        {{ recent_grades.0.class_subject.subject.name }}
+                    {% else %}
+                        Hali baho yo'q
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Bugungi jadval va oxirgi baholar -->
+    <section class="content-grid">
+
+        <!-- Bugungi dars jadvali -->
+        <div class="chart-container">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Bugungi dars jadvali</h3>
+                    <span class="muted">{{ today|date:"d.m.Y, l" }}</span>
+                </div>
+                <div class="card-body">
+                    {% if today_timetable %}
+                    <table class="classes-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Fan</th>
+                                <th>O'qituvchi</th>
+                                <th>Vaqt</th>
+                                <th>Xona</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lesson in today_timetable %}
+                            <tr>
+                                <td class="muted">{{ lesson.lesson_order }}</td>
+                                <td>
+                                    <div class="class-meta">
+                                        <span class="class-name">{{ lesson.class_subject.subject.name }}</span>
+                                    </div>
+                                </td>
+                                <td class="muted">
+                                    {{ lesson.class_subject.teacher|default:"—" }}
+                                </td>
+                                <td>
+                                    <span class="pill pill--info">
+                                        {{ lesson.start_time|time:"H:i" }} – {{ lesson.end_time|time:"H:i" }}
+                                    </span>
+                                </td>
+                                <td class="muted">{{ lesson.room|default:"—" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fa-solid fa-calendar-xmark"></i>
+                        </div>
+                        <h4>Bugun dars yo'q</h4>
+                        <p class="muted">Dam olish kuni yoki jadval kiritilmagan.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Oxirgi baholar -->
+        <div class="recent-activity">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Oxirgi baholar</h3>
+                    <a href="{% url 'student_panel:grade_list' %}" class="btn btn-secondary btn-sm">
+                        Barchasi
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if recent_grades %}
+                    <ul class="activity-list">
+                        {% for grade in recent_grades %}
+                        <li>
+                            <div class="activity-icon
+                                {% if grade.value >= 4 %}class-added
+                                {% elif grade.value == 3 %}system-update
+                                {% else %}new-user{% endif %}">
+                                <span style="font-size:16px; font-weight:700;">{{ grade.value }}</span>
+                            </div>
+                            <div class="activity-details">
+                                <p>{{ grade.class_subject.subject.name }}</p>
+                                <span class="activity-time">
+                                    {{ grade.get_grade_type_display }} — {{ grade.date|date:"d.m.Y" }}
+                                </span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <div class="empty-state" style="padding: 20px 0;">
+                        <p class="muted">Hali baho kiritilmagan.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 AJOU School Student Panel. Barcha huquqlar himoyalangan.</p>
+    </footer>
+
+</main>
+{% endblock %}

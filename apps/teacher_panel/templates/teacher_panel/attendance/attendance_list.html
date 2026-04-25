@@ -1,0 +1,63 @@
+{% extends "teacher_panel/base.html" %}
+{% load static %}
+
+{% block title %}Davomat — Sinf tanlash{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/teacher_attendance.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="classes-page">
+
+  <header class="header">
+    <div class="header-left">
+      <h2>Davomat</h2>
+      <p>Davomat belgilash uchun sinf va fanni tanlang</p>
+    </div>
+  </header>
+
+  <section class="card classes-card">
+    <div class="card-header classes-card-header">
+      <div>
+        <h3>Mening sinf-fanlarim</h3>
+        <span class="muted">{{ class_subjects|length }} ta sinf-fan biriktirilgan</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+      {% if class_subjects %}
+      <div class="att-select-grid">
+        {% for cs in class_subjects %}
+        <a href="{% url 'teacher_panel:attendance_mark' cs.id %}" class="att-select-card">
+          <div class="att-select-card__icon">
+            <i class="fa-solid fa-person-chalkboard"></i>
+          </div>
+          <div class="att-select-card__info">
+            <div class="att-select-card__subject">{{ cs.subject.name }}</div>
+            <div class="att-select-card__class muted">
+              <i class="fa-solid fa-school"></i>
+              {{ cs.school_class.name }}
+            </div>
+            <div class="att-select-card__code muted">Kod: {{ cs.subject.code }}</div>
+          </div>
+          <div class="att-select-card__arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="fa-solid fa-folder-open"></i>
+        </div>
+        <h4>Sinf-fan biriktirilmagan</h4>
+        <p class="muted">Sizga sinf va fan biriktirilgandan keyin shu yerda ko'rinadi.</p>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+</main>
+{% endblock %}

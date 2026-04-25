@@ -12,7 +12,7 @@ urlpatterns = [
     path("admin-panel/", include("apps.admin_panel.urls")),
     path("teacher-panel/", include("apps.teacher_panel.urls")),
     path('logout/', LogoutView.as_view(), name='logout'),
-
+    path("student-panel/", include("apps.student_panel.urls")),
 
 ]
 

@@ -1,0 +1,131 @@
+{% extends 'student_panel/base.html' %}
+{% load static %}
+
+{% block title %}Davomat{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/teacher_attendance.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="classes-page">
+
+    <header class="header">
+        <div class="header-left">
+            <h2>Davomat</h2>
+            <p>
+                {% if school_class %}
+                    {{ school_class.name }} sinfi — fanlar bo'yicha davomat
+                {% else %}
+                    Sinfga biriktirilmagan
+                {% endif %}
+            </p>
+        </div>
+    </header>
+
+    <!-- Umumiy statistika -->
+    {% if subject_stats %}
+    <div class="att-stats-row">
+        <div class="att-stat att-stat--total">
+            <span class="att-stat__count">{{ grand_total }}</span>
+            <span class="att-stat__label">Jami darslar</span>
+        </div>
+        <div class="att-stat att-stat--present">
+            <i class="fa-solid fa-circle-check"></i>
+            <span class="att-stat__count">{{ grand_present }}</span>
+            <span class="att-stat__label">Keldi</span>
+        </div>
+        <div class="att-stat att-stat--absent">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <span class="att-stat__count">{{ grand_absent }}</span>
+            <span class="att-stat__label">Kelmadi</span>
+        </div>
+        <div class="att-stat att-stat--late">
+            <i class="fa-solid fa-clock"></i>
+            <span class="att-stat__count">{{ grand_late }}</span>
+            <span class="att-stat__label">Kech keldi</span>
+        </div>
+        <div class="att-stat att-stat--total" style="border-left-color: #a855f7;">
+            <span class="att-stat__count" style="color:#9333ea;">
+                {% if grand_percent is not None %}{{ grand_percent }}%{% else %}—{% endif %}
+            </span>
+            <span class="att-stat__label">Umumiy %</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Fanlar bo'yicha jadval -->
+    <section class="card classes-card">
+        <div class="card-header classes-card-header">
+            <div>
+                <h3>Fanlar bo'yicha davomat</h3>
+                <span class="muted">{{ subject_stats|length }} ta fan</span>
+            </div>
+        </div>
+        <div class="card-body table-responsive">
+            {% if subject_stats %}
+            <table class="classes-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>FAN</th>
+                        <th>O'QITUVCHI</th>
+                        <th>JAMI</th>
+                        <th>KELDI</th>
+                        <th>KELMADI</th>
+                        <th>KECH</th>
+                        <th>FOIZ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in subject_stats %}
+                    <tr>
+                        <td class="muted">{{ forloop.counter }}</td>
+                        <td>
+                            <div class="class-meta">
+                                <span class="class-name">{{ stat.class_subject.subject.name }}</span>
+                                <span class="class-code muted">{{ stat.class_subject.subject.code }}</span>
+                            </div>
+                        </td>
+                        <td class="muted">{{ stat.class_subject.teacher|default:"—" }}</td>
+                        <td><strong>{{ stat.total }}</strong></td>
+                        <td>
+                            <span class="pill pill--success">{{ stat.present }}</span>
+                        </td>
+                        <td>
+                            <span class="pill pill--danger">{{ stat.absent }}</span>
+                        </td>
+                        <td>
+                            <span class="pill pill--warning">{{ stat.late }}</span>
+                        </td>
+                        <td>
+                            {% if stat.percent is not None %}
+                                <div class="att-percent-bar">
+                                    <div class="att-percent-bar__fill
+                                        {% if stat.percent >= 90 %}att-percent-bar__fill--high
+                                        {% elif stat.percent >= 75 %}att-percent-bar__fill--mid
+                                        {% else %}att-percent-bar__fill--low{% endif %}"
+                                        style="width: {{ stat.percent }}%;">
+                                    </div>
+                                    <span class="att-percent-bar__text">{{ stat.percent }}%</span>
+                                </div>
+                            {% else %}
+                                <span class="muted">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon"><i class="fa-solid fa-calendar-xmark"></i></div>
+                <h4>Davomat ma'lumoti yo'q</h4>
+                <p class="muted">O'qituvchilar davomat belgilagandan keyin shu yerda ko'rinadi.</p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+</main>
+{% endblock %}

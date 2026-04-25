@@ -1,10 +1,296 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "teacher_panel/base.html" %}
+{% load static %}
 
-</body>
-</html>
+{% block title %}Davomat — {{ class_subject.school_class }} / {{ class_subject.subject }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/teacher_attendance.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="classes-page">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <a href="{% url 'teacher_panel:attendance_list' %}" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i>
+        Orqaga
+      </a>
+      <h2>Davomat belgilash</h2>
+      <p>{{ class_subject.school_class.name }} sinfi — {{ class_subject.subject.name }}</p>
+    </div>
+  </header>
+
+  <!-- Sana tanlash -->
+  <div class="att-date-bar">
+    <form method="get" class="att-date-form" id="dateForm">
+      <label for="dateInput">
+        <i class="fa-solid fa-calendar-days"></i>
+        Sana:
+      </label>
+      <input
+        type="date"
+        id="dateInput"
+        name="date"
+        value="{{ selected_date|date:'Y-m-d' }}"
+        max="{{ today|date:'Y-m-d' }}"
+      >
+      <button type="submit" class="btn btn-secondary">
+        <i class="fa-solid fa-rotate"></i>
+        Yangilash
+      </button>
+    </form>
+
+    {% if already_saved %}
+    <span class="pill pill--success">
+      <i class="fa-solid fa-circle-check"></i>
+      Bu sana uchun davomat saqlangan
+    </span>
+    {% else %}
+    <span class="pill pill--warning">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      Hali saqlanmagan
+    </span>
+    {% endif %}
+  </div>
+
+  <!-- Statistika -->
+  <div class="att-stats-row">
+    <div class="att-stat att-stat--total">
+      <span class="att-stat__count">{{ total }}</span>
+      <span class="att-stat__label">Jami</span>
+    </div>
+    <div class="att-stat att-stat--present">
+      <i class="fa-solid fa-circle-check"></i>
+      <span class="att-stat__count" id="presentCount">{{ present_count }}</span>
+      <span class="att-stat__label">Keldi</span>
+    </div>
+    <div class="att-stat att-stat--absent">
+      <i class="fa-solid fa-circle-xmark"></i>
+      <span class="att-stat__count" id="absentCount">{{ absent_count }}</span>
+      <span class="att-stat__label">Kelmadi</span>
+    </div>
+    <div class="att-stat att-stat--late">
+      <i class="fa-solid fa-clock"></i>
+      <span class="att-stat__count" id="lateCount">{{ late_count }}</span>
+      <span class="att-stat__label">Kech keldi</span>
+    </div>
+  </div>
+
+  <!-- Davomat jadvali -->
+  <section class="card classes-card">
+    <div class="card-header classes-card-header">
+      <div>
+        <h3>O'quvchilar ro'yxati</h3>
+        <span class="muted">{{ selected_date|date:"d.m.Y" }} sanasi uchun davomat</span>
+      </div>
+      <div class="right">
+        <!-- Hammani belgilash tugmalari -->
+        <div class="att-bulk-actions">
+          <button type="button" class="btn btn-sm btn-success" id="markAllPresent">
+            <i class="fa-solid fa-check-double"></i>
+            Hammasi keldi
+          </button>
+          <button type="button" class="btn btn-sm btn-danger" id="markAllAbsent">
+            <i class="fa-solid fa-xmark"></i>
+            Hammasi kelmadi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body table-responsive">
+      {% if student_rows %}
+      <table class="classes-table" id="attendanceTable">
+        <colgroup>
+          <col style="width:50px;">
+          <col style="width:260px;">
+          <col style="width:200px;">
+          <col style="width:160px;">
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>O'QUVCHI</th>
+            <th>PASSPORT ID</th>
+            <th>HOLAT</th>
+            <th>IZOH</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in student_rows %}
+          <tr class="att-row" data-student-id="{{ row.student.id }}" data-status="{{ row.status }}">
+            <td class="muted">{{ forloop.counter }}</td>
+            <td>
+              <div class="class-meta">
+                <span class="att-student-name">
+                  {{ row.student.last_name }} {{ row.student.first_name }}
+                </span>
+              </div>
+            </td>
+            <td class="muted">{{ row.student.passport_id|default:"—" }}</td>
+            <td>
+              <div class="att-status-group" role="group">
+                <button type="button"
+                  class="att-status-btn att-status-btn--present {% if row.status == 'present' %}active{% endif %}"
+                  data-value="present" title="Keldi">
+                  <i class="fa-solid fa-circle-check"></i>
+                </button>
+                <button type="button"
+                  class="att-status-btn att-status-btn--absent {% if row.status == 'absent' %}active{% endif %}"
+                  data-value="absent" title="Kelmadi">
+                  <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+                <button type="button"
+                  class="att-status-btn att-status-btn--late {% if row.status == 'late' %}active{% endif %}"
+                  data-value="late" title="Kech keldi">
+                  <i class="fa-solid fa-clock"></i>
+                </button>
+              </div>
+            </td>
+            <td>
+              <input
+                type="text"
+                class="att-note-input"
+                placeholder="Izoh (ixtiyoriy)"
+                value="{{ row.note }}"
+                maxlength="255"
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="fa-solid fa-users-slash"></i>
+        </div>
+        <h4>Bu sinfda o'quvchilar yo'q</h4>
+        <p class="muted">O'quvchilar qo'shilgandan keyin shu yerda ko'rinadi.</p>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if student_rows %}
+    <div class="card-footer att-footer">
+      <span class="muted">{{ total }} ta o'quvchi</span>
+      <button type="button" class="btn btn-primary" id="saveAttendanceBtn">
+        <i class="fa-solid fa-floppy-disk"></i>
+        Saqlash
+      </button>
+    </div>
+    {% endif %}
+  </section>
+
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  const DATE      = "{{ selected_date|date:'Y-m-d' }}";
+  const SAVE_URL  = "{{ request.path }}?date=" + DATE;
+  const CSRF      = "{{ csrf_token }}";
+
+  // --- Statistika counter ---
+  function updateCounts() {
+    let present = 0, absent = 0, late = 0;
+    document.querySelectorAll(".att-row").forEach(row => {
+      const s = row.dataset.status;
+      if (s === "present") present++;
+      else if (s === "absent") absent++;
+      else if (s === "late") late++;
+    });
+    document.getElementById("presentCount").textContent = present;
+    document.getElementById("absentCount").textContent  = absent;
+    document.getElementById("lateCount").textContent    = late;
+  }
+
+  // --- Status tugmalar ---
+  document.querySelectorAll(".att-status-group").forEach(group => {
+    group.addEventListener("click", e => {
+      const btn = e.target.closest(".att-status-btn");
+      if (!btn) return;
+      const row = btn.closest(".att-row");
+      const value = btn.dataset.value;
+
+      // Active classni yangilash
+      group.querySelectorAll(".att-status-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      row.dataset.status = value;
+      updateCounts();
+    });
+  });
+
+  // --- Hammasini belgilash ---
+  document.getElementById("markAllPresent")?.addEventListener("click", () => {
+    document.querySelectorAll(".att-row").forEach(row => {
+      row.dataset.status = "present";
+      row.querySelectorAll(".att-status-btn").forEach(b => b.classList.remove("active"));
+      row.querySelector('[data-value="present"]').classList.add("active");
+    });
+    updateCounts();
+  });
+
+  document.getElementById("markAllAbsent")?.addEventListener("click", () => {
+    document.querySelectorAll(".att-row").forEach(row => {
+      row.dataset.status = "absent";
+      row.querySelectorAll(".att-status-btn").forEach(b => b.classList.remove("active"));
+      row.querySelector('[data-value="absent"]').classList.add("active");
+    });
+    updateCounts();
+  });
+
+  // --- Saqlash (AJAX) ---
+  document.getElementById("saveAttendanceBtn")?.addEventListener("click", async () => {
+    const btn = document.getElementById("saveAttendanceBtn");
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saqlanmoqda...';
+
+    const records = [];
+    document.querySelectorAll(".att-row").forEach(row => {
+      records.push({
+        student_id: parseInt(row.dataset.studentId),
+        status:     row.dataset.status,
+        note:       row.querySelector(".att-note-input")?.value || "",
+      });
+    });
+
+    try {
+      const res = await fetch(SAVE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": CSRF,
+        },
+        body: JSON.stringify({ date: DATE, records }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Saqlandi';
+        btn.classList.add("btn--saved");
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Saqlash';
+          btn.classList.remove("btn--saved");
+        }, 2500);
+      } else {
+        alert("Xatolik: " + (data.error || "Noma'lum xato"));
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Saqlash';
+      }
+    } catch (err) {
+      alert("Server bilan bog'lanishda xatolik.");
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Saqlash';
+    }
+  });
+
+})();
+</script>
+{% endblock %}

@@ -204,3 +204,103 @@ class Enrollment(models.Model):
         return f"{self.student} → {self.school_class}"
 
 
+# =========================
+# DAVOMAT
+# =========================
+class Attendance(models.Model):
+    class Status(models.TextChoices):
+        PRESENT = "present", "Keldi"
+        ABSENT  = "absent",  "Kelmadi"
+        LATE    = "late",    "Kech keldi"
+
+    class_subject = models.ForeignKey(
+        ClassSubject,
+        on_delete=models.CASCADE,
+        related_name="attendances",
+        verbose_name="Sinf-Fan"
+    )
+    student = models.ForeignKey(
+        StudentProfile,
+        on_delete=models.CASCADE,
+        related_name="attendances",
+        verbose_name="O'quvchi"
+    )
+    date = models.DateField(verbose_name="Sana")
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.PRESENT,
+        verbose_name="Holat"
+    )
+    note = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="Izoh"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Davomat"
+        verbose_name_plural = "Davomatlar"
+        # Bir o'quvchi — bir fan — bir sana uchun faqat bitta yozuv
+        unique_together = ("class_subject", "student", "date")
+        ordering = ["-date", "student"]
+
+    def __str__(self):
+        return f"{self.student} | {self.class_subject.subject} | {self.date} | {self.get_status_display()}"
+
+
+# =========================
+# BAHOLAR
+# =========================
+class Grade(models.Model):
+    class GradeType(models.TextChoices):
+        CURRENT  = "current",  "Joriy baho"
+        MIDTERM  = "midterm",  "Oraliq baho"
+        FINAL    = "final",    "Yakuniy baho"
+
+    class_subject = models.ForeignKey(
+        ClassSubject,
+        on_delete=models.CASCADE,
+        related_name="grades",
+        verbose_name="Sinf-Fan"
+    )
+    student = models.ForeignKey(
+        StudentProfile,
+        on_delete=models.CASCADE,
+        related_name="grades",
+        verbose_name="O'quvchi"
+    )
+    grade_type = models.CharField(
+        max_length=10,
+        choices=GradeType.choices,
+        default=GradeType.CURRENT,
+        verbose_name="Baho turi"
+    )
+    value = models.PositiveSmallIntegerField(verbose_name="Baho (1-5)")
+    date = models.DateField(verbose_name="Sana")
+    note = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="Izoh"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Baho"
+        verbose_name_plural = "Baholar"
+        ordering = ["-date", "student"]
+
+    def __str__(self):
+        return f"{self.student} | {self.class_subject.subject} | {self.value} | {self.date}"
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if not (1 <= self.value <= 5):
+            raise ValidationError({"value": "Baho 1 dan 5 gacha bo'lishi kerak."})
+
+

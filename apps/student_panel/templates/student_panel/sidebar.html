@@ -1,0 +1,41 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>AJOU School</h2>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li>
+            <a href="{% url 'student_panel:dashboard' %}"
+               class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+               🏠 Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'student_panel:timetable' %}"
+               class="{% if request.resolver_match.url_name == 'timetable' %}active{% endif %}">
+               🗓️ Dars jadvali
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'student_panel:attendance_list' %}"
+               class="{% if 'attendance' in request.resolver_match.url_name %}active{% endif %}">
+               📌 Davomat
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'student_panel:grade_list' %}"
+               class="{% if 'grade' in request.resolver_match.url_name %}active{% endif %}">
+               🎓 Baholar
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'student_panel:profile' %}"
+               class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+               👤 Profil
+            </a>
+        </li>
+        <li class="logout">
+            <a href="{% url 'logout' %}">🚪 Logout</a>
+        </li>
+    </ul>
+</aside>
